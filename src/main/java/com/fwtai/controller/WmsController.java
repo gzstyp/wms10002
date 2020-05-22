@@ -6,7 +6,6 @@ import com.fwtai.entity.Task;
 import com.fwtai.entity.TaskStatus;
 import com.fwtai.service.TaskService;
 import com.fwtai.tool.ToolClient;
-import com.fwtai.tool.ToolListOrMap;
 import com.fwtai.tool.ToolString;
 import com.fwtai.websocket.WebSocketServer;
 import io.swagger.annotations.Api;
@@ -14,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,19 +130,6 @@ public class WmsController{
         }
         final Integer row = taskService.insert(jsonObject);
         if(row != 0){
-            final ArrayList<String> storages = new ArrayList<>();
-            for(int i = 0; i < list.size(); i++){
-                storages.add(list.get(i).get("item_storage_code"));
-            }
-            final List<HashMap<String,String>> listCode = taskService.queryStorageCode(storages);
-            //替换货位坐标
-            final HashMap<String,String> convertMap = ToolListOrMap.listConvertMap(listCode,"item_storage_code","point");
-            for(int i = 0; i < list.size(); i++){
-                final String storage_code = list.get(i).get("item_storage_code");
-                final String value = convertMap.get(storage_code);
-                list.get(i).put("storage_point",value);
-            }
-            //jsonObject.put("data",list);
             final String json = ToolClient.queryJson(taskService.queryListTask());//收到指令任务时获取任务列表
             final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
             for(final String userId : map.keySet()){
@@ -156,6 +143,13 @@ public class WmsController{
             final String result = ToolClient.createJsonFail("操作失败");
             ToolClient.responseJson(result,response);
         }
+    }
+
+    @ApiOperation(value = "客户端连接服务端成功后获取未完成的任务指令", notes = "连接成功后获取未完成的任务指令列表")
+    @GetMapping("/getTask")
+    public void getTask(final HttpServletResponse response){
+        final String json = ToolClient.queryJson(taskService.queryListTask());//收到指令任务时获取任务列表
+        ToolClient.responseJson(json,response);
     }
 
     //更新任务状态

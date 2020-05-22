@@ -7,6 +7,8 @@ import com.fwtai.tool.ToolString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 /**
  * @作者 田应平
  * @版本 v1.0
@@ -29,6 +31,19 @@ public class StoragePointService{
         final String point = formData.getString(p_point);
         final int type = ToolString.jsonType(point);
         if(type != 1)return ToolClient.createJsonFail("货位坐标的格式有误");
+        final HashMap<String,String> map = ToolString.parseJsonObject(point);
+        boolean bl = false;
+        for(final String key : map.keySet()){
+            final String value = map.get(key);
+            final boolean b = ToolString.isNumber(value);
+            if(!b){
+                bl = true;
+                break;
+            }
+        }
+        if(bl){
+            return ToolClient.createJsonFail("货位坐标的应该是数字");
+        }
         final String kid = ToolString.getIdsChar32();
         formData.put("kid",kid);
         final int rows = daoHandle.execute("wms.addStoragePoint",formData);

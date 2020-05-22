@@ -12,6 +12,7 @@
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
     <script src="/layer/layer.js"></script>
+    <script src="/page.layer.js"></script>
 </head>
 <script>
     var socket;
@@ -21,7 +22,7 @@
         }else{
             //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
             //等同于socket = new WebSocket("ws://localhost:8888/xxxx/im/25");
-            var socketUrl = "<%=basePath%>imserver/"+$("#userId").val();//连接WebSocket服务端
+            var socketUrl = "<%=basePath%>imserver/"+$("#userId").val();//连接WebSocket服务端,ws:api.fwtai.com/imserver/10
             socketUrl=socketUrl.replace("https","ws").replace("http","ws");
             if(socket!=null){
                 socket.close();
@@ -33,9 +34,14 @@
                 //socket.send("这是来自客户端的消息" + location.href + new Date());
             };
             //获得消息事件
-            socket.onmessage = function(msg){
-                //发现消息进入    开始处理前端触发逻辑
-                showGreeting(msg.data);
+            socket.onmessage = function(data){
+                showGreeting(data.data);
+                //发现消息进入,开始处理前端触发逻辑
+                data = eval('(' + data.data + ')');
+                if(data.code === 200){
+                    result('你有新的消息');
+                    getTask();
+                }
             };
             //关闭事件
             socket.onclose = function() {
@@ -46,6 +52,14 @@
                 console.log("websocket发生了错误");
             }
         }
+    }
+    function getTask(){
+        ajaxGet('/wms/getTask',{},function(data){
+            showGreeting(data.data[0].item_name);//json数组
+            if(data.code === 200){
+                result('你有新的任务');
+            }
+        });
     }
     function showGreeting(message) {
         $("#greetings").append("<tr><td>" + message + "</td></tr>");

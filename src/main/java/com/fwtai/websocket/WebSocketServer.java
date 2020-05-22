@@ -1,7 +1,7 @@
 package com.fwtai.websocket;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.fwtai.tool.ToolClient;
+import com.fwtai.tool.ToolString;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 //连接WebSocket服务端
@@ -61,7 +62,8 @@ public class WebSocketServer{
         }
         System.out.println("当前连接用户:" + userId + ",当前在线人数为:" + getOnlineCount());
         try{
-            sendMsg("连接成功");
+            final String json = ToolClient.createJsonSuccess("连接成功");
+            sendMsg(json);
         }catch(IOException e){
             System.out.println("用户:" + userId + ",网络异常!!!!!!");
         }
@@ -92,13 +94,14 @@ public class WebSocketServer{
         if(StringUtils.isNotBlank(message)){
             try{
                 //解析发送的报文
-                JSONObject jsonObject = JSON.parseObject(message);
+                final HashMap<String,String> map = ToolString.parseJsonObject(message);
+                if(map == null || map.size() <= 0)return;
                 //追加发送人(防止串改)
-                jsonObject.put("fromUserId",this.userId);
-                String toUserId = jsonObject.getString("toUserId");
+                map.put("fromUserId",this.userId);
+                String toUserId = map.get("toUserId");
                 //传送给对应toUserId用户的websocket
                 if(StringUtils.isNotBlank(toUserId) && webSocketMap.containsKey(toUserId)){
-                    webSocketMap.get(toUserId).sendMsg(jsonObject.toJSONString());
+                    webSocketMap.get(toUserId).sendMsg(ToolClient.queryJson(map));
                 }else{
                     System.err.println("请求的userId:" + toUserId + "不在该服务器上");
                     //否则不在这个服务器上，发送到mysql或者redis

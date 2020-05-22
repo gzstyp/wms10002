@@ -13,6 +13,7 @@
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
     <script src="/layer/layer.js"></script>
+    <script src="/page.layer.js"></script>
 </head>
 <body>
 <div id="main-content" class="container">
@@ -141,10 +142,10 @@
                 };
                 thisPage.btnText("正在提交……",false);
                 ajaxPost('/storage/addPoint',param,function(data){
+                    thisPage.btnText("添加",true);
                     if(data.code === 200){
-                        result(data.msg);
+                        result(data.msg,1500);
                         thisPage.getListData();
-                        thisPage.btnText("添加",true);
                         resetForm();
                     }else{
                         layer.alert(data.msg);
@@ -168,49 +169,6 @@
             $('#y1').val('');
             $('#x2').val('');
             $('#y2').val('');
-        }
-        function ajaxPost(url,params,succeed,failure){
-            $.ajax({
-                type : "POST",
-                url : url,
-                dataType : "json",
-                data : params,
-                success : function(result){
-                    succeed(result);
-                },
-                error : function(response,err){
-                    if (failure != null && failure != ''){
-                        failure(err);
-                    }
-                }
-            });
-        }
-        function ajaxGet(url,params,succeed,failure){
-            $.ajax({
-                type : "GET",
-                url : url,
-                dataType : "json",
-                data : params,
-                success : function(result){
-                    succeed(result);
-                },
-                error : function(response,err){
-                    if (failure != null && failure != ''){
-                        failure(err);
-                    }
-                }
-            });
-        }
-        function result(content){
-            layer.open({
-                title : '系统提示',
-                content : content,//此处可以是任意代码
-                shade : 0,
-                offset : 'rb',
-                anim : 2,
-                btn:false,
-                time:1500
-            });
         }
     })(jQuery);
 </script>

@@ -346,7 +346,16 @@ public final class ToolString implements Serializable {
 		try {
 			Integer.parseInt(str);
 			return true;
-		} catch (NumberFormatException e){
+		} catch (final NumberFormatException e){
+			return false;
+		}
+	}
+
+	public final static boolean isNumber(final String str){
+		try {
+		    Double.parseDouble(str);
+			return true;
+		} catch (final NumberFormatException e){
 			return false;
 		}
 	}
