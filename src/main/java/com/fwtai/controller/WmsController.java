@@ -44,7 +44,7 @@ public class WmsController{
     @ApiOperation(value = "确认操作某个任务", notes = "如果当前正在操作任务；那不接收或忽略接收任务；<br/>在返回的数据中list里的falg的值为1说明已有人接任务且userId不为空，即userId就是接任务的人，此时才做业务处理")
     @ApiImplicitParams(
         {
-            @ApiImplicitParam(name = "kid", value = "当前要执行的任务id", paramType = "query", dataType = "string",required = true),
+            @ApiImplicitParam(name = "kid", value = "当前要执行的任务kid", paramType = "query", dataType = "string",required = true),
             @ApiImplicitParam(name = "userId", value = "当前要执行任务人的useId", paramType = "query", dataType = "string",required = true)
         }
     )
