@@ -55,8 +55,8 @@
     }
     function getTask(){
         ajaxGet('/wms/getTask',{},function(data){
-            showGreeting(data.data[0].item_name);//json数组
             if(data.code === 200){
+                showGreeting(data.data[0].item_name);//json数组
                 result('你有新的任务');
             }
         });
