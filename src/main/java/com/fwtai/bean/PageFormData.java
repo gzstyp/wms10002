@@ -8,6 +8,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -171,6 +172,28 @@ public final class PageFormData extends HashMap<String,Object>{
             }
             return dataMap;
         }
+    }
+
+    /**
+     * 获取请求体的字符串,拿到该字符串后可调用该字符串是否是json对象|json数组|纯字符串再做业务处理
+     * @param
+     * @作者 田应平
+     * @QQ 444141300
+     * @创建时间 2020/5/23 20:24
+    */
+    public final static String getRequest(final HttpServletRequest request){
+        final StringBuilder sb = new StringBuilder();
+        try {
+            final InputStream is = request.getInputStream();
+            final InputStreamReader isr = new InputStreamReader(is,"UTF-8");
+            final BufferedReader br = new BufferedReader(isr);
+            String s = "";
+            while ((s = br.readLine()) != null){
+                sb.append(s);
+            }
+            return sb.length() > 0 ? sb.toString() : null;
+        } catch (Exception e) {}
+        return null;
     }
 
 	public final String getString(final String key){
