@@ -11,8 +11,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.List;
@@ -582,4 +585,19 @@ public final class ToolClient implements Serializable{
 	public final static String getDomainName(final HttpServletRequest request){
 		return request.getScheme()+"://"+request.getServerName();
 	}
+
+    public final static String getHttpClientRequest(final HttpServletRequest request){
+        final StringBuilder sb = new StringBuilder();
+        try {
+            final InputStream is = request.getInputStream();
+            final InputStreamReader isr = new InputStreamReader(is,"UTF-8");
+            final BufferedReader br = new BufferedReader(isr);
+            String s = "";
+            while ((s = br.readLine()) != null){
+                sb.append(s);
+            }
+            return sb.length() > 0 ? sb.toString() : null;
+        } catch (Exception e) {}
+        return null;
+    }
 }
