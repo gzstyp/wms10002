@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -197,15 +199,54 @@ public final class PageFormData extends HashMap<String,Object>{
     }
 
 	public final String getString(final String key){
-		return get(key) == null ? null : get(key).toString();
+        final Object value = get(key);
+        if(value == null)return null;
+        final String strVal = (String) value;
+        if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+        return String.valueOf(value).trim();
 	}
 
 	public final Integer getInteger(final String key){
-		return get(key) == null ? null : Integer.parseInt(get(key).toString());
+        final Object value = get(key);
+        if(value == null)return null;
+        if(value instanceof Integer)return (Integer) value;
+        if(value instanceof String){
+            final String strVal = (String) value;
+            if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+        }
+		return Integer.parseInt(String.valueOf(value));
 	}
 
     public final Long getLong(final String key){
-        return get(key) == null ? null : Long.parseLong(get(key).toString());
+        final Object value = get(key);
+        if(value == null)return null;
+        if(value instanceof Long)return (Long) value;
+        if(value instanceof String){
+            final String strVal = (String) value;
+            if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+        }
+        return Long.parseLong(String.valueOf(value));
+    }
+
+    public final Double getDouble(final String key){
+        final Object value = get(key);
+        if(value == null)return null;
+        if(value instanceof Double)return (Double) value;
+        if(value instanceof String){
+            final String strVal = (String) value;
+            if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+        }
+        return Double.parseDouble(String.valueOf(value));
+    }
+
+    public final BigDecimal getBigDecimal(final String key){
+        final Object value = get(key);
+        if(value == null)return null;
+        if(value instanceof BigDecimal)return (BigDecimal) value;
+        if(value instanceof BigInteger)return new BigDecimal((BigInteger) value);
+        final String strVal = value.toString();
+        if(strVal.length() == 0)return null;
+        return new BigDecimal(strVal);
     }
 
 	@Override
