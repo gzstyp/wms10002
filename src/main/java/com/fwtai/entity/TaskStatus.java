@@ -13,13 +13,13 @@ import io.swagger.annotations.ApiModelProperty;
 */
 public final class TaskStatus{
 
-    @ApiModelProperty(notes = "任务单号|编号")
+    @ApiModelProperty(notes = "任务单号|编号",required = true,value = "单号|编号,必填")
     private String invoices_code;
 
-    @ApiModelProperty(notes = "物资编号")
+    @ApiModelProperty(notes = "物资编号",required = true,value = "物资编号,必填")
     private String item_code;
 
-    @ApiModelProperty(notes = "任务状态(1待执行;2进行中;3完成;)")
+    @ApiModelProperty(notes = "任务状态(1待执行;2进行中;3完成;)",required = true,value = "任务状态:1待执行;2进行中;3完成;必填",dataType = "int")
     private Integer status;
 
     public String getInvoices_code(){

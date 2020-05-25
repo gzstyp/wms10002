@@ -19,14 +19,14 @@ public final class Task{
 
     private String kid;
     private String user;
-    @ApiModelProperty(notes = "任务单号|编号")
+    @ApiModelProperty(notes = "任务单号|编号",required = true,value = "单号|编号,必填")
     private String invoices_code;
-    @ApiModelProperty(notes = "指令类型(1入库;2出库;)")
+    @ApiModelProperty(notes = "指令类型(1入库;2出库;)",required = true,value = "1入库;2出库;必填",dataType = "Integer")
     private Integer type;
-    @ApiModelProperty(notes = "任务数量")
+    @ApiModelProperty(notes = "任务数量",required = true,value = "任务数量,必填",dataType = "Integer")
     private Integer total;
     private Integer status;
-    @ApiModelProperty(notes = "任务明细")
+    @ApiModelProperty(notes = "任务明细",required = true,value = "List明细,必填")
     private List<TaskDetail> data;
 
     public Task(){}
