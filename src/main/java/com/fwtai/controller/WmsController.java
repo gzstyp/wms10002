@@ -158,6 +158,13 @@ public class WmsController{
     public void status(@RequestBody final List<TaskStatus> taskStatus,final HttpServletResponse response){
         final String jsonStr = JSONObject.toJSONString(taskStatus);
         final JSONArray jsonArray = ToolString.parseJsonArray(jsonStr);
+        final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
+        for(final String userId : map.keySet()){
+            try{
+                webSocketServer.sendMessage(String.valueOf(jsonArray),userId);
+            }catch(IOException e){}
+        }
+
         ToolClient.responseJson(taskService.status(jsonArray),response);
     }
 }
