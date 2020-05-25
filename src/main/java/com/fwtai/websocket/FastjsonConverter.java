@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 添加fastjson的转换
+ * 添加fastjson的转换a
  */
 @Configuration
 public class FastjsonConverter {
@@ -21,7 +21,7 @@ public class FastjsonConverter {
 	@Bean
 	public HttpMessageConverters customConverters() {
 		// 定义一个转换消息的对象
-		
+
 		FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
 
 		// 添加fastjson的配置信息 比如 ：是否要格式化返回的json数据
@@ -39,11 +39,11 @@ public class FastjsonConverter {
 		fastConverter.setSupportedMediaTypes(fastMediaTypes);
 		// 在转换器中添加配置信息
 		fastConverter.setFastJsonConfig(fastJsonConfig);
-		
+
 		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 		stringConverter.setDefaultCharset(Charset.forName("UTF-8"));
 		stringConverter.setSupportedMediaTypes(fastMediaTypes);
-		
+
 		// 将转换器添加到converters中
 		return new HttpMessageConverters(stringConverter,fastConverter);
 	}
