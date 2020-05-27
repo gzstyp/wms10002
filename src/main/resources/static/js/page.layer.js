@@ -42,6 +42,18 @@ function result(content,time){
         time:time
     });
 }
+function topHint(content,time){
+    time = (time == null || time.length <= 0) ? -1 : time;
+    return layer.open({
+        title : false,
+        closeBtn : 0,
+        content : content,//此处可以是任意代码
+        shade : 0,
+        offset : 't',
+        btn : false,
+        time : time
+    });
+}
 /**alert('好的,谢谢!',function(){alert('嗯,再见!')})*/
 window.alert = function(msg,callback){
     var al_t = (self==top)?parent:window;

@@ -12,7 +12,7 @@
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
     <script src="/layer/layer.js"></script>
-    <script src="/page.layer.js"></script>
+    <script src="/js/page.layer.js"></script>
 </head>
 <script>
     var socket;
