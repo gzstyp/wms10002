@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Launch{
 
-    public static void main(String[] args) {
-        SpringApplication.run(Launch.class, args);
+    public static void main(String[] args){
+        SpringApplication.run(Launch.class,args);
     }
 
     @Bean
