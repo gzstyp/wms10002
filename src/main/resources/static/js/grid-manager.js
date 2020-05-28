@@ -185,6 +185,7 @@
             monitorData : function(){
                 var data = [
                     {
+                        "id":"10242048",
                         "monitor_name" : "温湿度监控A区",
                         "humidity" : "66%",
                         "revolutions" : "1500转/min",
@@ -194,6 +195,7 @@
                         "temperature_outdoor2" : "32℃"
                     },
                     {
+                        "id":"20483096",
                         "monitor_name" : "温湿度监控B区",
                         "humidity" : "64%",
                         "revolutions" : "1500转/min",
