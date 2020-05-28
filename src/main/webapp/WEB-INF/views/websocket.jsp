@@ -40,7 +40,6 @@
                 data = eval('(' + data.data + ')');
                 if(data.code === 200){
                     result('你有新的消息');
-                    getTask();
                 }
             };
             //关闭事件
