@@ -51,15 +51,14 @@
             :total="page.total">
         </el-pagination>
     </div>
-
     <el-dialog style="display:none;" title="编辑货位号" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
                 <el-form-item label="货位号">
-                    <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:330px;"></el-input>
+                    <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:340px;"></el-input>
                 </el-form-item>
                 <el-form-item label="楼层平面图">
-                    <el-select v-model="formData.images_id" placeholder="选择楼层平面图">
+                    <el-select v-model="formData.images_id" placeholder="选择楼层平面图" style="width:340px;">
                         <el-option label="不选择" value=""></el-option>
                         <el-option
                             v-for="item in optionsFloor"
@@ -70,7 +69,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="热点区域">
-                    <el-input v-model="formData.coords" placeholder="热点区域" clearable style="width:330px;"></el-input>
+                    <el-input v-model="formData.coords" placeholder="热点区域" clearable style="width:340px;"></el-input>
                 </el-form-item>
             </el-form>
         </div>
@@ -94,6 +93,7 @@
         el : '#app',
         data : function(){
             return {
+                title : '添加',
                 formData : {
                     kid : '',
                     images_id : '',
