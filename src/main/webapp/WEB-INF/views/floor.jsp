@@ -93,7 +93,6 @@
         el : '#app',
         data : function(){
             return {
-                title : '添加',
                 formData : {
                     kid : '',
                     images_id : '',
