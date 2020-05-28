@@ -15,7 +15,6 @@
 <body>
 <div id="app">
     <div class="head">
-
         <el-row :gutter="24">
             <el-col :span="2">
                 <el-col style="padding:0px;height:40px;line-height:40px;">
@@ -42,13 +41,22 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+            v-if="page.size<page.total"
+            background
+            layout="total,prev,pager,next,jumper"
+            @current-change="currentChange"
+            :page-size="page.size"
+            :current-page="page.current"
+            :total="page.total">
+        </el-pagination>
     </div>
 
     <el-dialog style="display:none;" title="编辑货位号" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
                 <el-form-item label="货位号">
-                    <el-input v-model="formData.item_storage_code" clearable style="width:330px;"></el-input>
+                    <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:330px;"></el-input>
                 </el-form-item>
                 <el-form-item label="楼层平面图">
                     <el-select v-model="formData.images_id" placeholder="选择楼层平面图">
@@ -62,7 +70,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="热点区域">
-                    <el-input v-model="formData.coords" clearable style="width:330px;"></el-input>
+                    <el-input v-model="formData.coords" placeholder="热点区域" clearable style="width:330px;"></el-input>
                 </el-form-item>
             </el-form>
         </div>
@@ -196,14 +204,6 @@
                     },function(){
                         elementFn.fnMessage('已取消操作');
                     });
-
-
-                    /*elementFn.fnConfirm(,function(){
-
-
-                    },function(){
-                        elementFn.fnMessage('已取消操作');
-                    });*/
                 }else{
                     elementFn.fnMsgError('请选择要删除的数据!');
                 }
@@ -229,7 +229,8 @@
             getListData : function(){
                 var _this = this;
                 var params = {
-                    current:_this.page.current,pageSize:_this.page.size
+                    current : _this.page.current,
+                    pageSize : _this.page.size
                 };
                 if(_this.searchForm.storage_code){
                     params.item_storage_code = _this.searchForm.storage_code;
@@ -251,6 +252,10 @@
                         _this.optionsFloor[0].label= data.data.msg;
                     }
                 });
+            },
+            currentChange : function(current){
+                this.page.current = current;
+                this.getListData();
             }
         }
     });
