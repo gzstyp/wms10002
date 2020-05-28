@@ -4,6 +4,46 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="show">
 
+    <update id="add" parameterType="HashMap">
+        INSERT INTO IMAGES_MAPS(KID,IMAGES_ID,ITEM_STORAGE_CODE,COORDS) VALUES (#{kid},#{images_id},#{item_storage_code},#{coords})
+    </update>
 
+    <update id="edit" parameterType="HashMap">
+        UPDATE IMAGES_MAPS
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="images_id != null">IMAGES_ID = #{images_id},</if>
+            <if test="item_storage_code != null">ITEM_STORAGE_CODE = #{item_storage_code},</if>
+            <if test="coords != null">COORDS = #{coords}</if>
+        </trim>
+        WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <select id="queryImagesExist" resultType="String" parameterType="String">
+        SELECT KID FROM IMAGES WHERE KID = #{kid} LIMIT 1
+    </select>
+
+    <update id="delById" parameterType="String">
+        DELETE FROM IMAGES_MAPS WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM IMAGES_MAPS WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select kid, images_id, item_storage_code, coords from images_maps
+        LIMIT #{section},#{pageSize}
+    </select>
+
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT count(kid) total from images_maps
+    </select>
+
+    <select id="getAllFloorMap" resultType="HashMap">
+        SELECT kid value,floor_name label FROM images
+    </select>
 
 </mapper>

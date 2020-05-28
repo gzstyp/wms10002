@@ -915,4 +915,20 @@ public final class ToolString implements Serializable {
         }
         return string;
     }
+
+    /**
+     * 适用于element-ui的批量删除操作,返回值可能是list<String>也可能是list<Bean>
+     * @param jsonArray
+     * @作者 田应平
+     * @QQ 444141300
+     * @创建时间 2020/5/28 20:28
+    */
+    public final static ArrayList<Object> jsonArrayToList(final Object jsonArray){
+        final ArrayList<Object> lists = new ArrayList<>();
+        final JSONArray arrays = ToolString.parseJsonArray(String.valueOf(jsonArray));
+        for(int x = 0; x < arrays.size(); x++){
+            lists.add(arrays.get(x));
+        }
+        return lists;
+    }
 }

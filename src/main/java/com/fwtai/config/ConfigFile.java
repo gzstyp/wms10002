@@ -44,6 +44,12 @@ public final class ConfigFile implements Serializable{
 	public final static String data = "data";
 	/**分页的默认大小*/
 	public final static int size_default = 50;
+    /**统一全局的total总条数|总记录数json关键字key响应给客户端*/
+    public final static String total = "total";
+    /**分页的区间标识符*/
+    public final static String section = "section";
+    /**统一全局的pageSize每页大小json关键字key响应给客户端或作为Mybatis的分页参数*/
+    public final static String pageSize = "pageSize";
 	/**拦截器表达式,配置不拦截的url资源,以括号(xxx)什么开头的都不拦截;即不对匹配该值的访问路径拦截（正则）*/
 	public final static String expression = ".*/((app)|(weChat)|(api)).*";
 }

@@ -3,6 +3,7 @@ package com.fwtai.tool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fwtai.bean.PageFormData;
 import com.fwtai.config.ConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -599,5 +602,40 @@ public final class ToolClient implements Serializable{
             return sb.length() > 0 ? sb.toString() : null;
         } catch (Exception e) {}
         return null;
+    }
+
+    public final static String jsonPage(Object listData,Integer total){
+        final JSONObject json = new JSONObject();
+        if(total == null || total == 0){
+            listData = new ArrayList<HashMap<String,Object>>();
+            total = 0;
+            json.put(ConfigFile.code,ConfigFile.code202);
+            json.put(ConfigFile.msg,ConfigFile.msg201);
+            json.put(ConfigFile.total,total);
+            json.put(ConfigFile.data,listData);
+            return json.toJSONString();
+        }else{
+            json.put(ConfigFile.code,ConfigFile.code200);
+            json.put(ConfigFile.msg,ConfigFile.msg200);
+            json.put(ConfigFile.total,total);
+            json.put(ConfigFile.data,listData);
+            return json.toJSONString();
+        }
+    }
+
+    public final static PageFormData dataMysql(final PageFormData pageFormData){
+        Integer size = pageFormData.getInteger("pageSize");//每页大小
+        Integer current = pageFormData.getInteger("current");//当前页
+        if(size == null || current == null) return null;
+        if(current <= 0){
+            current = 1;
+        }
+        if(size > 200){
+            size = ConfigFile.size_default;
+        }
+        pageFormData.put(ConfigFile.section,(current - 1) * size);//读取区间
+        pageFormData.put(ConfigFile.pageSize,size);//每页大小
+        pageFormData.remove("current");
+        return pageFormData;
     }
 }

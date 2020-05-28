@@ -1,5 +1,7 @@
 package com.fwtai.dao;
 
+import com.fwtai.bean.PageFormData;
+import com.fwtai.config.ConfigFile;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -349,5 +351,12 @@ public class DaoHandle{
      */
     public <T> List<T> queryListEntity(final String sqlMapId, final Object objParam){
         return sqlSession.selectList(sqlMapId, objParam);
+    }
+
+    public HashMap<String,Object> queryForPage(final PageFormData params,final String sqlMapIdListData,final String sqlMapIdTotal){
+        final HashMap<String,Object> map = new HashMap<String,Object>(2);
+        map.put(ConfigFile.total,sqlSession.selectOne(sqlMapIdTotal,params));
+        map.put(ConfigFile.data,sqlSession.selectList(sqlMapIdListData,params));
+        return map;
     }
 }

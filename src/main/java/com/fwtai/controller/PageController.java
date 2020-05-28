@@ -32,4 +32,9 @@ public class PageController{
     public String websocket(){
         return "websocket";
     }
+
+    @GetMapping(value = "/floor")
+    public String floor(){
+        return "floor";
+    }
 }

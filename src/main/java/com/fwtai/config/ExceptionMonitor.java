@@ -14,6 +14,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.SocketTimeoutException;
+import java.sql.SQLSyntaxErrorException;
 
 /**
  * 拦截异常并统一处理
@@ -56,6 +57,11 @@ public class ExceptionMonitor{
     public void mumberFormat(final Exception exception,final HttpServletResponse response){
         exception.printStackTrace();
         ToolClient.responseJson(ToolClient.exceptionJson("数字格式异常"),response);
+    }
+
+    @ExceptionHandler(SQLSyntaxErrorException.class)
+    public void sQLException(final HttpServletResponse response){
+        ToolClient.responseJson(ToolClient.exceptionJson(),response);
     }
 
     @ExceptionHandler({SocketTimeoutException.class,MyBatisSystemException.class,DataAccessException.class})
