@@ -30,7 +30,7 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" @selection-change="selectionChange" border style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
             <el-table-column type="selection" width="36"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
@@ -107,7 +107,7 @@
                 listDatas : [],
                 page: {
                     current: 1,
-                    size: 5,
+                    size: 50,
                     total: 0
                 },
                 optionsFloor: [],
@@ -126,8 +126,30 @@
                     this.kids.push(element.kid);
                 });
             },
+            dblclick : function(row,column,event){
+                this.openDialog(row);
+            },
             search : function(){
                 this.getListData();
+            },
+            openDialog : function(row){
+                if(row != null && row.kid != null){
+                    this.formData = {
+                        kid : row.kid,
+                        images_id : row.images_id,
+                        item_storage_code : row.item_storage_code,
+                        coords : row.coords
+                    };
+                }else{
+                    this.formData = {};
+                    /*this.formData = {
+                        kid : '',
+                        images_id : '',
+                        item_storage_code : '',
+                        coords : ''
+                    };*/
+                }
+                this.dialogVisible = true;
             },
             //dialog对话框右上角的关闭之前的操作
             handleClose : function(done) {
@@ -155,22 +177,10 @@
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
-                    this.formData = {
-                        kid : item.kid,
-                        images_id : item.images_id,
-                        item_storage_code : item.item_storage_code,
-                        coords : item.coords
-                    };
+                    this.openDialog(item);
                 }else{
-                    this.formData = {};
-                    /*this.formData = {
-                        kid : '',
-                        images_id : '',
-                        item_storage_code : '',
-                        coords : ''
-                    };*/
+                    this.openDialog(null);
                 }
-                this.dialogVisible = true;
             },
             handleDelete : function(index,row){
                 var _this = this;
