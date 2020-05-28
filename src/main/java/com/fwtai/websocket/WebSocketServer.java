@@ -1,5 +1,6 @@
 package com.fwtai.websocket;
 
+import com.fwtai.service.TaskService;
 import com.fwtai.tool.ToolClient;
 import com.fwtai.tool.ToolString;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 //连接WebSocket服务端
@@ -62,7 +64,9 @@ public class WebSocketServer{
         }
         System.out.println("当前连接用户:" + userId + ",当前在线人数为:" + getOnlineCount());
         try{
-            final String json = ToolClient.createJsonSuccess("连接成功");
+            final TaskService authService =  (TaskService) SpringUtil.getBean("taskService");
+            final List<HashMap<String,Object>> hashMaps = authService.queryListTask();
+            final String json = ToolClient.queryJson(hashMaps);
             sendMsg(json);
         }catch(IOException e){
             System.out.println("用户:" + userId + ",网络异常!!!!!!");
