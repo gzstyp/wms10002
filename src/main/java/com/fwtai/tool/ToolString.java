@@ -925,7 +925,7 @@ public final class ToolString implements Serializable {
     */
     public final static ArrayList<Object> jsonArrayToList(final Object jsonArray){
         final ArrayList<Object> lists = new ArrayList<>();
-        final JSONArray arrays = ToolString.parseJsonArray(String.valueOf(jsonArray));
+        final JSONArray arrays = parseJsonArray(String.valueOf(jsonArray));
         for(int x = 0; x < arrays.size(); x++){
             lists.add(arrays.get(x));
         }
