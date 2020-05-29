@@ -30,10 +30,11 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="empty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
             <el-table-column type="selection" width="35"></el-table-column>
-            <el-table-column prop="item_storage_code" label="楼层平面图名称" width="180"></el-table-column>
-            <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="floor_name" label="楼层平面图名称" width="180"></el-table-column>
+            <el-table-column prop="width" label="图片的宽度" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="height" label="图片的高度" show-overflow-tooltip></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -53,26 +54,74 @@
             :total="page.total">
         </el-pagination>
     </div>
-    <el-dialog style="display:none;" title="编辑货位号" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
+    <el-dialog style="display:none;" :title="dialogTitle" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <div>
-            <el-form ref="form" :model="formData" label-width="120px">
-                <el-form-item label="货位号">
-                    <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:340px;"></el-input>
+            <el-form ref="formData" :model="formData" label-width="120px">
+                <el-form-item label="楼层平面图名称" prop="floor_name">
+                    <el-input v-model="formData.floor_name" placeholder="楼层平面图名称" clearable style="width:340px;"></el-input>
+                </el-form-item>
+                <el-form-item label="图片的宽度" prop="width">
+                    <el-input v-model="formData.width" placeholder="图片的宽度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
+                </el-form-item>
+                <el-form-item label="图片的高度" prop="height">
+                    <el-input v-model="formData.height" placeholder="图片的高度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
+                </el-form-item>
+                <el-form-item label="热点usemap值" prop="usemap">
+                    <el-input v-model="formData.usemap" placeholder="usemap值" clearable style="width:340px;"></el-input>
                 </el-form-item>
                 <el-form-item label="楼层平面图">
-                    <el-select v-model="formData.images_id" placeholder="选择楼层平面图" style="width:340px;">
-                        <el-option label="不选择" value=""></el-option>
-                        <el-option
-                            v-for="item in optionsFloor"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
+                    <el-upload style="width:340px;"
+                        ref="upload"
+                        action="http://127.0.0.1:82/show/imageInfo"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :on-success="onSuccess"
+                        :on-error="onError"
+                        :on-change="onChange"
+                        :file-list="fileList"
+                        list-type="picture"
+                        :multiple=false
+                        :auto-upload="false">
+                        <el-button size="small">选择图片</el-button>
+                    </el-upload>
                 </el-form-item>
-                <el-form-item label="热点区域">
-                    <el-input v-model="formData.coords" placeholder="热点区域" clearable style="width:340px;"></el-input>
-                </el-form-item>
+
+
+                <div id="upload">
+                    <!--elementui的上传图片的upload组件-->
+                    <el-upload class="upload-demo"
+                               ref="upload"
+                               list-type="picture-card"
+                               action="http://127.0.0.1:82/show/imageInfo"
+                               :limit="9"
+                               :on-preview="handlePreview"
+                               :before-upload="beforeupload"
+                               :on-exceed="exceedHandle"
+                               :auto-upload="false"
+                               :multiple='true'>
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <!--展示选中图片的区域-->
+                    <%--<el-dialog :visible.sync="dialogVisible">
+                        <img width="100%"
+                             :src="dialogImageUrl"
+                             alt="">
+                    </el-dialog>--%>
+                    <!--elementui的form组件-->
+                    <el-form ref="form"
+                             :model="formData"
+                             label-width="80px">
+                        <el-form-item label="活动名称">
+                            <el-input v-model="formData.floor_name" name="names"
+                                      style="width:360px;"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary"
+                                       @click="onSubmit">立即创建</el-button>
+                            <el-button>取消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -95,15 +144,36 @@
         el : '#app',
         data : function(){
             return {
-                empty:'暂无数据',
+                dialogImageUrl : '',
+                listEmpty:'暂无数据',
+                dialogTitle :'编辑楼层平面图',
                 formData : {
                     kid : '',
-                    images_id : '',
-                    item_storage_code : '',
-                    coords : ''
+                    floor_name : '',
+                    width : '',
+                    height : '',
+                    usemap : '',
+                    img_url : ''
                 },
+                fileList : [],
                 searchForm : {
                     storage_code : ''
+                },
+                rules: {
+                    floor_name: [
+                        {required:true, message:'楼层平面图名称',trigger: 'blur'},
+                        {min:2,max:64,message:'长度在2到64个字符',trigger: 'blur'}
+                    ],
+                    width: [
+                        {required:true, message:'请输入图片的宽度',trigger:'blur'},
+                        {pattern: /^-?\d+\.?\d*$/,min:0,message:'请输入正确的数值',trigger:'blur'}
+                    ],
+                    height: [
+                        {required:true, message:'请输入图片的高度',trigger:'blur'}
+                    ],
+                    usemap: [
+                        {required:true,message:'请输入图片热点usemap值',trigger:'blur'}
+                    ],
                 },
                 kids: [],
                 listDatas : [],
@@ -119,7 +189,6 @@
         },
         created() {
             this.getListData();
-            this.getOptions();
         },
         methods : {
             // 行选择触发事件
@@ -132,6 +201,28 @@
             dblclick : function(row,column,event){
                 this.openDialog(row);
             },
+            handleRemove(file,fileList) {
+                console.log(file,fileList);
+            },
+            onSuccess : function(response,file,fileList){
+                console.info(response);
+                console.info(file);
+                console.info(fileList);
+            },
+            onError : function(err,file,fileList){
+
+            },
+            //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+            onChange : function(file,fileList){
+
+            },
+            //预览
+            handlePreview(file){
+                console.log(file);
+            },
+            submitUpload(){
+                this.$refs.upload.submit();
+            },
             search : function(){
                 this.getListData();
             },
@@ -139,18 +230,14 @@
                 if(row != null && row.kid != null){
                     this.formData = {
                         kid : row.kid,
-                        images_id : row.images_id,
-                        item_storage_code : row.item_storage_code,
-                        coords : row.coords
+                        floor_name : row.floor_name,
+                        width : row.width,
+                        height : row.height,
+                        usemap : row.usemap,
+                        img_url : row.img_url
                     };
                 }else{
                     this.formData = {};
-                    /*this.formData = {
-                        kid : '',
-                        images_id : '',
-                        item_storage_code : '',
-                        coords : ''
-                    };*/
                 }
                 this.dialogVisible = true;
             },
@@ -164,24 +251,34 @@
                 this.dialogVisible = false;
             },
             checkForm : function(){
-                if(!this.formData.item_storage_code){
-                    elementFn.fnMsgError('请填写货位号');
+                if(!this.formData.floor_name){
+                    elementFn.fnMsgError('楼层平面图名称');
                     return;
                 }
-                if(!this.formData.images_id){
-                    elementFn.fnMsgError('请选择楼层平面图');
+                if(!this.formData.width){
+                    elementFn.fnMsgError('请填写图片宽度');
                     return;
                 }
-                if(!this.formData.coords){
-                    elementFn.fnMsgError('请填写热点区域');
+                if(!this.formData.height){
+                    elementFn.fnMsgError('请填写图片高度');
                     return;
                 }
+                if(!this.formData.usemap){
+                    elementFn.fnMsgError('请填图片热点区域usemap');
+                    return;
+                }
+                /*if(!this.formData.img_url){
+                    elementFn.fnMsgError('请请上传图片');
+                    return;
+                }*/
                 return true;
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
+                    this.dialogTitle='编辑楼层平面图';
                     this.openDialog(item);
                 }else{
+                    this.dialogTitle='添加楼层平面图';
                     this.openDialog(null);
                 }
             },
@@ -227,7 +324,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'show/add' : 'show/edit';
+                var url = (kid == null || kid.length <= 0) ? 'show/imageInfo' : 'show/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.handleResult(data.data);
@@ -252,18 +349,7 @@
                         _this.listDatas = [];
                         _this.page.total = 0;
                     }else{
-                        _this.empty = data.data.msg;
-                    }
-                });
-            },
-            getOptions : function(){
-                var _this = this;
-                ajax.get("show/getAllFloorMap",{},function(data){
-                    if(data.data.code === 200){
-                        _this.optionsFloor = [];
-                        _this.optionsFloor = data.data.data;
-                    }else{
-                        _this.optionsFloor[0].label= data.data.msg;
+                        _this.listEmpty = data.data.msg;
                     }
                 });
             },
@@ -275,6 +361,55 @@
             currentChange : function(current){
                 this.page.current = current;
                 this.getListData();
+            },
+
+
+
+
+            // 1，上传前移除事件
+            beforeRemove (file, fileList) {
+                return this.$confirm(`确定移除 ${file.name}？`)
+            },
+            // 2，上传前事件
+            beforeupload (file) {
+                // 2.1，重新写一个表单上传的方法
+                this.param = new FormData()
+                this.fileList.push(file) // 把单个文件变成数组
+                let images = [...this.fileList] // 把数组存储为一个参数，便于后期操作
+                // 2.2，遍历数组
+                images.forEach((img, index) => {
+                    this.param.append(`img_${index}`, img) // 把单个图片重命名，存储起来（给后台）
+                })
+                return false
+            },
+            // 3，点击文件列表中已上传的文件时的钩子
+            handlePictureCardPreview (file) {
+                this.dialogImageUrl = file.url
+                this.dialogVisible = true
+            },
+            // 4，表单提交的事件
+            onSubmit () {
+                let _this = this
+                debugger;
+                var names = _this.formData.floor_name
+                this.$refs.upload.submit()
+                // 4.1，下面append的东西就会到form表单数据的this.param中；
+                this.param.append('company_id', _this.company_id)
+                this.param.append('caption', names)
+                // 4.2，赋予提交请求头，格式为：'multipart/form-data'（必须！！）
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                // 4.3，然后通过下面的方式把内容通过axios来传到后台
+                axios.post('http://127.0.0.1:82/show/imageInfo', this.param, config).then(function (result) {
+                    console.log(result)
+                })
+            },
+            // 5设置超过9张图给与提示
+            exceedHandle () {
+                alert('您现在选择已超过9张图，请重新选择')
             }
         }
     });
