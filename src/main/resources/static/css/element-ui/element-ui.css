@@ -16,9 +16,9 @@
     flex:1;
     overflow: auto;
 }
-/*表格内的样式  padding: 8px 0; 较为好看*/
+/*表格内的样式  padding: 6px 0; 较为好看*/
 .el-table td, .el-table th{
-    padding:8px 0;
+    padding:6px 0;
 }
 /*暂无数据的样式*/
 .el-table__empty-block {min-height:41px;}
