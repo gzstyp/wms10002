@@ -8,13 +8,21 @@
 elementFn = new Vue({
     methods : {
         fnMessage : function(msg){
-            this.$message(msg);
+            this.$message({
+                showClose: true,
+                message : msg
+            });
         },
         fnMsgError : function(msg){
-            this.$message.error(msg);
+            this.$message.error({
+                showClose: true,
+                message : msg,
+                type : 'error'
+            });
         },
         fnMsgSuccess : function(msg){
             this.$message({
+                showClose: true,
                 message : msg,
                 type : 'success'
             });

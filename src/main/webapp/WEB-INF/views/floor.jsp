@@ -76,7 +76,7 @@
             </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitSave">提交</el-button>
+            <el-button type="primary" @click="submits()">提交</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
         </span>
     </el-dialog>
@@ -189,16 +189,19 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     _this.listDatas.splice(index,1);
                     ajax.post('show/delById',{kid:row.kid},function(data){
-                        if(data.data.code === 200){
-                            elementFn.fnMsgSuccess(data.data.msg);
-                            _this.getListData();
-                        }else{
-                            elementFn.fnMsgError(data.data.msg);
-                        }
+                        _this.handleResult(data.data);
                     });
                 },function(){
                     elementFn.fnMessage('已取消操作');
                 });
+            },
+            handleResult : function(data){
+                if(data.code === 200){
+                    elementFn.fnMsgSuccess(data.msg);
+                    this.getListData();
+                }else{
+                    elementFn.fnMsgError(data.msg);
+                }
             },
             delByKeys : function(){
                 var _this = this;
@@ -206,12 +209,7 @@
                     elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         elementFn.fnMessage('已确认操作');
                         ajax.post('show/delByKeys',{ids:_this.kids},function(data){
-                            if(data.data.code === 200){
-                                elementFn.fnMsgSuccess(data.data.msg);
-                                _this.getListData();
-                            }else{
-                                elementFn.fnMsgError(data.data.msg);
-                            }
+                            _this.handleResult(data.data);
                         });
                     },function(){
                         elementFn.fnMessage('已取消操作');
@@ -220,7 +218,7 @@
                     elementFn.fnMsgError('请选择要删除的数据!');
                 }
             },
-            submitSave : function(){
+            submits : function(){
                 var form = this.checkForm();
                 if(!form){
                     return;
@@ -229,12 +227,7 @@
                 var kid = this.formData.kid;
                 var url = (kid == null || kid.length <= 0) ? 'show/add' : 'show/edit';
                 ajax.post(url,this.formData,function(data){
-                    if(data.data.code === 200){
-                        elementFn.fnMsgSuccess(data.data.msg);
-                        _this.getListData();
-                    }else{
-                        elementFn.fnMsgError(data.data.msg);
-                    }
+                    _this.handleResult(data.data);
                 });
                 this.dialogVisible = false;
             },
