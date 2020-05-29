@@ -27,13 +27,13 @@
                 <div style="margin-left:290px;" id="image_area">
                     <img id="img_map" width="1496" height="568" usemap="#areaMap" class="imageMap">
                     <map name="areaMap" id="areaMap">
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="办公区" coords="237,102,307,125"/>
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="物资展览区" coords="211,149,304,240"/>
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="充电区" coords="212,331,304,422"/>
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="货位信息1" coords="375,137,393,152"/>
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="货位信息2" coords="392,138,409,151"/>
-                        <area shape="rect" onclick="values(this);" href="javascript:;" rel="电梯" coords="223,439,278,464"/>
-                        <area shape="poly" onclick="values(this);" href="javascript:;" rel="过道" coords="323,87,324,257,210,257,210,310,1365,312,1367,257,1278,257,1277,86,1249,89,1249,252,844,256,844,87,816,87,816,255,353,257,352,84" />
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="办公区" rel="办公区" coords="237,102,307,125"/>
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="物资展览区" rel="物资展览区" coords="211,149,304,240"/>
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="充电区" rel="充电区" coords="212,331,304,422"/>
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="货位信息1" rel="货位信息1" coords="375,137,393,152"/>
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="货位信息2" rel="货位信息2" coords="392,138,409,151"/>
+                        <area shape="rect" onclick="values(this);" href="javascript:;" title="电梯" rel="电梯" coords="223,439,278,464"/>
+                        <area shape="poly" onclick="values(this);" href="javascript:;" title="过道" rel="过道" coords="323,87,324,257,210,257,210,310,1365,312,1367,257,1278,257,1277,86,1249,89,1249,252,844,256,844,87,816,87,816,255,353,257,352,84" />
                     </map>
                 </div>
 			</div>
@@ -124,17 +124,23 @@
                 $("area").each(function(){
                     var name = $(this).attr("rel");
                     $(this).mouseover(function(e){
-                        self.indexLayer = topHint(name);
+                        //self.indexLayer = topHint(name);
                         //显示
                     }).mouseout(function(){
                         //隐藏
-                        layer.close(self.indexLayer);
+                        //layer.close(self.indexLayer);
                     });
                 });
             });
 
             function values(obj){
-                alert(obj.rel);
+                //var title = $(obj).attr("rel");
+                layer.msg('<div style="padding:16px;border-radius:8px;min-width:320px;min-height:240px;text-align:left;color:#fff;">'+obj.rel+'</div>',{
+                    time: 0,
+                    closeBtn: 0,
+                    shadeClose: true,
+                    shade: [0.1,'#fff']
+                });
             }
         </script>
 	</body>
