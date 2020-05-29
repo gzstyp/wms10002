@@ -43,5 +43,16 @@ elementFn = new Vue({
                 }
             });
         },
+        loadOpen : function(msg){
+            return this.$loading({
+                lock: true,
+                text: msg,
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.3)'
+            });
+        },
+        loadClose : function(loading){
+            loading.close();
+        }
     }
 });
