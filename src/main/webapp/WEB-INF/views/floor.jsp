@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <base href="<%=basePath%>">
-    <title>物联网应用平台</title>
+    <title>物联网应用平台-楼层货位管理</title>
     <link href="/css/element-ui/element-ui.css" rel="stylesheet">
     <link href="/css/page/page.container.css" rel="stylesheet">
 </head>
@@ -44,9 +44,11 @@
         <el-pagination
             v-if="page.size<page.total"
             background
-            layout="total,prev,pager,next,jumper"
+            layout="total,sizes,prev,pager,next,jumper"
+            @size-change="changeSize"
             @current-change="currentChange"
             :page-size="page.size"
+            :page-sizes="page.sizes"
             :current-page="page.current"
             :total="page.total">
         </el-pagination>
@@ -106,7 +108,8 @@
                 listDatas : [],
                 page: {
                     current: 1,
-                    size: 50,
+                    size: 20,
+                    sizes: [20,50,99],
                     total: 0
                 },
                 optionsFloor: [],
@@ -261,6 +264,11 @@
                         _this.optionsFloor[0].label= data.data.msg;
                     }
                 });
+            },
+            changeSize : function (pageSize){
+                this.page.current = 1;
+                this.page.size = pageSize;
+                this.getListData();
             },
             currentChange : function(current){
                 this.page.current = current;
