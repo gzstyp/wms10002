@@ -244,6 +244,9 @@
                     if(data.data.code === 200){
                         _this.listDatas = data.data.data;
                         _this.page.total = data.data.total;
+                    }else if(data.data.code === 202){
+                        _this.listDatas = [];
+                        _this.page.total = 0;
                     }
                 });
             },
