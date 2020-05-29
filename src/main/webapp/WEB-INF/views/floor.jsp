@@ -31,7 +31,7 @@
     </div>
     <div>
         <el-table :data="listDatas" :empty-text="empty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
-            <el-table-column type="selection" width="36"></el-table-column>
+            <el-table-column type="selection" width="35"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
             <el-table-column width="160" label="操作">
