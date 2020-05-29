@@ -30,7 +30,7 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" :empty-text="empty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
             <el-table-column type="selection" width="36"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
@@ -95,6 +95,7 @@
         el : '#app',
         data : function(){
             return {
+                empty:'暂无数据',
                 formData : {
                     kid : '',
                     images_id : '',
@@ -241,13 +242,17 @@
                 if(_this.searchForm.storage_code){
                     params.item_storage_code = _this.searchForm.storage_code;
                 }
+                elementFn.loadOpen();
                 ajax.get("show/listData",params,function(data){
+                    elementFn.loadClose();
                     if(data.data.code === 200){
                         _this.listDatas = data.data.data;
                         _this.page.total = data.data.total;
                     }else if(data.data.code === 202){
                         _this.listDatas = [];
                         _this.page.total = 0;
+                    }else{
+                        _this.empty = data.data.msg;
                     }
                 });
             },

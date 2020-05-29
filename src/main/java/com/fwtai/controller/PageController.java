@@ -37,4 +37,9 @@ public class PageController{
     public String floor(){
         return "floor";
     }
+
+    @GetMapping(value = "/upload")
+    public String upload(){
+        return "upload";
+    }
 }

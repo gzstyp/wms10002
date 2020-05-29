@@ -66,7 +66,7 @@ public class ExceptionMonitor{
 
     @ExceptionHandler({SocketTimeoutException.class,MyBatisSystemException.class,DataAccessException.class})
     public void socketTimeoutException(final HttpServletResponse response){
-        ToolClient.responseJson(ToolClient.exceptionJson("连接服务器超时,请重试……"),response);
+        ToolClient.responseJson(ToolClient.exceptionJson(),response);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
