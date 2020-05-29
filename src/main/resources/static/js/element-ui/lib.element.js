@@ -6,6 +6,10 @@
 */
 
 elementFn = new Vue({
+    data : {
+        title : '系统提示',
+        loadIndex:null
+    },
     methods : {
         fnMessage : function(msg){
             this.$message({
@@ -27,12 +31,55 @@ elementFn = new Vue({
                 type : 'success'
             });
         },
+        fnNotify : function(msg,type){
+            switch (type){
+                case 1:
+                    this.fnNotifySuccess(msg);
+                    break;
+                case 2:
+                    this.fnNotifyError(msg);
+                    break;
+                case 3:
+                    this.fnNotifyWarning(msg);
+                    break;
+                default:
+                    this.fnNotifyInfo(msg);
+                    break;
+            }
+        },
+        fnNotifySuccess : function(msg){
+            this.$notify({
+                title: this.title,
+                message: msg,
+                type: 'success'
+            });
+        },
+        fnNotifyWarning : function(msg){
+            this.$notify({
+                title: this.title,
+                message: msg,
+                type: 'warning'
+            });
+        },
+        fnNotifyInfo : function(msg){
+            this.$notify.info({
+                title: this.title,
+                message: msg,
+                type: 'info'
+            });
+        },
+        fnNotifyError : function(msg){
+            this.$notify.error({
+                title: this.title,
+                message: msg,
+                type: 'error'
+            });
+        },
         fnConfirm : function(msg,verify,cancel){
-            this.$confirm(msg, '系统提示',{
+            this.$confirm(msg,this.title,{
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-                //center: true
             }).then(() => {
                 if(verify){
                     verify();
@@ -44,15 +91,18 @@ elementFn = new Vue({
             });
         },
         loadOpen : function(msg){
-            return this.$loading({
+            msg = (msg == null || msg.length <= 0) ? '正在操作,请稍候……' : msg;
+            this.loadIndex = this.$loading({
                 lock: true,
                 text: msg,
                 spinner: 'el-icon-loading',
                 background: 'rgba(0, 0, 0, 0.3)'
             });
         },
-        loadClose : function(loading){
-            loading.close();
+        loadClose : function(){
+            if(this.loadIndex){
+                this.loadIndex.close();
+            }
         }
     }
 });
