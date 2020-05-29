@@ -187,6 +187,7 @@
             handleDelete : function(index,row){
                 var _this = this;
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
+                    elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
                     ajax.post('show/delById',{kid:row.kid},function(data){
                         _this.handleResult(data.data);
@@ -196,23 +197,23 @@
                 });
             },
             handleResult : function(data){
+                elementFn.loadClose();
                 if(data.code === 200){
-                    elementFn.fnMsgSuccess(data.msg);
+                    this.dialogVisible = false;
+                    elementFn.fnNotifySuccess(data.msg);
                     this.getListData();
                 }else{
-                    elementFn.fnMsgError(data.msg);
+                    elementFn.fnNotifyWarning(data.msg);
                 }
             },
             delByKeys : function(){
                 var _this = this;
                 if(this.kids){
                     elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
-                        elementFn.fnMessage('已确认操作');
                         ajax.post('show/delByKeys',{ids:_this.kids},function(data){
                             _this.handleResult(data.data);
                         });
-                    },function(){
-                        elementFn.fnMessage('已取消操作');
+                        elementFn.loadOpen();//注意不要放错顺序!!!
                     });
                 }else{
                     elementFn.fnMsgError('请选择要删除的数据!');
@@ -226,10 +227,10 @@
                 var _this = this;
                 var kid = this.formData.kid;
                 var url = (kid == null || kid.length <= 0) ? 'show/add' : 'show/edit';
+                elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.handleResult(data.data);
                 });
-                this.dialogVisible = false;
             },
             getListData : function(){
                 var _this = this;
