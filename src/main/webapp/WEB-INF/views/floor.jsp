@@ -263,7 +263,6 @@
                 var _this = this;
                 ajax.get("show/getAllFloorMap",{},function(data){
                     if(data.data.code === 200){
-                        _this.optionsFloor = [];
                         _this.optionsFloor = data.data.data;
                     }else{
                         _this.optionsFloor[0].label= data.data.msg;
