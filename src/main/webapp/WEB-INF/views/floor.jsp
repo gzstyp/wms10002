@@ -30,7 +30,7 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="empty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
             <el-table-column type="selection" width="35"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
@@ -53,7 +53,7 @@
             :total="page.total">
         </el-pagination>
     </div>
-    <el-dialog style="display:none;" title="编辑货位号" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
+    <el-dialog style="display:none;" :title="dialogTitle" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
                 <el-form-item label="货位号">
@@ -95,7 +95,8 @@
         el : '#app',
         data : function(){
             return {
-                empty:'暂无数据',
+                listEmpty:'暂无数据',
+                dialogTitle :'货位号信息',
                 formData : {
                     kid : '',
                     images_id : '',
@@ -180,8 +181,10 @@
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
+                    this.dialogTitle = '编辑';
                     this.openDialog(item);
                 }else{
+                    this.dialogTitle = '添加';
                     this.openDialog(null);
                 }
             },
@@ -252,7 +255,7 @@
                         _this.listDatas = [];
                         _this.page.total = 0;
                     }else{
-                        _this.empty = data.data.msg;
+                        _this.listEmpty = data.data.msg;
                     }
                 });
             },
