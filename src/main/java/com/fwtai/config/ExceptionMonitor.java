@@ -78,7 +78,7 @@ public class ExceptionMonitor{
             final String column = message.substring(start,forKey);
             final String value = request.getParameter(column);
             if(value != null){
-                ToolClient.responseJson(ToolClient.exceptionJson("输入的[<span style='color:#f00'>"+value+ "</span>]字符过多,减少一些试试"),response);
+                ToolClient.responseJson(ToolClient.exceptionJson("输入的["+value+ "字符过多,减少一些试试"),response);
             }else{
                 ToolClient.responseJson(ToolClient.exceptionJson("输入的字符过多,减少一些试试!"),response);
             }
@@ -94,7 +94,7 @@ public class ExceptionMonitor{
             final int start = message.lastIndexOf("Duplicate entry '") + 17;
             final int forKey = message.lastIndexOf("' for key '");
             final String value = message.substring(start,forKey);
-            ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的[<span style='color:#f00'>"+value + "</span>]已存在"),response);
+            ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的["+value + "]已存在"),response);
         }else{
             ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的数据已存在"),response);
         }
