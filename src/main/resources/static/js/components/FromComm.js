@@ -1,6 +1,7 @@
 /**
  * 组件名:form-comm,其命名规则：单文件组件的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)。(推荐使用短横线分隔命名)
  * 在使用时，就像普通的标签一样的使用即可,也就是: <form-comm></form-comm>
+ * 组件的传值可以通过不带冒号:的来传递字符串,如 id-key="userId";也可以通过带冒号:来传递变量,如 :id-key="userId"
 */
 Vue.component("form-comm",{
     /*模版*/
@@ -34,6 +35,7 @@ Vue.component("form-comm",{
     props : {
         // 表单的模型
         model : {},
+        idKey : null,
         //后端新增添加的api接口url,注意驼峰命名规则,即当组件定义成驼峰命名的 addUrl时,那在调用该组件时必须以 add-url 这样的写法，否则获取不到值,即把大写的字母换成-
         //组件的命名规则是 aaaXxxYyy,则在调用时就是 :aaa-xxx-yyy="变量名"
         addUrl : null,
@@ -43,13 +45,16 @@ Vue.component("form-comm",{
         console.info('add-->'+this.addUrl);//好使!!!
         console.info('edit-->'+this.editUrl);//好使!!!
         console.info('model-->'+this.model.price);//好使!!!
-        console.info('kid-->'+this.model.kid);
+        //好使,不要删除,console.info('kid-->'+this.model[this.idKey]);//组件的封装-主键字段的作为字符串来传递,取值是 this.model[this.idKey],传值是 id-key="kid",注意没有冒号:哦!!!
+        console.info('kid-->'+this.idKey);//组件的封装-主键字段的作为变量来传递,this.idKey,取值是 this.idKey,传值是 :id-key="model.主键",注意有冒号:哦!!!
     },
     /*方法*/
     methods : {
         submits : function(){
             if(this.model != null && this.model != undefined){
-                var kid = this.model.kid;
+                //var kid = this.model.kid;//好使!!!
+                var kid = this.idKey;
+                console.info('----->'+kid);
                 if(kid == null || kid.length <= 0){
                     this.add();
                 }else{

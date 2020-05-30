@@ -15,8 +15,13 @@
 <body>
 <div id="app">
     <%-- :model="Xxx"是传值到组件里的 props.model,add-url 也是传值到在组件里的 props.addUrl,需要注意的是以驼峰命名规则,用短横线分隔命名
-    组件的命名规则是在 props 的下的 aaaYyy,则在调用时就是 :aaa-yyy="变量名" | aaaXxxYyy --> :aaa-xxx-yyy="变量名"  --%>
-    <form-comm :model="goods" :add-url="url.add" :edit-url="url.edit">
+    组件的命名规则是在 props 的下的 aaaYyy,则在调用时就是 :aaa-yyy="变量名" | aaaXxxYyy --> :aaa-xxx-yyy="变量名",指定主键的字段,注意 id-key 是字符串,不带冒号:,所以不是变量!!!
+
+    好使,不要删除,console.info('kid-->'+this.model[this.idKey]);//组件的封装-主键字段的作为字符串来传递,取值是 this.model[this.idKey],传值是 id-key="kid",注意没有冒号:哦!!!
+    console.info('kid-->'+this.idKey);//组件的封装-主键字段的作为变量来传递,this.idKey,取值是 this.idKey,传值是 :id-key="model.主键",注意有冒号:哦!!!
+
+    --%>
+    <form-comm :model="goods" :add-url="url.add" :edit-url="url.edit" :id-key="goods.kid">
         <%--添加自己的元素--%>
         <%--<template>
             <el-form>
@@ -75,7 +80,7 @@
         methods : {
             getProductById : function(){
                 this.goods = {
-                    kid : '',
+                    kid : 1024585,
                     productName : 'apple',
                     num : '152',
                     price : '100.20'
