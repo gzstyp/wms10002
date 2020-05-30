@@ -48,11 +48,11 @@ Vue.component("form-comm",{
         }
     },
     created : function(){
-        console.info('add-->'+this.addUrl);//好使!!!
-        console.info('edit-->'+this.editUrl);//好使!!!
-        console.info('model-->'+this.model.price);//好使!!!
+        //console.info('add-->'+this.addUrl);//好使!!!
+        //console.info('edit-->'+this.editUrl);//好使!!!
+        //console.info('model-->'+this.model.price);//好使!!!
         //好使,不要删除,console.info('kid-->'+this.model[this.idKey]);//组件的封装-主键字段的作为字符串来传递,取值是 this.model[this.idKey],传值是 id-key="kid",注意没有冒号:哦!!!
-        console.info('kid-->'+this.idKey);//组件的封装-主键字段的作为变量来传递,this.idKey,取值是 this.idKey,传值是 :id-key="model.主键",注意有冒号:哦!!!
+        //console.info('kid-->'+this.idKey);//组件的封装-主键字段的作为变量来传递,this.idKey,取值是 this.idKey,传值是 :id-key="model.主键",注意有冒号:哦!!!
     },
     /*方法*/
     methods : {
@@ -95,24 +95,32 @@ Vue.component("form-comm",{
             }*/
         },
         add : function(){
-            if(this.addUrl != null && this.addUrl != undefined){
-                //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
-                console.info('add执行成功!-->'+this.addUrl);
-                /*console.info('-->'+this.model.price);
-                ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
-                    console.info('data-->'+data.data.code);
-                },function(err){
-                    console.info('err-->'+err);
-                });*/
+            if(this.model != null && this.model != undefined){
+                if(this.addUrl != null && this.addUrl != undefined){
+                    //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
+                    console.info('add执行成功!-->'+this.addUrl);
+                    /*console.info('-->'+this.model.price);
+                    ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
+                        console.info('data-->'+data.data.code);
+                    },function(err){
+                        console.info('err-->'+err);
+                    });*/
+                }else{
+                    alert('请设置add-url的访问接口');
+                }
             }else{
-                alert('请设置add-url的访问接口');
+                alert('请传mode对象');
             }
         },
         edit : function(){
-            if(this.editUrl != null && this.editUrl != undefined){
-                console.info('edit执行成功-->'+this.editUrl);
+            if(this.model != null && this.model != undefined){
+                if(this.editUrl != null && this.editUrl != undefined){
+                    console.info('edit执行成功-->'+this.editUrl);
+                }else{
+                    alert('请设置edit-url的访问接口');
+                }
             }else{
-                alert('请设置edit-url的访问接口');
+                alert('请传mode对象');
             }
         },
         closeForm : function(){
