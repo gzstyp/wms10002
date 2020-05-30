@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ichnography">
+
+    <update id="add" parameterType="HashMap">
+        INSERT INTO IMAGES(KID,WIDTH,HEIGHT,USEMAP,FLOOR_NAME,IMG_URL) VALUES (#{kid},#{width},#{height},#{usemap},#{floor_name},#{img_url})
+    </update>
+
+    <update id="edit" parameterType="HashMap">
+        UPDATE IMAGES
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="width != null">WIDTH = #{width},</if>
+            <if test="height != null">HEIGHT = #{height},</if>
+            <if test="floor_name != null">FLOOR_NAME = #{floor_name},</if>
+            <if test="img_url != null">IMG_URL = #{img_url},</if>
+            <if test="usemap != null">USEMAP = #{usemap}</if>
+        </trim>
+        WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delById" parameterType="String">
+        DELETE FROM IMAGES WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM IMAGES WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select kid,width,height,usemap,floor_name,img_url from IMAGES
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="floor_name != null">
+                AND FLOOR_NAME LIKE CONCAT(#{floor_name},'%')
+            </if>
+        </trim>
+        <choose>
+            <when test="order != null and column != null">
+                ORDER BY ${column} ${order}
+            </when>
+            <otherwise>
+                ORDER BY ADD_DATE DESC
+            </otherwise>
+        </choose>
+        LIMIT #{section},#{pageSize}
+    </select>
+
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT COUNT(KID) TOTAL FROM IMAGES
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="floor_name != null">
+                AND FLOOR_NAME LIKE CONCAT(#{floor_name},'%')
+            </if>
+        </trim>
+    </select>
+
+</mapper>

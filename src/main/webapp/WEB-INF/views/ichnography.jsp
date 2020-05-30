@@ -22,7 +22,7 @@
                 </el-col>
             </el-col>
             <el-col :span="6" :pull="1">
-                <el-input placeholder="楼层平面图名称" v-model="searchForm.storage_code" clearable/>
+                <el-input placeholder="楼层平面图名称" v-model="searchForm.floor_name" clearable/>
             </el-col>
             <el-col :span="6" :pull="1" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
             <%--<el-col :span="4" style="background:#ccb19b;height:40px;line-height:40px;">4份</el-col>
@@ -32,9 +32,11 @@
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
             <el-table-column type="selection" width="35"></el-table-column>
-            <el-table-column prop="floor_name" label="楼层平面图名称" width="180"></el-table-column>
-            <el-table-column prop="width" label="图片的宽度" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="height" label="图片的高度" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="floor_name" label="楼层平面图名称" width="300"></el-table-column>
+            <el-table-column prop="width" label="宽度" width="72"></el-table-column>
+            <el-table-column prop="height" label="高度" width="72"></el-table-column>
+            <el-table-column prop="usemap" label="usemap值" width="150"></el-table-column>
+            <el-table-column prop="img_url" label="图片的路径" show-overflow-tooltip></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -72,7 +74,7 @@
                 <el-form-item label="楼层平面图">
                     <el-upload style="width:340px;"
                         ref="upload"
-                        action="http://127.0.0.1:82/show/imageInfo"
+                        action="http://127.0.0.1:823/ichnography/imageInfo"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :on-success="onSuccess"
@@ -92,7 +94,6 @@
                     <el-upload class="upload-demo"
                                ref="upload"
                                list-type="picture-card"
-                               action="http://127.0.0.1:82/show/imageInfo"
                                :limit="9"
                                :on-preview="handlePreview"
                                :before-upload="beforeupload"
@@ -157,7 +158,7 @@
                 },
                 fileList : [],
                 searchForm : {
-                    storage_code : ''
+                    floor_name : ''
                 },
                 rules: {
                     floor_name: [
@@ -287,7 +288,7 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
-                    ajax.post('show/delById',{kid:row.kid},function(data){
+                    ajax.post('ichnography/delById',{kid:row.kid},function(data){
                         _this.handleResult(data.data);
                     });
                 },function(){
@@ -308,7 +309,7 @@
                 var _this = this;
                 if(this.kids){
                     elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
-                        ajax.post('show/delByKeys',{ids:_this.kids},function(data){
+                        ajax.post('ichnography/delByKeys',{ids:_this.kids},function(data){
                             _this.handleResult(data.data);
                         });
                         elementFn.loadOpen();//注意不要放错顺序!!!
@@ -324,7 +325,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'show/imageInfo' : 'show/edit';
+                var url = (kid == null || kid.length <= 0) ? 'ichnography/imageInfo' : 'ichnography/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.handleResult(data.data);
@@ -336,11 +337,11 @@
                     current : _this.page.current,
                     pageSize : _this.page.size
                 };
-                if(_this.searchForm.storage_code){
-                    params.item_storage_code = _this.searchForm.storage_code;
+                if(_this.searchForm.floor_name){
+                    params.floor_name = _this.searchForm.floor_name;
                 }
                 elementFn.loadOpen();
-                ajax.get("show/listData",params,function(data){
+                ajax.get("ichnography/listData",params,function(data){
                     elementFn.loadClose();
                     if(data.data.code === 200){
                         _this.listDatas = data.data.data;
@@ -373,12 +374,14 @@
             // 2，上传前事件
             beforeupload (file) {
                 // 2.1，重新写一个表单上传的方法
-                this.param = new FormData()
+                this.param = new FormData();
                 this.fileList.push(file) // 把单个文件变成数组
-                let images = [...this.fileList] // 把数组存储为一个参数，便于后期操作
+                //console.info(this.fileList);
+                var images = [...this.fileList] // 把数组存储为一个参数，便于后期操作
                 // 2.2，遍历数组
+                //debugger;
                 images.forEach((img, index) => {
-                    this.param.append(`img_${index}`, img) // 把单个图片重命名，存储起来（给后台）
+                    this.param.append(img.name,img); // 把单个图片重命名，存储起来（给后台）
                 })
                 return false
             },
@@ -390,12 +393,11 @@
             // 4，表单提交的事件
             onSubmit () {
                 let _this = this
-                debugger;
                 var names = _this.formData.floor_name
                 this.$refs.upload.submit()
                 // 4.1，下面append的东西就会到form表单数据的this.param中；
-                this.param.append('company_id', _this.company_id)
-                this.param.append('caption', names)
+                this.param.append('company_id',"852698545656");
+                this.param.append('caption',"5645612345868");
                 // 4.2，赋予提交请求头，格式为：'multipart/form-data'（必须！！）
                 let config = {
                     headers: {
@@ -403,8 +405,10 @@
                     }
                 }
                 // 4.3，然后通过下面的方式把内容通过axios来传到后台
-                axios.post('http://127.0.0.1:82/show/imageInfo', this.param, config).then(function (result) {
-                    console.log(result)
+                console.info('-准备提交表单-');
+                console.info(this.fileList);
+                axios.post('http://127.0.0.1:82/ichnography/imageInfo', this.param, config).then(function (result) {
+                    console.log(result)//上传成功后要移除或清空图片
                 })
             },
             // 5设置超过9张图给与提示
