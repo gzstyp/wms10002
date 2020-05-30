@@ -57,21 +57,12 @@ Vue.component("form-comm",{
     /*方法*/
     methods : {
         submits : function(){
-            var kid = this.idKey;
             if(this.onValidation){
                 if(this.onValidation(this.model)){
-                    if(kid == null || kid.length <= 0){
-                        this.add();
-                    }else{
-                        this.edit();
-                    }
+                    this.addOrEdit();
                 }
             }else{
-                if(kid == null || kid.length <= 0){
-                    this.add();
-                }else{
-                    this.edit();
-                }
+                this.addOrEdit();
             }
             /*if(this.model != null && this.model != undefined){
                 //var kid = this.model.kid;//好使!!!
@@ -121,6 +112,14 @@ Vue.component("form-comm",{
                 }
             }else{
                 alert('请传mode对象');
+            }
+        },
+        addOrEdit : function(){
+            var kid = this.idKey;
+            if(kid == null || kid.length <= 0){
+                this.add();
+            }else{
+                this.edit();
             }
         },
         closeForm : function(){
