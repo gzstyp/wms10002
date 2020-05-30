@@ -38,8 +38,9 @@ public class PageController{
         return "floor";
     }
 
-    @GetMapping(value = "/upload")
-    public String upload(){
-        return "upload";
+    // http://127.0.0.1:82/ichnography
+    @GetMapping(value = "/ichnography")
+    public String ichnography(){
+        return "ichnography";
     }
 }

@@ -5,10 +5,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fwtai.bean.PageFormData;
 import com.fwtai.config.ConfigFile;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -637,5 +641,116 @@ public final class ToolClient implements Serializable{
         pageFormData.put(ConfigFile.pageSize,size);//每页大小
         pageFormData.remove("current");
         return pageFormData;
+    }
+
+    /**
+     * 封装文件上传,指定上传的目录,返回值HashMap<String,Object>,files,params,error
+     * @param baseDir 该值的结尾必须要带 /
+     * @param limit 如果该值为null或为负数时则不限制文件数
+     * @return HashMap<key,Object>,其中key可能为error,files,params，要做判断再做页面处理
+     * @作者 田应平
+     * @QQ 444141300
+     * @创建时间 2020/5/30 10:19
+    */
+    public final static HashMap<String,Object> uploadImage(final HttpServletRequest request,final String baseDir,final Integer limit){
+        //final PageFormData formData = new PageFormData().build(request);
+        final PageFormData formData = new PageFormData(request);
+        final HashMap<String,Object> objectHashMap = new HashMap<String,Object>(2);
+        final String error = "error";
+        MultipartHttpServletRequest mhsr = null;
+        try {
+            mhsr =  (MultipartHttpServletRequest) request;
+        } catch (Exception e){
+            objectHashMap.put(error,"请上传文件");
+            return objectHashMap;
+        }
+        if(mhsr == null){
+            objectHashMap.put(error,"未上传文件");
+            return objectHashMap;
+        }
+        final DiskFileItemFactory fac = new DiskFileItemFactory();
+        final ServletFileUpload upload = new ServletFileUpload(fac);
+        String originalPath = null;
+        try {
+            upload.setHeaderEncoding("utf-8");
+            mhsr.setCharacterEncoding("utf-8");
+            /* 在 spring boot 的jar下这个方式想不通啦!!!
+            final String sys = File.separator;
+            String dirType = sys;
+            final String savePath = mhsr.getSession().getServletContext().getRealPath(dirType);
+            final File directory = new File(savePath);
+            if(!directory.exists()){
+                directory.mkdirs();
+            }*/
+            final Map<String,MultipartFile> map = mhsr.getFileMap();
+            if(map == null || map.size() <=0){
+                objectHashMap.put(error,"请选择上传文件");
+                return objectHashMap;
+            }
+            if(limit != null && limit > 0){
+                if(map != null && map.size() > limit){
+                    objectHashMap.put(error,"图片数量已超过限制");
+                    return objectHashMap;
+                }
+            }
+            final ArrayList<HashMap<String,String>> fileList = new ArrayList<HashMap<String,String>>();
+            boolean bl = false;
+            for(final String key : map.keySet()){
+                final MultipartFile mf = mhsr.getFile(key);
+                if(mf.getSize() > 5242880l){
+                    bl = true;
+                    break;
+                }
+                final String name = mf.getOriginalFilename();
+                final String extName = name.substring(name.lastIndexOf("."));
+                final String fileName = ToolString.getIdsChar32() + extName;
+                final File fileDir = new File(baseDir);
+                if(!fileDir.exists()){
+                    fileDir.mkdirs();
+                }
+                originalPath = baseDir + fileName;
+                mf.transferTo(new File(originalPath));
+                final HashMap<String,String> maps = new HashMap<String,String>(3);
+                maps.put("originalName",name);
+                maps.put("fileName",fileName);
+                maps.put("path",originalPath);
+                fileList.add(maps);
+            }
+            if(bl){
+                for(int i = 0; i < fileList.size(); i++){
+                    delFileByThread(fileList.get(i).get("path"));
+                }
+                objectHashMap.put(error,"操作失败,某个文件过大");
+                return objectHashMap;
+            }
+            if(fileList.size() > 0){
+                objectHashMap.put("files",fileList);
+            }
+            if(formData.size() > 0){
+                objectHashMap.put("params",formData);
+            }
+            return objectHashMap;
+        } catch (Exception e) {
+            delFileByThread(originalPath);
+            objectHashMap.put(error,"操作失败,处理文件失败");
+            return objectHashMap;
+        }
+    }
+
+    /**
+     * 开线程访问服务器删除图片
+     * @date 2019年10月31日 16:41:40
+    */
+    public final static void delFileByThread(final String filePath) {
+        try {
+            new Thread(){
+                public void run() {
+                    final File file = new File(filePath);
+                    if(file.isFile()){
+                        file.delete();
+                    }
+                }
+            }.start();
+        } catch (Exception e){}
     }
 }
