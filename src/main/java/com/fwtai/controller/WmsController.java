@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -147,6 +148,7 @@ public class WmsController{
 
     @ApiOperation(value = "客户端连接服务端成功后获取未完成的任务指令", notes = "连接成功后获取未完成的任务指令列表")
     @GetMapping("/getTask")
+    @ApiIgnore
     public void getTask(final HttpServletResponse response){
         final String json = ToolClient.queryJson(taskService.queryListTask());//收到指令任务时获取任务列表
         ToolClient.responseJson(json,response);

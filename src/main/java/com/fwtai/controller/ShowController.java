@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 */
 @RestController
 @CrossOrigin
-@Api(tags = "出入库接口文档")
+@Api(tags = "楼层平面图")
+@ApiIgnore
 @RequestMapping("/show")
 public class ShowController{
 

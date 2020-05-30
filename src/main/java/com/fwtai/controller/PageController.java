@@ -43,4 +43,10 @@ public class PageController{
     public String ichnography(){
         return "ichnography";
     }
+
+    // http://127.0.0.1:82/component
+    @GetMapping(value = "/component")
+    public String component(){
+        return "component";
+    }
 }
