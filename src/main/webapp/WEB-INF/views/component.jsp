@@ -14,7 +14,9 @@
 </head>
 <body>
 <div id="app">
-    <%-- :model="Xxx"是传值到组件里的 props.model,add-url 也是传值到在组件里的 props.addUrl,需要注意的是以驼峰命名规则,用短横线分隔命名
+    <%--
+       这里是父组件!!!!!
+    :model="Xxx"是传值到组件里的 props.model,add-url 也是传值到在组件里的 props.addUrl,需要注意的是以驼峰命名规则,用短横线分隔命名
     组件的命名规则是在 props 的下的 aaaYyy,则在调用时就是 :aaa-yyy="变量名" | aaaXxxYyy --> :aaa-xxx-yyy="变量名",指定主键的字段,注意 id-key 是字符串,不带冒号:,所以不是变量!!!
 
     好使,不要删除,console.info('kid-->'+this.model[this.idKey]);//组件的封装-主键字段的作为字符串来传递,取值是 this.model[this.idKey],传值是 id-key="kid",注意没有冒号:哦!!!
@@ -26,7 +28,9 @@
         :model="goods"
         :add-url="url.add"
         :edit-url="url.edit"
-        :id-key="goods.kid">
+        :id-key="goods.kid"
+        :on-validation="onValidation"
+        >
         <%--添加自己的元素--%>
         <%--<template>
             <el-form>
@@ -107,7 +111,19 @@
                 }
                 //this.boxTitle =`编辑商品\${this.goods.productName}`;//这里需要注意的是,如果是在html页面下是不需要加转义符\的
                 this.boxTitle =`编辑商品\${this.goods.productName}`;//因为是在jsp页面环境里$的jsp的特殊的标识,所以要转义符\处理,而在html下是不需要做转义符处理的
-            }
+            },
+            //这里是父组件,这里的model是从子组件(组件[名])的 this.onValidation(this.model) 的this.model的数据,最后需要注意的是必须返回true才能执行表单的提交!!!
+            onValidation : function(model){
+                var productName = model.productName;
+                var num = model.num;
+                if(productName == null || productName.length <= 0){
+                    alert('请输入商品名称!');return false;
+                }
+                if(num == null || num.length <= 0){
+                    alert('请输入库存数量');return false;
+                }
+                return true;
+            },
         }
     });
 </script>

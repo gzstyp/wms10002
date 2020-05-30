@@ -40,7 +40,12 @@ Vue.component("form-comm",{
         addUrl : null,
         editUrl : null,
         boxTitle : null,
-        formType : null
+        formType : null,
+        //方法和属性一样,都是用冒号:来传值,即
+        onValidation : {
+            type : Function,
+            default : null
+        }
     },
     created : function(){
         console.info('add-->'+this.addUrl);//好使!!!
@@ -52,18 +57,42 @@ Vue.component("form-comm",{
     /*方法*/
     methods : {
         submits : function(){
-            if(this.model != null && this.model != undefined){
-                //var kid = this.model.kid;//好使!!!
-                var kid = this.idKey;
-                console.info('----->'+kid);
+            var kid = this.idKey;
+            if(this.onValidation){
+                if(this.onValidation(this.model)){
+                    if(kid == null || kid.length <= 0){
+                        this.add();
+                    }else{
+                        this.edit();
+                    }
+                }
+            }else{
                 if(kid == null || kid.length <= 0){
                     this.add();
                 }else{
                     this.edit();
                 }
+            }
+            /*if(this.model != null && this.model != undefined){
+                //var kid = this.model.kid;//好使!!!
+                var kid = this.idKey;
+                console.info('----->'+kid);
+                if(kid == null || kid.length <= 0){
+                    if(this.onValidation){
+                        if(this.onValidation(this.model)){
+                            this.add();
+                        }
+                    }
+                }else{
+                    if(this.onValidation){
+                        if(this.onValidation(this.model)){
+                            this.edit();
+                        }
+                    }
+                }
             }else{
                 alert('你保存的model对象模型没有定义或为空');
-            }
+            }*/
         },
         add : function(){
             if(this.addUrl != null && this.addUrl != undefined){
