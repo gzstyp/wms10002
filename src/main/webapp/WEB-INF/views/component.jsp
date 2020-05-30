@@ -16,7 +16,7 @@
 <div id="app">
     <%-- :model="Xxx"是传值到组件里的 props.model,add-api-url 也是传值到在组件里的 props.addApiUrl,需要注意的是以驼峰命名规则,用短横线分隔命名
     组件的命名规则是在 props 的下的 aaaXxxYyy,则在调用时就是 :aaa-xxx-yyy="变量名" --%>
-    <form-comm :model="goods" :add-api-url="url.listData">
+    <form-comm :model="goods" :add-api-url="url.add">
         <%--添加自己的元素--%>
         <%--<template>
             <el-form>
@@ -64,7 +64,8 @@
                     price : '100.20'
                 },
                 url : {
-                    listData : 'ichnography/listData'
+                    add : 'ichnography/add',
+                    edit : 'ichnography/edit'
                 }
             }
         },
