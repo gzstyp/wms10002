@@ -65,19 +65,18 @@
 <script>
     new Vue({
         el : '#app',
-        data : function(){
-            return {
-                boxTitle : '编辑',
-                goods : {
-                    kid : null,
-                    productName : 'apple',
-                    num : '152',
-                    price : '100.20'
-                },
-                url : {
-                    add : 'ichnography/add',
-                    edit : 'ichnography/edit'
-                }
+        //方法才返回才有return,属性就不需要return返回
+        data : {
+            boxTitle : '添加',
+            goods : {
+                kid : null,
+                productName : 'apple',
+                num : '152',
+                price : '100.20'
+            },
+            url : {
+                add : 'ichnography/add',
+                edit : 'ichnography/edit'
             }
         },
         created() {
@@ -87,10 +86,12 @@
             getProductById : function(){
                 this.goods = {
                     kid : 1024585,
-                    productName : 'apple',
+                    productName : 'apple充电器',
                     num : '152',
                     price : '100.20'
                 }
+                //this.boxTitle =`编辑商品\${this.goods.productName}`;//这里需要注意的是,如果是在html页面下是不需要加转义符\的
+                this.boxTitle =`编辑商品\${this.goods.productName}`;//因为是在jsp页面环境里$的jsp的特殊的标识,所以要转义符\处理,而在html下是不需要做转义符处理的
             }
         }
     });
