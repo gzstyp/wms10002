@@ -33,36 +33,51 @@ Vue.component("form-comm",{
     /*通过 props 传递数据 (推荐)*/
     props : {
         // 表单的模型
-        model : {
-
-        },
-        //后端新增添加的api接口url,注意驼峰命名规则,即当组件定义成驼峰命名的 addApiUrl时,那在调用该组件时必须以 add-api-url 这样的写法，否则获取不到值,即把大写的字母换成-
+        model : {},
+        //后端新增添加的api接口url,注意驼峰命名规则,即当组件定义成驼峰命名的 addUrl时,那在调用该组件时必须以 add-url 这样的写法，否则获取不到值,即把大写的字母换成-
         //组件的命名规则是 aaaXxxYyy,则在调用时就是 :aaa-xxx-yyy="变量名"
-        addApiUrl : null
+        addUrl : null,
+        editUrl : null
     },
     created : function(){
-        console.info('api-->'+this.addApiUrl);//好使!!!
+        console.info('add-->'+this.addUrl);//好使!!!
+        console.info('edit-->'+this.editUrl);//好使!!!
         console.info('model-->'+this.model.price);//好使!!!
+        console.info('kid-->'+this.model.kid);
     },
     /*方法*/
     methods : {
         submits : function(){
             if(this.model != null && this.model != undefined){
-                if(this.addApiUrl != null && this.addApiUrl != undefined){
-
-                    //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
-                    console.info('保存成功!-->'+this.addApiUrl);
-                    /*console.info('-->'+this.model.price);
-                    ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
-                        console.info('data-->'+data.data.code);
-                    },function(err){
-                        console.info('err-->'+err);
-                    });*/
+                var kid = this.model.kid;
+                if(kid == null || kid.length <= 0){
+                    this.add();
                 }else{
-                    alert('请设置addApiUrl的访问接口');
+                    this.edit();
                 }
             }else{
                 alert('你保存的model对象模型没有定义或为空');
+            }
+        },
+        add : function(){
+            if(this.addUrl != null && this.addUrl != undefined){
+                //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
+                console.info('add执行成功!-->'+this.addUrl);
+                /*console.info('-->'+this.model.price);
+                ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
+                    console.info('data-->'+data.data.code);
+                },function(err){
+                    console.info('err-->'+err);
+                });*/
+            }else{
+                alert('请设置addUrl的访问接口');
+            }
+        },
+        edit : function(){
+            if(this.editUrl != null && this.editUrl != undefined){
+                console.info('edit执行成功-->'+this.editUrl);
+            }else{
+                alert('请设置editUrl的访问接口');
             }
         },
         closeForm : function(){
