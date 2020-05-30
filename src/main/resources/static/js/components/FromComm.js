@@ -1,5 +1,5 @@
 /**
- * 组件名称:form-comm,v-if="isShow || formType > 0"
+ * 组件名:form-comm,其命名规则：单文件组件的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)。(推荐使用短横线分隔命名)
  * 在使用时，就像普通的标签一样的使用即可,也就是: <form-comm></form-comm>
 */
 Vue.component("form-comm",{
@@ -32,24 +32,38 @@ Vue.component("form-comm",{
     },
     /*通过 props 传递数据 (推荐)*/
     props : {
+        // 表单的模型
         model : {
 
-        }
+        },
+        //后端新增添加的api接口url,注意驼峰命名规则,即当组件定义成驼峰命名的 addApiUrl时,那在调用该组件时必须以 add-api-url 这样的写法，否则获取不到值,即把大写的字母换成-
+        //组件的命名规则是 aaaXxxYyy,则在调用时就是 :aaa-xxx-yyy="变量名"
+        addApiUrl : null
     },
     created : function(){
-
+        console.info('api-->'+this.addApiUrl);//好使!!!
+        console.info('model-->'+this.model.price);//好使!!!
     },
     /*方法*/
     methods : {
         submits : function(){
-            //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
-            console.info('-->'+this.model);
-            console.info('-->'+this.model.price);
-            ajax.post('show/listData',{pageSize : 10,current : 1},function(data){
-                console.info('data-->'+data.data.code);
-            },function(err){
-                console.info('err-->'+err);
-            });
+            if(this.model != null && this.model != undefined){
+                if(this.addApiUrl != null && this.addApiUrl != undefined){
+
+                    //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
+                    console.info('保存成功!-->'+this.addApiUrl);
+                    /*console.info('-->'+this.model.price);
+                    ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
+                        console.info('data-->'+data.data.code);
+                    },function(err){
+                        console.info('err-->'+err);
+                    });*/
+                }else{
+                    alert('请设置addApiUrl的访问接口');
+                }
+            }else{
+                alert('你保存的model对象模型没有定义或为空');
+            }
         },
         closeForm : function(){
         }
