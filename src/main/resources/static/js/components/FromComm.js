@@ -10,7 +10,7 @@ Vue.component("form-comm",{
         <div v-if="isShow" class="model_form">
             <div class="button_group line">
                 <label>{{boxTitle}}</label>
-                <span v-if="formType < 1 || !formType" @click="closeForm">关闭</span>
+                <span @click="closeForm">关闭</span>
                 <!--<span @click="closeForm">关闭</span>-->
             </div>
             <!--slot插槽-->
