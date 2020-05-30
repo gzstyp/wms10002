@@ -16,6 +16,7 @@
 <div id="app">
     <%--
        这里是父组件!!!!!
+       其中定义的 ref="xxxForm" 是方便调用子组件(也就是组件的方法,一般是 this.$refs.goodsForm.showForm();调用)
     :model="Xxx"是传值到组件里的 props.model,add-url 也是传值到在组件里的 props.addUrl,需要注意的是以驼峰命名规则,用短横线分隔命名
     组件的命名规则是在 props 的下的 aaaYyy,则在调用时就是 :aaa-yyy="变量名" | aaaXxxYyy --> :aaa-xxx-yyy="变量名",指定主键的字段,注意 id-key 是字符串,不带冒号:,所以不是变量!!!
 
@@ -24,6 +25,7 @@
 
     --%>
     <form-comm
+        ref="goodsForm"
         :box-title="boxTitle"
         :model="goods"
         :add-url="url.add"
@@ -97,10 +99,14 @@
             addData : function(){
                 this.goods = {};
                 this.boxTitle = '添加';
+                //调用子组件(即组件的)的方法 showForm(),也就是 组件的 methods.showForm();其中的 goodsForm 是上面定义的 ref="goodsForm"
+                this.$refs.goodsForm.showForm();
             },
             editData : function(){
                 this.getProductById();//模拟数据
                 this.boxTitle = '编辑';
+                //调用子组件(即组件的)的方法 showForm(),也就是 组件的 methods.showForm();其中的 goodsForm 是上面定义的 ref="goodsForm"
+                this.$refs.goodsForm.showForm();
             },
             getProductById : function(){
                 this.goods = {

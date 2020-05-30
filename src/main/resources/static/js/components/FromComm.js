@@ -7,10 +7,11 @@
 Vue.component("form-comm",{
     /*模版*/
     template:`
-        <div class="model_form">
+        <div v-if="isShow" class="model_form">
             <div class="button_group line">
                 <label>{{boxTitle}}</label>
-                <span v-if="formType < 1 || !formType" @click="closeForm"></span>
+                <span v-if="formType < 1 || !formType" @click="closeForm">关闭</span>
+                <!--<span @click="closeForm">关闭</span>-->
             </div>
             <!--slot插槽-->
             <slot>
@@ -28,6 +29,7 @@ Vue.component("form-comm",{
     data : function() {
         return {
             //定义组件内的参数
+            isShow : true
         }
     },
     /*通过 props 传递数据 (推荐)*/
@@ -122,7 +124,11 @@ Vue.component("form-comm",{
                 this.edit();
             }
         },
+        showForm : function(){
+            this.isShow = true;
+        },
         closeForm : function(){
+            this.isShow = false;
         }
     }
 });
