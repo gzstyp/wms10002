@@ -53,6 +53,13 @@
             </el-form-item>
         </el-form>
     </form-comm>
+
+    <div class="button_group">
+        <%--好使:<el-button size="mini" type="primary" @click="boxTitle='添加'">添加</el-button>
+        <el-button size="mini" type="success" @click="boxTitle='编辑'">编辑</el-button>--%>
+        <el-button size="mini" type="primary" @click="addData">添加</el-button>
+        <el-button size="mini" type="success" @click="editData">编辑</el-button>
+    </div>
 </div>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
@@ -70,9 +77,9 @@
             boxTitle : '添加',
             goods : {
                 kid : null,
-                productName : 'apple',
-                num : '152',
-                price : '100.20'
+                productName : '',
+                num : null,
+                price : ''
             },
             url : {
                 add : 'ichnography/add',
@@ -80,9 +87,17 @@
             }
         },
         created() {
-            this.getProductById();
+            //this.getProductById();
         },
         methods : {
+            addData : function(){
+                this.goods = {};
+                this.boxTitle = '添加';
+            },
+            editData : function(){
+                this.getProductById();//模拟数据
+                this.boxTitle = '编辑';
+            },
             getProductById : function(){
                 this.goods = {
                     kid : 1024585,
