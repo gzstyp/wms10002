@@ -21,7 +21,12 @@
     console.info('kid-->'+this.idKey);//组件的封装-主键字段的作为变量来传递,this.idKey,取值是 this.idKey,传值是 :id-key="model.主键",注意有冒号:哦!!!
 
     --%>
-    <form-comm :model="goods" :add-url="url.add" :edit-url="url.edit" :id-key="goods.kid">
+    <form-comm
+        :box-title="boxTitle"
+        :model="goods"
+        :add-url="url.add"
+        :edit-url="url.edit"
+        :id-key="goods.kid">
         <%--添加自己的元素--%>
         <%--<template>
             <el-form>
@@ -62,6 +67,7 @@
         el : '#app',
         data : function(){
             return {
+                boxTitle : '编辑',
                 goods : {
                     kid : null,
                     productName : 'apple',

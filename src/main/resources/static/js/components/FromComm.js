@@ -2,6 +2,7 @@
  * 组件名:form-comm,其命名规则：单文件组件的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)。(推荐使用短横线分隔命名)
  * 在使用时，就像普通的标签一样的使用即可,也就是: <form-comm></form-comm>
  * 组件的传值可以通过不带冒号:的来传递字符串,如 id-key="userId";也可以通过带冒号:来传递变量,如 :id-key="userId"
+ * https://www.jianshu.com/p/99f490b76b03
 */
 Vue.component("form-comm",{
     /*模版*/
@@ -27,8 +28,6 @@ Vue.component("form-comm",{
     data : function() {
         return {
             //定义组件内的参数
-            boxTitle : '编辑',
-            formType : 1
         }
     },
     /*通过 props 传递数据 (推荐)*/
@@ -39,7 +38,9 @@ Vue.component("form-comm",{
         //后端新增添加的api接口url,注意驼峰命名规则,即当组件定义成驼峰命名的 addUrl时,那在调用该组件时必须以 add-url 这样的写法，否则获取不到值,即把大写的字母换成-
         //组件的命名规则是 aaaXxxYyy,则在调用时就是 :aaa-xxx-yyy="变量名"
         addUrl : null,
-        editUrl : null
+        editUrl : null,
+        boxTitle : null,
+        formType : null
     },
     created : function(){
         console.info('add-->'+this.addUrl);//好使!!!
@@ -75,14 +76,14 @@ Vue.component("form-comm",{
                     console.info('err-->'+err);
                 });*/
             }else{
-                alert('请设置addUrl的访问接口');
+                alert('请设置add-url的访问接口');
             }
         },
         edit : function(){
             if(this.editUrl != null && this.editUrl != undefined){
                 console.info('edit执行成功-->'+this.editUrl);
             }else{
-                alert('请设置editUrl的访问接口');
+                alert('请设置edit-url的访问接口');
             }
         },
         closeForm : function(){
