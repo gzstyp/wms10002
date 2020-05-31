@@ -110,9 +110,9 @@ Vue.component('data-list-comm', {
                     if (rs.data.code == 0) {
                         //如果是后台已经分页返回来的值
                         if (this.isPage) {
-                            this.modelList = rs.data.data.records;
+                            this.modelList = rs.data.records;
                         } else {
-                            this.modelList = rs.data.data;
+                            this.modelList = rs.data;
                         }
                     } else {
                         alert(rs.data.msg);

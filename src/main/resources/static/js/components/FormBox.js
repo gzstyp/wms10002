@@ -99,9 +99,9 @@ Vue.component("form-comm",{
                     /*console.info('-->'+this.model.price);*/
                     var _this = this;
                     ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
-                        console.info('code-->'+data.data.code);
-                        console.info('code-->'+data.data);
-                        _this.succeed(data.data);
+                        console.info('code-->'+data.code);
+                        console.info('code-->'+data);
+                        _this.succeed(data);
                     },function(err){
                         console.info('err-->'+err);
                     });
@@ -118,8 +118,8 @@ Vue.component("form-comm",{
                     console.info('edit执行成功-->'+this.editUrl);
                     var _this = this;
                     ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
-                        console.info('code-->'+data.data.code);
-                        _this.succeed(data.data);
+                        console.info('code-->'+data.code);
+                        _this.succeed(data);
                     },function(err){
                         console.info('err-->'+err);
                     });

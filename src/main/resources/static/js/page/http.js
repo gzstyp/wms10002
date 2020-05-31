@@ -10,9 +10,9 @@ axios.interceptors.request.use(function(config){
     config.headers.token = '20200531888889999';
     return config;
 });
-//响应拦截器,在实际应用中可以 return.data.data,好使!!!
+//响应拦截器,在实际应用中可以,好使!!!
 axios.interceptors.response.use(function(data){
-    return data;
+    return data.data;
 });
 ajax = {
     get : function(url,params,succeed,failure){

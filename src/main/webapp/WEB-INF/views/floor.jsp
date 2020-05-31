@@ -194,7 +194,7 @@
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
                     ajax.post('show/delById',{kid:row.kid},function(data){
-                        _this.handleResult(data.data);
+                        _this.handleResult(data);
                     });
                 },function(){
                     elementFn.fnMessage('已取消操作');
@@ -215,7 +215,7 @@
                 if(this.kids){
                     elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         ajax.post('show/delByKeys',{ids:_this.kids},function(data){
-                            _this.handleResult(data.data);
+                            _this.handleResult(data);
                         });
                         elementFn.loadOpen();//注意不要放错顺序!!!
                     });
@@ -233,7 +233,7 @@
                 var url = (kid == null || kid.length <= 0) ? 'show/add' : 'show/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
-                    _this.handleResult(data.data);
+                    _this.handleResult(data);
                 });
             },
             getListData : function(){
@@ -248,25 +248,25 @@
                 elementFn.loadOpen();
                 ajax.get("show/listData",params,function(data){
                     elementFn.loadClose();
-                    if(data.data.code === 200){
-                        _this.listDatas = data.data.data;
-                        _this.page.total = data.data.total;
-                    }else if(data.data.code === 202){
+                    if(data.code === 200){
+                        _this.listDatas = data.data;
+                        _this.page.total = data.total;
+                    }else if(data.code === 202){
                         _this.listDatas = [];
                         _this.page.total = 0;
                     }else{
-                        _this.listEmpty = data.data.msg;
+                        _this.listEmpty = data.msg;
                     }
                 });
             },
             getOptions : function(){
                 var _this = this;
                 ajax.get("show/getAllFloorMap",{},function(data){
-                    if(data.data.code === 200){
+                    if(data.code === 200){
                         //_this.optionsFloor = [];
-                        _this.optionsFloor = data.data.data;
+                        _this.optionsFloor = data.data;
                     }else{
-                        _this.optionsFloor[0].label= data.data.msg;
+                        _this.optionsFloor[0].label= data.msg;
                     }
                 });
             },
