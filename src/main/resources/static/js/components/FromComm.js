@@ -47,6 +47,10 @@ Vue.component("form-comm",{
         onValidation : {
             type : Function,
             default : null
+        },
+        onSucceed : {
+            type : Function,
+            default : null
         }
     },
     created : function(){
@@ -92,12 +96,15 @@ Vue.component("form-comm",{
                 if(this.addUrl != null && this.addUrl != undefined){
                     //获取到值,是从调用本组件那使用 :model="goods" 传值过来的
                     console.info('add执行成功!-->'+this.addUrl);
-                    /*console.info('-->'+this.model.price);
+                    /*console.info('-->'+this.model.price);*/
+                    var _this = this;
                     ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
-                        console.info('data-->'+data.data.code);
+                        console.info('code-->'+data.data.code);
+                        console.info('code-->'+data.data);
+                        _this.succeed(data.data);
                     },function(err){
                         console.info('err-->'+err);
-                    });*/
+                    });
                 }else{
                     alert('请设置add-url的访问接口');
                 }
@@ -109,6 +116,13 @@ Vue.component("form-comm",{
             if(this.model != null && this.model != undefined){
                 if(this.editUrl != null && this.editUrl != undefined){
                     console.info('edit执行成功-->'+this.editUrl);
+                    var _this = this;
+                    ajax.get('ichnography/listData',{pageSize : 10,current : 1},function(data){
+                        console.info('code-->'+data.data.code);
+                        _this.succeed(data.data);
+                    },function(err){
+                        console.info('err-->'+err);
+                    });
                 }else{
                     alert('请设置edit-url的访问接口');
                 }
@@ -122,6 +136,14 @@ Vue.component("form-comm",{
                 this.add();
             }else{
                 this.edit();
+            }
+        },
+        succeed : function(data){
+            if(this.onSucceed){
+                console.info('--有on-succeed--');
+                this.onSucceed(data);
+            }else{
+                console.info('--无on-succeed--');
             }
         },
         showForm : function(){

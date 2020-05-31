@@ -32,6 +32,7 @@
         :edit-url="url.edit"
         :id-key="goods.kid"
         :on-validation="onValidation"
+        :on-succeed="onSucceed"
         >
         <%--添加自己的元素--%>
         <%--<template>
@@ -73,6 +74,7 @@
 <script src="/js/element-ui/index.js"></script>
 <script src="/js/element-ui/axios.min.js"></script>
 <script src="/js/page/http.js"></script>
+<script src="/js/element-ui/lib.element.js"></script>
 <script src="/js/components/FromComm.js"></script>
 
 <script>
@@ -123,13 +125,16 @@
                 var productName = model.productName;
                 var num = model.num;
                 if(productName == null || productName.length <= 0){
-                    alert('请输入商品名称!');return false;
+                    elementFn.fnMsgError('请输入商品名称!');return false;
                 }
                 if(num == null || num.length <= 0){
-                    alert('请输入库存数量');return false;
+                    elementFn.fnMsgError('请输入库存数量');return false;
                 }
                 return true;
             },
+            onSucceed : function(data){
+                console.info(data);
+            }
         }
     });
 </script>
