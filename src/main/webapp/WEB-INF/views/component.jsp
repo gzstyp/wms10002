@@ -74,7 +74,7 @@
 <script src="/js/element-ui/axios.min.js"></script>
 <script src="/js/page/http.js"></script>
 <script src="/js/element-ui/lib.element.js"></script>
-<script src="/js/components/FromComm.js"></script>
+<script src="/js/components/FormBox.js"></script>
 
 <script>
     new Vue({
