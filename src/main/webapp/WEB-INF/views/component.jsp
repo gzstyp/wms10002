@@ -66,6 +66,25 @@
         <el-button size="mini" type="primary" @click="addData">添加</el-button>
         <el-button size="mini" type="success" @click="editData">编辑</el-button>
     </el-col>
+    <%--,好使,但会显示重复!!!<slot-data>
+        <div name="header">插槽名name值的是header</div>
+        <div>插槽默认要有没有name值的</div>
+        <div name="footer">插槽名name值的是footer</div>
+    </slot-data>--%>
+    <slot-data>
+        <template name="header">
+            <div>插槽名name值的是header</div>
+            <p>文本</p>
+        </template>
+        <template>
+            <div>注意在多个slot插槽中可以有一个没有name值的</div>
+            <p>文本</p>
+        </template>
+        <template name="footer">
+            <div>插槽名name值的是footer</div>
+            <p>文本</p>
+        </template>
+    </slot-data>
 </div>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
@@ -75,7 +94,6 @@
 <script src="/js/page/http.js"></script>
 <script src="/js/element-ui/lib.element.js"></script>
 <script src="/js/components/FormBox.js"></script>
-
 <script>
     new Vue({
         el : '#app',
@@ -135,6 +153,22 @@
                 console.info(data);
             }
         }
+    });
+    // slot-data是组件名,注意在多个slot插槽中可以有一个没有name值的,不推荐使用多个插槽???,因为会重复
+    Vue.component('slot-data',{
+        template : `
+            <div>
+                <slot name="header">
+                    <div>插槽名name值的是header</div>
+                </slot>
+                <slot>
+                    <div>注意在多个slot插槽中可以有一个没有name值的</div>
+                </slot>
+                <slot name="footer">
+                    <div>插槽名name值的是footer</div>
+                </slot>
+            </div>
+        `
     });
 </script>
 </body>

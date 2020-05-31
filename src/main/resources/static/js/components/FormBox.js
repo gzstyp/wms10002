@@ -13,7 +13,7 @@ Vue.component("form-comm",{
                 <span @click="closeForm">关闭</span>
                 <!--<span @click="closeForm">关闭</span>-->
             </div>
-            <!--slot插槽-->
+            <!--slot插槽,注意在多个slot插槽中可以有一个没有name值的-->
             <slot>
                 <div style="margin:10px;line-height:20px;height:20px;text-align:center">
                     在此是添加表单的具体元素,你还未添加任何元素
