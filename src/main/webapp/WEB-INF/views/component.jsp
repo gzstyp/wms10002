@@ -60,13 +60,12 @@
             </el-form-item>
         </el-form>
     </form-comm>
-
-    <div class="button_group">
+    <el-col style="margin-top:16px;">
         <%--好使:<el-button size="mini" type="primary" @click="boxTitle='添加'">添加</el-button>
         <el-button size="mini" type="success" @click="boxTitle='编辑'">编辑</el-button>--%>
         <el-button size="mini" type="primary" @click="addData">添加</el-button>
         <el-button size="mini" type="success" @click="editData">编辑</el-button>
-    </div>
+    </el-col>
 </div>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>

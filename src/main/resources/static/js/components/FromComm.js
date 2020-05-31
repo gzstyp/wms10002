@@ -20,7 +20,7 @@ Vue.component("form-comm",{
                 </div>
             </slot>
             <div class="button_group">
-                <el-button @click="submits">提交</el-button>
+                <el-button @click="submits" type="primary">提交</el-button>
                 <el-button @click="closeForm">取消</el-button>
             </div>
         </div>
