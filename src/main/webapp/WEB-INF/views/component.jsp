@@ -85,6 +85,7 @@
             <p>文本</p>
         </template>
     </slot-data>
+    <a v-bind:href="target">属性绑定,类似于jquery的atrr用法,而vue的用法是 v-bind:href="url"</a>
 </div>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
@@ -109,7 +110,8 @@
             url : {
                 add : 'ichnography/add',
                 edit : 'ichnography/edit'
-            }
+            },
+            target : 'http://www.yinlz.com'
         },
         created() {
             //this.getProductById();
