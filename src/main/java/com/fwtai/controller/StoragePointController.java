@@ -3,7 +3,6 @@ package com.fwtai.controller;
 import com.fwtai.bean.PageFormData;
 import com.fwtai.service.StoragePointService;
 import com.fwtai.tool.ToolClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("storage")
 @ApiIgnore
 public class StoragePointController{
-
-    @Autowired
-    private HttpServletRequest request;
 
     @Resource
     private StoragePointService service;
