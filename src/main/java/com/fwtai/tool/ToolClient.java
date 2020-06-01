@@ -667,10 +667,10 @@ public final class ToolClient implements Serializable{
     }
 
     /**
-     * 封装文件上传,指定上传的目录,返回值HashMap<String,Object>,files,params,error
+     * 封装文件上传,指定上传的目录,返回值HashMap_String,Object>,files,params,error
      * @param baseDir 该值的结尾必须要带 /
      * @param limit 如果该值为null或为负数时则不限制文件数
-     * @return HashMap<key,Object>,其中key可能为error,files,params，要做判断再做页面处理
+     * @return HashMap_key,Object>,其中key可能为error,files,params，要做error判断再做页面处理,若 key 不为空时,那files则是　ArrayList_HashMap_String,String;params是PageFormData
      * @作者 田应平
      * @QQ 444141300
      * @创建时间 2020/5/30 10:19
@@ -694,10 +694,11 @@ public final class ToolClient implements Serializable{
         final DiskFileItemFactory fac = new DiskFileItemFactory();
         final ServletFileUpload upload = new ServletFileUpload(fac);
         String originalPath = null;
+        final ArrayList<HashMap<String,String>> fileList = new ArrayList<HashMap<String,String>>();
         try {
             upload.setHeaderEncoding("utf-8");
             mhsr.setCharacterEncoding("utf-8");
-            /* 在 spring boot 的jar下这个方式想不通啦!!!
+            /* 在 spring boot 的jar下这个方式行不通啦!!!
             final String sys = File.separator;
             String dirType = sys;
             final String savePath = mhsr.getSession().getServletContext().getRealPath(dirType);
@@ -716,7 +717,6 @@ public final class ToolClient implements Serializable{
                     return objectHashMap;
                 }
             }
-            final ArrayList<HashMap<String,String>> fileList = new ArrayList<HashMap<String,String>>();
             boolean bl = false;
             for(final String key : map.keySet()){
                 final MultipartFile mf = mhsr.getFile(key);
