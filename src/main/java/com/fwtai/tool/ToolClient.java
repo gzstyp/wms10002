@@ -366,8 +366,8 @@ public final class ToolClient implements Serializable{
 
     /**
      * 验证所输入的数据是否是Integer类型,先验证是否必填后才调用本方法
-     * @用法1 final String FieldInteger = ToolClient.validateInteger(pageFormData,"type");if(FieldInteger != null)return FieldInteger;
-     * @用法2 final String FieldInteger = ToolClient.validateInteger(pageFormData,new String[]{"category","subset","type"});if(FieldInteger != null)return FieldInteger;
+     * @用法1 final String fieldInteger = ToolClient.validateInteger(pageFormData,"type");if(fieldInteger != null)return fieldInteger;
+     * @用法2 final String fieldInteger = ToolClient.validateInteger(pageFormData,new String[]{"category","subset","type"});if(fieldInteger != null)return fieldInteger;
      * @param
      * @作者 田应平
      * @QQ 444141300
