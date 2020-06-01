@@ -627,6 +627,12 @@ public final class ToolClient implements Serializable{
         }
     }
 
+    /**
+     * 添加了排序
+     * @作者 田应平
+     * @QQ 444141300
+     * @创建时间 2020/6/1 11:48
+    */
     public final static PageFormData dataMysql(final PageFormData pageFormData){
         Integer size = pageFormData.getInteger("pageSize");//每页大小
         Integer current = pageFormData.getInteger("current");//当前页
@@ -637,9 +643,26 @@ public final class ToolClient implements Serializable{
         if(size > 200){
             size = ConfigFile.size_default;
         }
+        String sort = pageFormData.getString("sort");
+        String column = pageFormData.getString("column");
+        if(column != null){
+            if(sort != null){
+                sort = ToolString.sqlInject(sort);
+                sort = sort.replace("ascending","ASC").replace("descending","DESC");
+            }else{
+                sort = "DESC";
+            }
+            column = ToolString.sqlInject(column);
+            if(column != null && sort != null){
+                pageFormData.put("column",column.toUpperCase());//排序字段 order by name desc
+                pageFormData.put("order",sort);//排序关键字(升序|降序)
+            }
+        }
+        pageFormData.remove("sort");
         pageFormData.put(ConfigFile.section,(current - 1) * size);//读取区间
         pageFormData.put(ConfigFile.pageSize,size);//每页大小
         pageFormData.remove("current");
+        System.out.println(pageFormData);
         return pageFormData;
     }
 
