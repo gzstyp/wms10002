@@ -77,6 +77,7 @@ elementFn = new Vue({
         },
         fnConfirm : function(msg,verify,cancel){
             this.$confirm(msg,this.title,{
+                distinguishCancelAndClose: true,
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -84,7 +85,7 @@ elementFn = new Vue({
                 if(verify){
                     verify();
                 }
-            }).catch(() => {
+            }).catch(action => {
                 if(cancel){
                     cancel();
                 }
