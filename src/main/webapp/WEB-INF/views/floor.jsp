@@ -61,9 +61,9 @@
                 </el-form-item>
                 <el-form-item label="楼层平面图">
                     <el-select v-model="formData.images_id" placeholder="选择楼层平面图" style="width:340px;">
-                        <el-option label="不选择" value=""></el-option>
+                        <%--如果有必要就取消注释即可,下面的:label="item.label"可以支持 item.label + i 变量哦 <el-option label="不选择" value=""></el-option>--%>
                         <el-option
-                            v-for="item in optionsFloor"
+                            v-for="(item,i) in optionsFloor"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -263,10 +263,9 @@
                 var _this = this;
                 ajax.get("show/getAllFloorMap",{},function(data){
                     if(data.code === 200){
-                        //_this.optionsFloor = [];
                         _this.optionsFloor = data.data;
                     }else{
-                        _this.optionsFloor[0].label= data.msg;
+                        _this.optionsFloor.push({"value":'',"label":data.msg});
                     }
                 });
             },
