@@ -241,7 +241,7 @@
                 this.viewImageVisible = false
             },
             handleEdit : function(index,item){
-                this.fileList = [];
+                this.fileList = [];//置空
                 if(item != null && item.kid != null){
                     this.dialogTitle='编辑楼层平面图';
                     this.openDialog(item);
@@ -266,7 +266,7 @@
                 elementFn.loadClose();
                 if(data.code === 200){
                     this.dialogVisible = false;
-                    this.fileList = [];
+                    this.fileList = [];//置空
                     elementFn.fnNotifySuccess(data.msg);
                     this.getListData();
                 }else{
