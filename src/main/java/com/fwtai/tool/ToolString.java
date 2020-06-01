@@ -693,7 +693,7 @@ public final class ToolString implements Serializable {
 	 * @QQ 444141300
 	 * @创建时间 2018年1月1日 14:24:50
 	*/
-	public final static String sqlInject(String sqlKey)throws Exception{
+	public final static String sqlInject(String sqlKey){
         if(sqlKey == null || sqlKey.length() <= 0)return null;
 		//去掉'|"|;|\字符
 		sqlKey = sqlKey.replaceAll("'","").replaceAll("\"","").replaceAll(";", "").replaceAll("--", "").replace( "\\", "");
@@ -703,8 +703,8 @@ public final class ToolString implements Serializable {
 		final String[] keywords = {"master","truncate","insert","select","delete","update","declare","alert","drop"};
 		//判断是否包含非法字符
 		for(final String keyword : keywords){
-			if(sqlKey.indexOf(keyword) != -1){
-				new RuntimeException("包含非法字符");
+		    if(sqlKey.contains(keyword)){
+			    return null;
 			}
 		}
 		return sqlKey;
