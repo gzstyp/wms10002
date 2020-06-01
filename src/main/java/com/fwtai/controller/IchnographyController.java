@@ -14,7 +14,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 
 /**
  * 大屏显示处理
@@ -38,9 +37,14 @@ public class IchnographyController{
     @Resource
     private IchnographyService service;
 
-    @PostMapping("add")
-    public void add(final HttpServletResponse response){
-        ToolClient.responseJson(service.add(new PageFormData().build(request)),response);
+    @PostMapping("add")//在提交表单若有文件上传时,不能用注解的 HttpServletRequest,否则获取不到文件!!!
+    public void add(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.add(request),response);
+    }
+
+    @PostMapping("edit")//在提交表单若有文件上传时,不能用注解的 HttpServletRequest,否则获取不到文件!!!
+    public void edit(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.edit(request),response);
     }
 
     @PostMapping("delById")
@@ -53,29 +57,8 @@ public class IchnographyController{
         ToolClient.responseJson(service.delByKeys(new PageFormData().build(request)),response);
     }
 
-    @PostMapping("edit")
-    public void edit(final HttpServletResponse response){
-        ToolClient.responseJson(service.edit(new PageFormData().build(request)),response);
-    }
-
     @GetMapping("listData")
     public void listData(final HttpServletResponse response){
         ToolClient.responseJson(service.listData(new PageFormData(request)),response);
-    }
-
-    @PostMapping("/imageInfo")//封装文件上传,指定上传的目录,返回值HashMap<String,Object>,files,params
-    public final void photo(final HttpServletRequest request,final HttpServletResponse response){
-        try {
-            final PageFormData formData = new PageFormData(request);
-            final HashMap<String,Object> map = ToolClient.uploadImage(request,"C:\\20200527\\",null);
-            if(map.containsKey("error")){
-                final String error = String.valueOf(map.get("error"));
-                ToolClient.responseJson(ToolClient.createJsonFail(error),response);
-                return;
-            }
-            ToolClient.responseJson(ToolClient.createJsonSuccess("上传成功"),response);
-        } catch (Exception e) {
-            ToolClient.responseJson(ToolClient.exceptionJson(),response);
-        }
     }
 }

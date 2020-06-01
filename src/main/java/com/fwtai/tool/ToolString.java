@@ -716,7 +716,7 @@ public final class ToolString implements Serializable {
 	 * @QQ 444141300
 	 * @创建时间 2018年1月23日 15:50:19
 	*/
-	public static boolean isLinuxOS(){
+	public final static boolean isLinuxOS(){
 		final String os = System.getProperties().getProperty("os.name");
 		if (os != null && os.toLowerCase().indexOf("linux") > -1)return true;
 		return false;

@@ -6,8 +6,10 @@ import com.fwtai.dao.DaoHandle;
 import com.fwtai.tool.ToolClient;
 import com.fwtai.tool.ToolString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,21 +28,57 @@ public class IchnographyService{
     @Autowired
     private DaoHandle daoHandle;
 
-    public String add(final PageFormData formData){
-        final String p_images_id = "images_id";
-        final String p_item_storage_code = "item_storage_code";
-        final String validateField = ToolClient.validateField(formData,p_images_id,p_item_storage_code,"coords");
+    @Value("${dir_window}")
+    private String dir_window;
+
+    @Value("${dir_linux}")
+    private String dir_linux;
+
+    public String add(final HttpServletRequest request){
+        final PageFormData formData = new PageFormData(request);
+        final String baseDir = ToolString.isLinuxOS() ? dir_linux : dir_window;
+        final HashMap<String,Object> map = ToolClient.uploadImage(request,baseDir,1,true);
+        if(map.containsKey("error")){
+            final String error = String.valueOf(map.get("error"));
+            return ToolClient.createJsonFail(error);
+        }
+        final String p_width = "width";
+        final String p_height = "height";
+        final String validateField = ToolClient.validateField(formData,p_width,p_height,"usemap","floor_name");
         if(validateField !=null)return validateField;
+        final String fieldInteger = ToolClient.validateInteger(formData,p_width,p_height);
+        if(fieldInteger != null)return fieldInteger;
+        final ArrayList<HashMap<String,String>> files = (ArrayList<HashMap<String,String>>)map.get("files");
+        final String img_url = files.get(0).get("fileName");
+        if(img_url == null){
+            return ToolClient.createJsonFail("请选择上传图片");
+        }
+        formData.put("img_url",img_url);
         formData.put("kid",ToolString.getIdsChar32());
         return ToolClient.executeRows(daoHandle.execute("ichnography.add",formData));
     }
 
-    public String edit(final PageFormData formData){
-        final String p_kid = "kid";
-        final String p_images_id = "images_id";
-        final String p_item_storage_code = "item_storage_code";
-        final String validateField = ToolClient.validateField(formData,p_kid,p_images_id,p_item_storage_code,"coords");
+    public String edit(final HttpServletRequest request){
+        final PageFormData formData = new PageFormData(request);
+        final String baseDir = ToolString.isLinuxOS() ? dir_linux : dir_window;
+        final HashMap<String,Object> map = ToolClient.uploadImage(request,baseDir,0,false);
+        if(map.containsKey("error")){
+            final String error = String.valueOf(map.get("error"));
+            return ToolClient.createJsonFail(error);
+        }
+        final String p_width = "width";
+        final String p_height = "height";
+        final String validateField = ToolClient.validateField(formData,p_width,p_height,"usemap","floor_name","kid");
         if(validateField !=null)return validateField;
+        final String fieldInteger = ToolClient.validateInteger(formData,p_width,p_height);
+        if(fieldInteger != null)return fieldInteger;
+        final ArrayList<HashMap<String,String>> files = (ArrayList<HashMap<String,String>>)map.get("files");
+        if(files != null){
+            final String img_url = files.get(0).get("fileName");
+            if(img_url != null){
+                formData.put("img_url",img_url);
+            }
+        }
         return ToolClient.executeRows(daoHandle.execute("ichnography.edit",formData));
     }
 

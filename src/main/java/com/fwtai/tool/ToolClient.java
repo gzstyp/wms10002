@@ -670,12 +670,13 @@ public final class ToolClient implements Serializable{
      * 封装文件上传,指定上传的目录,返回值HashMap_String,Object>,files,params,error
      * @param baseDir 该值的结尾必须要带 /
      * @param limit 如果该值为null或为负数时则不限制文件数
+     * @param verify 文件是否是必填项
      * @return HashMap_key,Object>,其中key可能为error,files,params，要做error判断再做页面处理,若 key 不为空时,那files则是　ArrayList_HashMap_String,String;params是PageFormData
      * @作者 田应平
      * @QQ 444141300
      * @创建时间 2020/5/30 10:19
     */
-    public final static HashMap<String,Object> uploadImage(final HttpServletRequest request,final String baseDir,final Integer limit){
+    public final static HashMap<String,Object> uploadImage(final HttpServletRequest request,final String baseDir,final Integer limit,final boolean verify){
         //final PageFormData formData = new PageFormData().build(request);
         final PageFormData formData = new PageFormData(request);
         final HashMap<String,Object> objectHashMap = new HashMap<String,Object>(2);
@@ -684,12 +685,23 @@ public final class ToolClient implements Serializable{
         try {
             mhsr =  (MultipartHttpServletRequest) request;
         } catch (Exception e){
-            objectHashMap.put(error,"请上传文件");
-            return objectHashMap;
+            if(verify){
+                objectHashMap.put(error,"请上传文件");
+                return objectHashMap;
+            }
         }
         if(mhsr == null){
-            objectHashMap.put(error,"未上传文件");
-            return objectHashMap;
+            if(verify){
+                objectHashMap.put(error,"未上传文件");
+                return objectHashMap;
+            }
+        }
+        final Map<String,MultipartFile> map = mhsr.getFileMap();
+        if(map == null || map.size() <=0){
+            if(verify){
+                objectHashMap.put(error,"请选择上传文件");
+                return objectHashMap;
+            }
         }
         final DiskFileItemFactory fac = new DiskFileItemFactory();
         final ServletFileUpload upload = new ServletFileUpload(fac);
@@ -706,11 +718,6 @@ public final class ToolClient implements Serializable{
             if(!directory.exists()){
                 directory.mkdirs();
             }*/
-            final Map<String,MultipartFile> map = mhsr.getFileMap();
-            if(map == null || map.size() <=0){
-                objectHashMap.put(error,"请选择上传文件");
-                return objectHashMap;
-            }
             if(limit != null && limit > 0){
                 if(map != null && map.size() > limit){
                     objectHashMap.put(error,"图片数量已超过限制");

@@ -30,14 +30,27 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
-            <el-table-column type="selection" width="35"></el-table-column>
-            <el-table-column prop="floor_name" label="楼层平面图名称" width="300"></el-table-column>
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @sort-change="sortChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+            <el-table-column type="selection" align="center" width="35"></el-table-column>
+            <el-table-column prop="floor_name" label="楼层平面图名称" width="300" :sortable="'custom'"></el-table-column>
             <el-table-column prop="width" label="宽度" width="72"></el-table-column>
             <el-table-column prop="height" label="高度" width="72"></el-table-column>
             <el-table-column prop="usemap" label="usemap值" width="150"></el-table-column>
-            <el-table-column prop="img_url" label="图片的路径" show-overflow-tooltip></el-table-column>
-            <el-table-column width="160" label="操作">
+            <el-table-column prop="img_url" label="图片" show-overflow-tooltip :formatter="urlFormatter">
+                <template slot-scope="scope">
+                    <a style="color:#1E9FFF;cursor:pointer;" @click="viewImage(scope.row.img_url)">查看图片</a>
+                </template>
+            </el-table-column>
+            <%--<el-table-column property="img_url" label="图片" align="left">
+                <template slot-scope="scope">
+                    <el-image
+                        style="width:20px;height:20px"
+                        :src="scope.row.img_url"
+                        :preview-src-list="imageList">
+                    </el-image>
+                </template>
+            </el-table-column>--%>
+            <el-table-column width="210" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
                     <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
@@ -57,80 +70,47 @@
         </el-pagination>
     </div>
     <el-dialog style="display:none;" :title="dialogTitle" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <div>
-            <el-form ref="formData" :model="formData" label-width="120px">
-                <el-form-item label="楼层平面图名称" prop="floor_name">
-                    <el-input v-model="formData.floor_name" placeholder="楼层平面图名称" clearable style="width:340px;"></el-input>
-                </el-form-item>
-                <el-form-item label="图片的宽度" prop="width">
-                    <el-input v-model="formData.width" placeholder="图片的宽度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
-                </el-form-item>
-                <el-form-item label="图片的高度" prop="height">
-                    <el-input v-model="formData.height" placeholder="图片的高度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
-                </el-form-item>
-                <el-form-item label="热点usemap值" prop="usemap">
-                    <el-input v-model="formData.usemap" placeholder="usemap值" clearable style="width:340px;"></el-input>
-                </el-form-item>
-                <el-form-item label="楼层平面图">
-                    <el-upload style="width:340px;"
-                        ref="upload"
-                        action="http://127.0.0.1:823/ichnography/imageInfo"
-                        :on-preview="handlePreview"
-                        :on-remove="handleRemove"
-                        :on-success="onSuccess"
-                        :on-error="onError"
-                        :on-change="onChange"
-                        :file-list="fileList"
-                        list-type="picture"
-                        :multiple=false
-                        :auto-upload="false">
-                        <el-button size="small">选择图片</el-button>
-                    </el-upload>
-                </el-form-item>
-
-
-                <div id="upload">
-                    <!--elementui的上传图片的upload组件-->
-                    <el-upload class="upload-demo"
-                               ref="upload"
-                               list-type="picture-card"
-                               :limit="9"
-                               :on-preview="handlePreview"
-                               :before-upload="beforeupload"
-                               :on-exceed="exceedHandle"
-                               :auto-upload="false"
-                               :multiple='true'>
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <!--展示选中图片的区域-->
-                    <%--<el-dialog :visible.sync="dialogVisible">
-                        <img width="100%"
-                             :src="dialogImageUrl"
-                             alt="">
-                    </el-dialog>--%>
-                    <!--elementui的form组件-->
-                    <el-form ref="form"
-                             :model="formData"
-                             label-width="80px">
-                        <el-form-item label="活动名称">
-                            <el-input v-model="formData.floor_name" name="names"
-                                      style="width:360px;"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary"
-                                       @click="onSubmit">立即创建</el-button>
-                            <el-button>取消</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-            </el-form>
-        </div>
+        <el-form ref="formData" :model="formData" label-width="120px">
+            <el-form-item label="楼层平面图名称" prop="floor_name">
+                <el-input v-model="formData.floor_name" placeholder="楼层平面图名称" clearable style="width:340px;"></el-input>
+            </el-form-item>
+            <el-form-item label="图片的宽度" prop="width">
+                <el-input v-model="formData.width" placeholder="图片的宽度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
+            </el-form-item>
+            <el-form-item label="图片的高度" prop="height">
+                <el-input v-model="formData.height" placeholder="图片的高度" oninput="value=value.replace(/[^\d]/g,'')" clearable style="width:340px;"></el-input>
+            </el-form-item>
+            <el-form-item label="热点usemap值" prop="usemap">
+                <el-input v-model="formData.usemap" placeholder="usemap值" clearable style="width:340px;"></el-input>
+            </el-form-item>
+            <el-form-item label="楼层平面图">
+                <el-upload style="width:340px;"
+                    ref="upload"
+                    accept=".jpg,.jpeg,.png,.gif,.bmp"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :on-success="onSuccess"
+                    :on-error="onError"
+                    :on-change="onChange"
+                    :limit="1"
+                    :before-upload="beforeupload"
+                    :file-list="fileList"
+                    list-type="picture"
+                    :multiple=false
+                    :auto-upload="false">
+                    <el-button size="small">选择图片</el-button>
+                </el-upload>
+            </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submits()">提交</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
         </span>
     </el-dialog>
-    <%-- 好使的,<p v-for="(item,i) in optionsFloor">--id--{{item.value}}   --姓名--{{item.label}}</p>--%>
+    <%-- 好使的,<p v-for="(item,i) in optionsFloor">--id--{{item.value}}  --姓名--{{item.label}}</p>--%>
+    <el-dialog style="display:none;" :title="viewImageTitle" :visible.sync="viewImageVisible" width="80%" height="100%" :before-close="viewImageClose" :close-on-click-modal="false" :append-to-body="true">
+        <el-image :src="view_img_url"/>
+    </el-dialog>
 </div>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
@@ -143,50 +123,55 @@
 <script>
     new Vue({
         el : '#app',
-        data : function(){
-            return {
-                dialogImageUrl : '',
-                listEmpty:'暂无数据',
-                dialogTitle :'编辑楼层平面图',
-                formData : {
-                    kid : '',
-                    floor_name : '',
-                    width : '',
-                    height : '',
-                    usemap : '',
-                    img_url : ''
-                },
-                fileList : [],
-                searchForm : {
-                    floor_name : ''
-                },
-                rules: {
-                    floor_name: [
-                        {required:true, message:'楼层平面图名称',trigger: 'blur'},
-                        {min:2,max:64,message:'长度在2到64个字符',trigger: 'blur'}
-                    ],
-                    width: [
-                        {required:true, message:'请输入图片的宽度',trigger:'blur'},
-                        {pattern: /^-?\d+\.?\d*$/,min:0,message:'请输入正确的数值',trigger:'blur'}
-                    ],
-                    height: [
-                        {required:true, message:'请输入图片的高度',trigger:'blur'}
-                    ],
-                    usemap: [
-                        {required:true,message:'请输入图片热点usemap值',trigger:'blur'}
-                    ],
-                },
-                kids: [],
-                listDatas : [],
-                page: {
-                    current: 1,
-                    size: 20,
-                    sizes: [20,50,99],
-                    total: 0
-                },
-                optionsFloor: [],
-                dialogVisible : false
-            }
+        data : {
+            dialogImageUrl : '',
+            listEmpty:'暂无数据',
+            dialogTitle :'编辑楼层平面图',
+            viewImageTitle :'查看图片',
+            view_img_url : null,
+            formData : {
+                kid : '',
+                floor_name : '',
+                width : '',
+                height : '',
+                usemap : '',
+                img_url : ''
+            },
+            order : {
+                column : null,
+                sort : null
+            },
+            fileList : [],
+            searchForm : {
+                floor_name : ''
+            },
+            rules: {
+                floor_name: [
+                    {required:true, message:'楼层平面图名称',trigger: 'blur'},
+                    {min:2,max:64,message:'长度在2到64个字符',trigger: 'blur'}
+                ],
+                width: [
+                    {required:true, message:'请输入图片的宽度',trigger:'blur'},
+                    {pattern: /^-?\d+\.?\d*$/,min:0,message:'请输入正确的数值',trigger:'blur'}
+                ],
+                height: [
+                    {required:true, message:'请输入图片的高度',trigger:'blur'}
+                ],
+                usemap: [
+                    {required:true,message:'请输入图片热点usemap值',trigger:'blur'}
+                ],
+            },
+            kids: [],
+            listDatas : [],
+            page: {
+                current: 1,
+                size: 20,
+                sizes: [20,50,99],
+                total: 0
+            },
+            optionsFloor: [],
+            dialogVisible : false,
+            viewImageVisible : false
         },
         created() {
             this.getListData();
@@ -202,19 +187,20 @@
             dblclick : function(row,column,event){
                 this.openDialog(row);
             },
-            handleRemove(file,fileList) {
-                console.log(file,fileList);
+            handleRemove(file,files) {
+                console.log(file);
+                //console.log(files);
             },
-            onSuccess : function(response,file,fileList){
+            onSuccess : function(response,file,files){
                 console.info(response);
                 console.info(file);
-                console.info(fileList);
+                console.info(files);
             },
-            onError : function(err,file,fileList){
+            onError : function(err,file,files){
 
             },
             //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
-            onChange : function(file,fileList){
+            onChange : function(file,files){
 
             },
             //预览
@@ -243,13 +229,91 @@
                 this.dialogVisible = true;
             },
             //dialog对话框右上角的关闭之前的操作
-            handleClose : function(done) {
+            handleClose : function(done){
                 /*有用,不要删除,this.$confirm('确认关闭?')
                     .then(_ => {
                         done();
                     })
                 .catch(_ => {});*/
                 this.dialogVisible = false;
+            },
+            viewImageClose : function(){
+                this.viewImageVisible = false
+            },
+            handleEdit : function(index,item){
+                this.fileList = [];
+                if(item != null && item.kid != null){
+                    this.dialogTitle='编辑楼层平面图';
+                    this.openDialog(item);
+                }else{
+                    this.dialogTitle='添加楼层平面图';
+                    this.openDialog(null);
+                }
+            },
+            handleDelete : function(index,row){
+                var _this = this;
+                elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
+                    elementFn.loadOpen();
+                    _this.listDatas.splice(index,1);
+                    ajax.post('ichnography/delById',{kid:row.kid},function(data){
+                        _this.resultHandle(data);
+                    });
+                },function(){
+                    elementFn.fnMessage('已取消操作');
+                });
+            },
+            resultHandle : function(data){
+                elementFn.loadClose();
+                if(data.code === 200){
+                    this.dialogVisible = false;
+                    this.fileList = [];
+                    elementFn.fnNotifySuccess(data.msg);
+                    this.getListData();
+                }else{
+                    elementFn.fnNotifyWarning(data.msg);
+                }
+            },
+            delByKeys : function(){
+                var _this = this;
+                if(this.kids){
+                    elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
+                        elementFn.loadOpen();
+                        ajax.post('ichnography/delByKeys',{ids:_this.kids},function(data){
+                            _this.resultHandle(data);
+                        });
+                    });
+                }else{
+                    elementFn.fnMsgError('请选择要删除的数据!');
+                }
+            },
+            sortChange : function(column){
+                this.order.column = column.prop;
+                this.order.sort = column.order;
+                this.getListData();
+            },
+            /*适用于格式化1男2女*/
+            urlFormatter : function(row,column,cellValue,index){
+                return cellValue;
+                /*console.info(row);
+                console.info(cellValue);*/
+            },
+            viewImage : function(url){
+                //var html = '<img style="width:1002px;height:1002px" src="'+url+'"/>';
+                //elementFn.fnAlert(html,'查看图片');
+                this.view_img_url = url;
+                this.viewImageVisible = true;
+                //elementFn.fnMsgbox('表单');
+            },
+            // 文件上传前事件
+            beforeupload (file){
+                // 2.1，重新写一个表单上传的方法
+                this.fileList.push(file); // 把单个文件变成数组
+                var images = [...this.fileList]; // 把数组存储为一个参数，便于后期操作
+                // 2.2，遍历数组
+                images.forEach((img,index) => {
+                    this.param.append(img.name,img);
+                });
+                return false
             },
             checkForm : function(){
                 if(!this.formData.floor_name){
@@ -268,74 +332,61 @@
                     elementFn.fnMsgError('请填图片热点区域usemap');
                     return;
                 }
-                /*if(!this.formData.img_url){
-                    elementFn.fnMsgError('请请上传图片');
-                    return;
-                }*/
+                var kid = this.formData.kid;
+                //新增|添加
+                if(kid == null || kid.length <= 0){
+                    var fe = this.fileList[0];
+                    if(fe == null || fe.length <= 0){
+                        elementFn.fnMsgError('请选择上传图片');
+                        return;
+                    }
+                }
                 return true;
             },
-            handleEdit : function(index,item){
-                if(item != null && item.kid != null){
-                    this.dialogTitle='编辑楼层平面图';
-                    this.openDialog(item);
-                }else{
-                    this.dialogTitle='添加楼层平面图';
-                    this.openDialog(null);
-                }
-            },
-            handleDelete : function(index,row){
-                var _this = this;
-                elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
-                    elementFn.loadOpen();
-                    _this.listDatas.splice(index,1);
-                    ajax.post('ichnography/delById',{kid:row.kid},function(data){
-                        _this.handleResult(data);
-                    });
-                },function(){
-                    elementFn.fnMessage('已取消操作');
-                });
-            },
-            handleResult : function(data){
-                elementFn.loadClose();
-                if(data.code === 200){
-                    this.dialogVisible = false;
-                    elementFn.fnNotifySuccess(data.msg);
-                    this.getListData();
-                }else{
-                    elementFn.fnNotifyWarning(data.msg);
-                }
-            },
-            delByKeys : function(){
-                var _this = this;
-                if(this.kids){
-                    elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
-                        ajax.post('ichnography/delByKeys',{ids:_this.kids},function(data){
-                            _this.handleResult(data);
-                        });
-                        elementFn.loadOpen();//注意不要放错顺序!!!
-                    });
-                }else{
-                    elementFn.fnMsgError('请选择要删除的数据!');
-                }
-            },
             submits : function(){
+                this.param = new FormData();//初始化表单参数!!!
+                this.$refs.upload.submit();//用于页面的图片初始化的,这个不能丢!!!
                 var form = this.checkForm();
                 if(!form){
                     return;
                 }
                 var _this = this;
-                var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'ichnography/imageInfo' : 'ichnography/edit';
+                var kid = _this.formData.kid;
+                var url = (kid == null || kid.length <= 0) ? 'ichnography/add' : 'ichnography/edit';
+                if(kid){
+                    this.param.append('kid',kid);
+                }
+                var floor_name = _this.formData.floor_name;
+                var width = _this.formData.width;
+                var height = _this.formData.height;
+                var usemap = _this.formData.usemap;
+                if(floor_name){
+                    this.param.append('floor_name',floor_name);
+                }
+                if(width){
+                    this.param.append('width',width);
+                }
+                if(height){
+                    this.param.append('height',height);
+                }
+                if(usemap){
+                    this.param.append('usemap',usemap);
+                }
                 elementFn.loadOpen();
-                ajax.post(url,this.formData,function(data){
-                    _this.handleResult(data);
+                ajax.postFile(url,this.param,function(data){
+                    _this.resultHandle(data);
+                },function(err){
+                    this.dialogVisible = false;
+                    elementFn.fnFailure();
                 });
             },
             getListData : function(){
                 var _this = this;
                 var params = {
                     current : _this.page.current,
-                    pageSize : _this.page.size
+                    pageSize : _this.page.size,
+                    column : _this.order.column,
+                    sort : _this.order.sort
                 };
                 if(_this.searchForm.floor_name){
                     params.floor_name = _this.searchForm.floor_name;
@@ -362,58 +413,6 @@
             currentChange : function(current){
                 this.page.current = current;
                 this.getListData();
-            },
-
-
-
-
-            // 1，上传前移除事件
-            beforeRemove (file, fileList) {
-                return this.$confirm(`确定移除 ${file.name}？`)
-            },
-            // 2，上传前事件
-            beforeupload (file) {
-                // 2.1，重新写一个表单上传的方法
-                this.param = new FormData();
-                this.fileList.push(file) // 把单个文件变成数组
-                //console.info(this.fileList);
-                var images = [...this.fileList] // 把数组存储为一个参数，便于后期操作
-                // 2.2，遍历数组
-                //debugger;
-                images.forEach((img, index) => {
-                    this.param.append(img.name,img); // 把单个图片重命名，存储起来（给后台）
-                })
-                return false
-            },
-            // 3，点击文件列表中已上传的文件时的钩子
-            handlePictureCardPreview (file) {
-                this.dialogImageUrl = file.url
-                this.dialogVisible = true
-            },
-            // 4，表单提交的事件
-            onSubmit () {
-                let _this = this
-                var names = _this.formData.floor_name
-                this.$refs.upload.submit()
-                // 4.1，下面append的东西就会到form表单数据的this.param中；
-                this.param.append('company_id',"852698545656");
-                this.param.append('caption',"5645612345868");
-                // 4.2，赋予提交请求头，格式为：'multipart/form-data'（必须！！）
-                let config = {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-                // 4.3，然后通过下面的方式把内容通过axios来传到后台
-                console.info('-准备提交表单-');
-                console.info(this.fileList);
-                axios.post('http://127.0.0.1:82/ichnography/imageInfo', this.param, config).then(function (result) {
-                    console.log(result)//上传成功后要移除或清空图片
-                })
-            },
-            // 5设置超过9张图给与提示
-            exceedHandle () {
-                alert('您现在选择已超过9张图，请重新选择')
             }
         }
     });

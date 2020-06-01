@@ -91,6 +91,50 @@ elementFn = new Vue({
                 }
             });
         },
+        fnFailure : function(msg){
+            msg = (msg == null || msg.length <= 0) ? '连接服务器失败' : msg;
+            this.fnNotifyWarning(msg);
+        },
+        fnAlert : function(html,title){
+            title = (title == null || title.length <= 0) ? this.title : title;
+            this.$alert(html,title,{
+                dangerouslyUseHTMLString : true
+            });
+        },
+        fnMsgbox : function(complete,title){
+            title = (title == null || title.length <= 0) ? this.title : title;
+            var h = this.$createElement;
+            this.$msgbox({
+                title: title,
+                message: h('p', null, [
+                    h('span',null,'内容可以是'),
+                    h('i', {style:'color: #f00' }, 'VNode')
+                ]),
+                showCancelButton: true,
+                closeOnClickModal: false,
+                closeOnPressEscape: false,
+                confirmButtonText: '提交',
+                cancelButtonText: '取消',
+                beforeClose: (action,instance,done) => {
+                    if (action === 'confirm') {
+                        instance.confirmButtonLoading = true;
+                        instance.confirmButtonText = '执行中...';
+                        setTimeout(() => {
+                            done();
+                            setTimeout(() => {
+                                instance.confirmButtonLoading = false;
+                            }, 300);
+                        }, 3000);
+                    } else {
+                        done();
+                    }
+                }
+            }).then(action => {
+                if(complete){
+                    complete();
+                }
+            });
+        },
         loadOpen : function(msg){
             msg = (msg == null || msg.length <= 0) ? '正在操作,请稍候……' : msg;
             this.loadIndex = this.$loading({
