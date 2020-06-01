@@ -48,6 +48,8 @@ public final class PageFormData extends HashMap<String,Object>{
             final String value = request.getParameter(key);
             if(value != null && value.length() > 0){
                 if(value.length() == 1 && value.equals("_"))continue;
+                if(value.equalsIgnoreCase("undefined"))continue;
+                if(value.equalsIgnoreCase("null"))continue;
                 map.put(key,value.trim());
             }
         }
@@ -75,6 +77,8 @@ public final class PageFormData extends HashMap<String,Object>{
                                 final String value = obj.toString().trim();
                                 if(value.length() <= 0)continue;
                                 if(value.length() == 1 && value.equals("_"))continue;
+                                if(value.equalsIgnoreCase("undefined"))continue;
+                                if(value.equalsIgnoreCase("null"))continue;
                                 map.put(key,value);
                             }else{
                                 map.put(key,obj);
@@ -108,6 +112,8 @@ public final class PageFormData extends HashMap<String,Object>{
                                 final String value = obj.toString().trim();
                                 if(value.length() <= 0)continue;
                                 if(value.length() == 1 && value.equals("_"))continue;
+                                if(value.equalsIgnoreCase("undefined"))continue;
+                                if(value.equalsIgnoreCase("null"))continue;
                                 json.put(key,value);
                             }else {
                                 json.put(key,obj);
@@ -145,6 +151,8 @@ public final class PageFormData extends HashMap<String,Object>{
                                 final String value = String.valueOf(obj).trim();
                                 if(value.length() <= 0)continue;
                                 if(value.length() == 1 && value.equals("_"))continue;
+                                if(value.equalsIgnoreCase("undefined"))continue;
+                                if(value.equalsIgnoreCase("null"))continue;
                                 objectObject.put(key,value);
                             }else{
                                 objectObject.put(key,obj);
