@@ -4,7 +4,7 @@
  * @QQ号码 444141300
  * @官网 http://www.fwtai.com
  */
-var baseUri = "http://127.0.0.1:82/";
+var baseUri = "/";
 //请求拦截器,好使!!!
 axios.interceptors.request.use(function(config){
     config.headers.token = '20200531888889999';
