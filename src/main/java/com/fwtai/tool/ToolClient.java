@@ -754,7 +754,9 @@ public final class ToolClient implements Serializable{
             }
             return objectHashMap;
         } catch (Exception e) {
-            delFileByThread(originalPath);
+            for(int i = 0; i < fileList.size(); i++){
+                delFileByThread(fileList.get(i).get("path"));
+            }
             objectHashMap.put(error,"操作失败,处理文件失败");
             return objectHashMap;
         }
