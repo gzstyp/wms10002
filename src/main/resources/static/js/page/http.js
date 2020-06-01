@@ -15,6 +15,7 @@ axios.interceptors.response.use(function(data){
     return data.data;
 });
 ajax = {
+    /*ajax.get(url,params,succeed,failure);*/
     get : function(url,params,succeed,failure){
         url = baseUri + url;
         axios.get(url,{
@@ -45,9 +46,38 @@ ajax = {
             link.click();
         });
     },
+    /*ajax.post(url,params,succeed,failure);*/
     post : function(url,params,succeed,failure){
         url = baseUri + url;
         axios.post(url,params).then(data =>{
+            if(succeed){
+                succeed(data);
+            }
+        }).catch(err =>{
+            if(failure){
+                failure(err);
+            }
+        });
+    },
+    /*ajax.postFile(url,params,succeed,failure);*/
+    postFile : function(url,params,succeed,failure){
+        url = baseUri + url;
+        axios.post(url,params,{
+            'Content-Type':'multipart/form-data'
+        }).then(data=>{
+            if(succeed){
+                succeed(data);
+            }
+        }).catch(err =>{
+            if(failure){
+                failure(err);
+            }
+        });
+    },
+    /*ajax.postConfig(url,params,succeed,config,failure);*/
+    postConfig : function(url,params,succeed,config,failure){
+        url = baseUri + url;
+        axios.post(url,params,config).then(function(data){
             if(succeed){
                 succeed(data);
             }
