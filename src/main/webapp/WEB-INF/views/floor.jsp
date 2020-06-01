@@ -213,11 +213,11 @@
             delByKeys : function(){
                 var _this = this;
                 if(this.kids){
-                    elementFn.fnConfirm(this.kids.length + "删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
+                    elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
+                        elementFn.loadOpen();
                         ajax.post('show/delByKeys',{ids:_this.kids},function(data){
                             _this.handleResult(data);
                         });
-                        elementFn.loadOpen();//注意不要放错顺序!!!
                     });
                 }else{
                     elementFn.fnMsgError('请选择要删除的数据!');
