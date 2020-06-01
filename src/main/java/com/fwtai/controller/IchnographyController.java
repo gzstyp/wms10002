@@ -32,9 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 public class IchnographyController{
 
     @Resource
-    private HttpServletRequest request;
-
-    @Resource
     private IchnographyService service;
 
     @PostMapping("add")//在提交表单若有文件上传时,不能用注解的 HttpServletRequest,否则获取不到文件!!!
@@ -48,17 +45,17 @@ public class IchnographyController{
     }
 
     @PostMapping("delById")
-    public void delById(final HttpServletResponse response){
+    public void delById(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.delById(new PageFormData().build(request)),response);
     }
 
     @PostMapping("delByKeys")
-    public void delByKeys(final HttpServletResponse response){
+    public void delByKeys(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.delByKeys(new PageFormData().build(request)),response);
     }
 
     @GetMapping("listData")
-    public void listData(final HttpServletResponse response){
+    public void listData(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.listData(new PageFormData(request)),response);
     }
 }

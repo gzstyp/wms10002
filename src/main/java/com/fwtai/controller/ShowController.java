@@ -32,33 +32,30 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowController{
 
     @Resource
-    private HttpServletRequest request;
-
-    @Resource
     private ShowService service;
 
     @PostMapping("add")
-    public void add(final HttpServletResponse response){
+    public void add(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.add(new PageFormData().build(request)),response);
     }
 
     @PostMapping("delById")
-    public void delById(final HttpServletResponse response){
+    public void delById(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.delById(new PageFormData().build(request)),response);
     }
 
     @PostMapping("delByKeys")
-    public void delByKeys(final HttpServletResponse response){
+    public void delByKeys(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.delByKeys(new PageFormData().build(request)),response);
     }
 
     @PostMapping("edit")
-    public void edit(final HttpServletResponse response){
+    public void edit(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.edit(new PageFormData().build(request)),response);
     }
 
     @GetMapping("listData")
-    public void listData(final HttpServletResponse response){
+    public void listData(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.listData(new PageFormData(request)),response);
     }
 
