@@ -1,11 +1,20 @@
 /**
- * 未定义axios的全局的http接口的变量,已定义的在本目录下的文件 apis.js
+ * 已定义axios的全局的http接口的变量,未定义的在本目录下的文件 http.js
  * @作者 田应平
  * @创建时间 2020-05-15 22:03
  * @QQ号码 444141300
  * @官网 http://www.fwtai.com
- */
-var baseUri = "/";
+*/
+
+/*var protocol = window.location.protocol; //协议
+var host = window.location.host; //主机
+var reg = /^localhost+/;
+if(reg.test(host)) {
+    axios.defaults.baseURL = 'http://127.0.0.1:82/';
+}else{
+    axios.defaults.baseURL = protocol + "//" + host +":5000";
+}*/
+axios.defaults.baseURL = "http://api.fwtai.com/";
 //请求拦截器,好使!!!
 axios.interceptors.request.use(function(config){
     config.headers.access_token = '2020053188889999';
@@ -19,7 +28,6 @@ axios.interceptors.response.use(function(data){
 ajax = {
     /*ajax.get(url,params,succeed,failure);*/
     get : function(url,params,succeed,failure){
-        url = baseUri + url;
         axios.get(url,{
             params : params
         }).then(function (data){
@@ -35,7 +43,6 @@ ajax = {
         });
     },
     download : function(url,params){
-        url = baseUri + url;
         axios.get(url,{
             responseType: 'blob',
             params:params
@@ -52,7 +59,6 @@ ajax = {
     },
     /*ajax.post(url,params,succeed,failure);*/
     post : function(url,params,succeed,failure){
-        url = baseUri + url;
         axios.post(url,params).then(data =>{
             if(succeed){
                 succeed(data);
@@ -67,7 +73,6 @@ ajax = {
     },
     /*ajax.postFile(url,params,succeed,failure);*/
     postFile : function(url,params,succeed,failure){
-        url = baseUri + url;
         axios.post(url,params,{
             'Content-Type':'multipart/form-data'
         }).then(data=>{
@@ -82,7 +87,6 @@ ajax = {
     },
     /*ajax.postConfig(url,params,succeed,config,failure);*/
     postConfig : function(url,params,succeed,config,failure){
-        url = baseUri + url;
         axios.post(url,params,config).then(function(data){
             if(succeed){
                 succeed(data);
