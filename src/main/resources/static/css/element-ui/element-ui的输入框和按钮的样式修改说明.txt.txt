@@ -1,0 +1,6 @@
+﻿
+文件库的高度是 40px 的修改处
+display:inline-block;font-size:inherit;height:40px;line-height:40px;outline:0;padding:0
+
+按钮的padding:12px 20px; 的修改处
+-webkit-transition:.1s;transition:.1s;font-weight:500;padding:12px 20px;
