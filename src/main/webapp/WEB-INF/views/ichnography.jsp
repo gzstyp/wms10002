@@ -354,21 +354,9 @@
                 if(kid){
                     this.param.append('kid',kid);
                 }
-                var floor_name = _this.formData.floor_name;
-                var width = _this.formData.width;
-                var height = _this.formData.height;
-                var usemap = _this.formData.usemap;
-                if(floor_name){
-                    this.param.append('floor_name',floor_name);
-                }
-                if(width){
-                    this.param.append('width',width);
-                }
-                if(height){
-                    this.param.append('height',height);
-                }
-                if(usemap){
-                    this.param.append('usemap',usemap);
+                var data = _this.formData;
+                for(var key in data){
+                    _this.param.append(key,data[key]);
                 }
                 elementFn.loadOpen();
                 ajax.postFile(url,this.param,function(data){
