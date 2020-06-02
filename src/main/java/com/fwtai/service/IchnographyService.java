@@ -53,7 +53,7 @@ public class IchnographyService{
         if(img_url == null){
             return ToolClient.createJsonFail("请选择上传图片");
         }
-        formData.put("img_url",img_url);
+        formData.put("img_url","/images/"+img_url);
         formData.put("kid",ToolString.getIdsChar32());
         return ToolClient.executeRows(daoHandle.execute("ichnography.add",formData));
     }
@@ -76,7 +76,7 @@ public class IchnographyService{
         if(files != null){
             final String img_url = files.get(0).get("fileName");
             if(img_url != null){
-                formData.put("img_url",img_url);
+                formData.put("img_url","/images/"+img_url);
             }
         }
         return ToolClient.executeRows(daoHandle.execute("ichnography.edit",formData));
