@@ -140,7 +140,7 @@
                 </configuration>
             </plugin>
             <!--docker-->
-            <plugin>
+            <!--<plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.2</version>
@@ -169,7 +169,7 @@
                         </resource>
                     </resources>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>
