@@ -8,6 +8,7 @@
 elementFn = new Vue({
     data : {
         title : '系统提示',
+        connectError : '连接服务器失败',
         loadIndex:null
     },
     methods : {

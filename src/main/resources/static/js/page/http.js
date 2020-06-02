@@ -30,9 +30,7 @@ ajax = {
             if(failure){
                 failure(error);
             }
-        }).then(function(){
-            // always executed
-        });
+        }).then(function(){});//始终会执行
     },
     download : function(url,params){
         url = baseUri + url;
@@ -61,9 +59,7 @@ ajax = {
             if(failure){
                 failure(err);
             }
-        }).then(function(){
-            // always executed
-        });
+        }).then(function(){});//始终会执行
     },
     /*ajax.postFile(url,params,succeed,failure);*/
     postFile : function(url,params,succeed,failure){
@@ -91,8 +87,6 @@ ajax = {
             if(failure){
                 failure(err);
             }
-        }).then(function(){
-            // always executed
-        });
+        }).then(function(){});//始终会执行
     }
 };

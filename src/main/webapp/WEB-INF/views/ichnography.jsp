@@ -401,6 +401,10 @@
                     }else{
                         _this.listEmpty = data.msg;
                     }
+                },function(){
+                    elementFn.loadClose();
+                    _this.listDatas = [];
+                    _this.listEmpty = elementFn.connectError;
                 });
             },
             changeSize : function (pageSize){
