@@ -297,7 +297,8 @@
             viewImage : function(url){
                 //var html = '<img style="width:1002px;height:1002px" src="'+url+'"/>';
                 //elementFn.fnAlert(html,'查看图片');
-                this.view_img_url = baseUri + url;
+                //this.view_img_url = baseUri + url;
+                this.view_img_url = url;
                 this.viewImageVisible = true;
                 //elementFn.fnMsgbox('表单');
             },
