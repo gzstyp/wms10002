@@ -7,7 +7,8 @@
 var baseUri = "/";
 //请求拦截器,好使!!!
 axios.interceptors.request.use(function(config){
-    config.headers.token = '20200531888889999';
+    config.headers.access_token = '2020053188889999';
+    config.headers.refresh_token = '2020053199998888';
     return config;
 });
 //响应拦截器,在实际应用中可以,好使!!!
@@ -28,6 +29,8 @@ ajax = {
             if(failure){
                 failure(error);
             }
+        }).then(function(){
+            // always executed
         });
     },
     download : function(url,params){
@@ -57,6 +60,8 @@ ajax = {
             if(failure){
                 failure(err);
             }
+        }).then(function(){
+            // always executed
         });
     },
     /*ajax.postFile(url,params,succeed,failure);*/
@@ -85,6 +90,8 @@ ajax = {
             if(failure){
                 failure(err);
             }
+        }).then(function(){
+            // always executed
         });
     }
 };
