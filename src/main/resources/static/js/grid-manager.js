@@ -345,17 +345,17 @@
                     {
                         "id":"ffffffffe56e8ef0ffffffff912af74a",
                         "floor_name" : "一楼一层",
-                        "img_url" : "/img/ffffffffe56e8ef0ffffffff912af74a.png"
+                        "img_url" : "/images/ffffffffe56e8ef0ffffffff912af74a.png"
                     },
                     {
                         "id":"ffffffffe56e8ef0ffffffff912af74a",
                         "floor_name" : "一楼二层",
-                        "img_url" : "/img/ffffffffe56e8ef0ffffffff912af742.png"
+                        "img_url" : "/images/ffffffffe56e8ef0ffffffff912af742.png"
                     },
                     {
                         "id":"ffffffffe56e8ef0ffffffff912af74a",
                         "floor_name" : "二楼一层",
-                        "img_url" : "/img/ffffffffe56e8ef0ffffffff912af743.png"
+                        "img_url" : "/images/ffffffffe56e8ef0ffffffff912af743.png"
                     }
                 ];
                 var html = '';
