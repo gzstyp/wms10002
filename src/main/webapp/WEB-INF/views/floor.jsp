@@ -82,6 +82,12 @@
     </el-dialog>
     <%-- 好使的,<p v-for="(item,i) in optionsFloor">--id--{{item.value}}   --姓名--{{item.label}}</p>--%>
 </div>
+<%--
+可以结合jquery的其他插件一起使用!!!
+<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script src="/layer/layer.js"></script>
+<script src="/js/page.layer.js"></script>
+--%>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
 <!-- import JavaScript -->

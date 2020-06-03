@@ -73,7 +73,7 @@ window.alert = function(msg,callback){
             callback();
         }
     });
-}
+};
 /**confirm('你好,需要服务吗?',function() {alert('好的,谢谢!',function(){alert('嗯,再见!')})});*/
 window.confirm = function(msg,callback){
     var conf_m = (self==top)?parent:window;
@@ -87,4 +87,16 @@ window.confirm = function(msg,callback){
             callback("ok");
         }
     });
+};
+/*用法:self.layerIndex = loading('正在处理……');可选值:('操作中,请稍候……','196px');|('正在处理……','179px');|*/
+function loading(msg,width){
+    msg = (msg == null || msg == '' || msg == undefined)?'操作中,请稍候……':msg;
+    width = (width == null || width == '') ? '196px' : width;
+    return top.layer.msg(msg,{icon:16,time:-1,shade:[0.3,'#000'],area:width});
+}
+function closeIndex(index){
+    top.layer.close(index);
+}
+function closedAll(){
+    top.layer.closeAll();
 }
