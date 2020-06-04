@@ -55,14 +55,8 @@ public class WmsController{
             final List<HashMap<String,Object>> listTask = taskService.queryListTask();//有人确认接任务后重新获取任务列表
             final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
             for(final String key : map.keySet()){
-                final HashMap<String,Object> _map = new HashMap<>();
-                if(key.equals(userId)){
-                    final String json = ToolClient.queryJson(listTask);
-                    webSocketServer.sendMessage(json,key);
-                }else{
-                    final String json = ToolClient.queryJson(listTask);
-                    webSocketServer.sendMessage(json,key);
-                }
+                final String json = ToolClient.queryJson(listTask);
+                webSocketServer.sendMessage(json,key);
             }
             final String json = ToolClient.createJsonSuccess("操作成功");
             ToolClient.responseJson(json,response);
