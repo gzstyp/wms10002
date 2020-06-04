@@ -57,12 +57,9 @@ public class WmsController{
             for(final String key : map.keySet()){
                 final HashMap<String,Object> _map = new HashMap<>();
                 if(key.equals(userId)){
-                    _map.put("userId",key);
-                    _map.put("list",listTask);
                     final String json = ToolClient.queryJson(listTask);
                     webSocketServer.sendMessage(json,key);
                 }else{
-                    _map.put("list",listTask);
                     final String json = ToolClient.queryJson(listTask);
                     webSocketServer.sendMessage(json,key);
                 }
