@@ -134,7 +134,10 @@ public class TaskService{
         if(result == 1){
             return 2;
         }
-        final int rows = daoHandle.execute("wms.confirm",kid);
+        HashMap hashMap=new HashMap();
+        hashMap.put("kid",kid);
+        hashMap.put("userId",userId);
+        final int rows = daoHandle.execute("wms.confirm",hashMap);
         return rows > 0 ? 1 : 0;
     }
 

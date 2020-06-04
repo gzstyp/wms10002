@@ -18,10 +18,11 @@
             td.item_name,
             td.item_total,
             td.item_storage_code,
-            sp.point
+            sp.point,
+            td.userId
         from task_detail td
         left join storage_point sp on sp.item_storage_code = td.item_storage_code
-        where td.status = 1 and td.falg = 0
+        where td.status = 1
     </select>
 
     <!--有人确认接任务后重新获取任务列表-->
@@ -121,9 +122,9 @@
     </update>
 
     <!-- 更新有人接了这个任务 -->
-    <update id="confirm" parameterType="String">
+    <update id="confirm" parameterType="HashMap">
         update task_detail
-        set falg = 1
+        set falg = 1,userId=#{userId}
         where
           kid = #{kid} and falg = 0 and status = 1
         limit 1

@@ -52,18 +52,18 @@ public class WmsController{
     public final void confirm(final String kid,final String userId,final HttpServletResponse response) throws IOException{
         final Integer result = taskService.confirm(kid,userId);
         if(result == 1){
-            final List<HashMap<String,Object>> listTask = taskService.getListTask(kid);//有人确认接任务后重新获取任务列表
+            final List<HashMap<String,Object>> listTask = taskService.queryListTask();//有人确认接任务后重新获取任务列表
             final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
             for(final String key : map.keySet()){
                 final HashMap<String,Object> _map = new HashMap<>();
                 if(key.equals(userId)){
                     _map.put("userId",key);
                     _map.put("list",listTask);
-                    final String json = ToolClient.queryJson(_map);
+                    final String json = ToolClient.queryJson(listTask);
                     webSocketServer.sendMessage(json,key);
                 }else{
                     _map.put("list",listTask);
-                    final String json = ToolClient.queryJson(_map);
+                    final String json = ToolClient.queryJson(listTask);
                     webSocketServer.sendMessage(json,key);
                 }
             }
@@ -158,15 +158,19 @@ public class WmsController{
     @ApiOperation(value = "更新任务", notes = "参数为json数组,即List< Bean >,返回的json格式")
     @PostMapping("/status")
     public void status(@RequestBody final List<TaskStatus> taskStatus,final HttpServletResponse response){
+
         final String jsonStr = JSONObject.toJSONString(taskStatus);
         final JSONArray jsonArray = ToolString.parseJsonArray(jsonStr);
+        final String string=taskService.status(jsonArray);
         final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
+        final List<HashMap<String,Object>> listTask = taskService.queryListTask();
         for(final String userId : map.keySet()){
             try{
-                webSocketServer.sendMessage(String.valueOf(jsonArray),userId);
+                final String json = ToolClient.queryJson(listTask);
+                webSocketServer.sendMessage(json,userId);
             }catch(IOException e){}
         }
 
-        ToolClient.responseJson(taskService.status(jsonArray),response);
+        ToolClient.responseJson(string,response);
     }
 }
