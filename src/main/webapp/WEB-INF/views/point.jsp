@@ -59,12 +59,12 @@
                     <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:340px;"></el-input>
                 </el-form-item>
                 <el-form-item label="坐标点1">
-                    <el-input v-model="formData.x1" placeholder="坐标x1的值" clearable style="width:150px;"></el-input>
-                    <el-input v-model="formData.y1" placeholder="坐标y1的值" clearable style="width:150px;"></el-input>
+                    <el-input v-model="formData.x1" placeholder="坐标x1的值" clearable style="width:168px;"></el-input>
+                    <el-input v-model="formData.y1" placeholder="坐标y1的值" clearable style="width:168px;"></el-input>
                 </el-form-item>
                 <el-form-item label="坐标点2">
-                    <el-input v-model="formData.x2" placeholder="坐标x2的值" clearable style="width:150px;"></el-input>
-                    <el-input v-model="formData.y2" placeholder="坐标y2的值" clearable style="width:150px;"></el-input>
+                    <el-input v-model="formData.x2" placeholder="坐标x2的值" clearable style="width:168px;"></el-input>
+                    <el-input v-model="formData.y2" placeholder="坐标y2的值" clearable style="width:168px;"></el-input>
                 </el-form-item>
             </el-form>
         </div>
