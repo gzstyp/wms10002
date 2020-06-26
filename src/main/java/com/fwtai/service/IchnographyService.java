@@ -94,6 +94,9 @@ public class IchnographyService{
         final String validate = ToolClient.validateField(formData,p_ids);
         if(validate != null)return validate;
         final ArrayList<Object> lists = ToolString.jsonArrayToList(formData.get(p_ids));
+        if(lists == null || lists.size() <= 0){
+            return ToolClient.createJsonFail("请选择要删除的数据");
+        }
         return ToolClient.executeRows(daoHandle.execute("ichnography.delByKeys",lists),"操作成功","数据已不存在,刷新重试");
     }
 

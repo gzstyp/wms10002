@@ -53,7 +53,7 @@
             :total="page.total">
         </el-pagination>
     </div>
-    <el-dialog style="display:none;" :title="dialogTitle" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
+    <el-dialog style="display:none;" :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
                 <el-form-item label="货位号">
@@ -125,8 +125,8 @@
             }
         },
         created() {
-            this.getListData();
             this.getOptions();
+            this.getListData();
         },
         methods : {
             // 行选择触发事件

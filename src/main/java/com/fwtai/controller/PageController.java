@@ -38,6 +38,11 @@ public class PageController{
         return "floor";
     }
 
+    @GetMapping(value = "/point1")
+    public String point1(){
+        return "point1";
+    }
+
     // http://127.0.0.1:82/ichnography
     @GetMapping(value = "/ichnography")
     public String ichnography(){

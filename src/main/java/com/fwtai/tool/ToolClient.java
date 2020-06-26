@@ -662,7 +662,6 @@ public final class ToolClient implements Serializable{
         pageFormData.put(ConfigFile.section,(current - 1) * size);//读取区间
         pageFormData.put(ConfigFile.pageSize,size);//每页大小
         pageFormData.remove("current");
-        System.out.println(pageFormData);
         return pageFormData;
     }
 

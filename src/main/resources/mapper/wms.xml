@@ -113,7 +113,7 @@
         </foreach>
     </select>
 
-    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+    <select id="getData" resultType="HashMap" parameterType="HashMap">
         select item_storage_code, point,DATE_FORMAT(gmt_create,'%Y-%m-%d %H:%i') gmt_create from storage_point order by gmt_create desc
     </select>
 
@@ -134,4 +134,47 @@
         select falg from task_detail where kid = #{kid} LIMIT 1
     </select>
 
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select kid,item_storage_code,point,DATE_FORMAT(gmt_create,'%Y-%m-%d %H:%i') gmt_create from storage_point
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="item_storage_code != null">
+                AND item_storage_code LIKE CONCAT(#{item_storage_code},'%')
+            </if>
+        </trim>
+        <choose>
+            <when test="order != null and column != null">
+                ORDER BY ${column} ${order}
+            </when>
+            <otherwise>
+                ORDER BY gmt_create DESC
+            </otherwise>
+        </choose>
+        LIMIT #{section},#{pageSize}
+    </select>
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT count(kid) total from storage_point
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="item_storage_code != null">
+                AND item_storage_code LIKE CONCAT(#{item_storage_code},'%')
+            </if>
+        </trim>
+    </select>
+
+    <!-- 编辑 -->
+    <update id="edit" parameterType="HashMap">
+        update storage_point set item_storage_code = #{item_storage_code} ,point = #{point} where kid = #{kid} LIMIT 1
+    </update>
+
+    <!-- 删除 -->
+    <update id="delById" parameterType="HashMap">
+        delete from storage_point where kid = #{kid} LIMIT 1
+    </update>
+
+    <!--批量删除-->
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM storage_point WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

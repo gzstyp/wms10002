@@ -108,7 +108,7 @@
         </span>
     </el-dialog>
     <%-- 好使的,<p v-for="(item,i) in optionsFloor">--id--{{item.value}}  --姓名--{{item.label}}</p>--%>
-    <el-dialog style="display:none;" :title="viewImageTitle" :visible.sync="viewImageVisible" width="80%" height="100%" :before-close="viewImageClose" :close-on-click-modal="false" :append-to-body="true">
+    <el-dialog style="display:none;" :title="viewImageTitle" :lock-scroll="false" :visible.sync="viewImageVisible" width="80%" height="100%" :before-close="viewImageClose" :close-on-click-modal="false" :append-to-body="true">
         <el-image :src="view_img_url"/>
     </el-dialog>
 </div>
@@ -208,6 +208,7 @@
                 console.log(file);
             },
             search : function(){
+                this.page.current = 1;
                 this.getListData();
             },
             openDialog : function(row){

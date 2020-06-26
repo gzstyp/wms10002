@@ -43,4 +43,29 @@ public class StoragePointController{
         final String json = service.getListData();
         ToolClient.responseJson(json,response);
     }
+
+    @GetMapping("listData")
+    public void listData(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.listData(new PageFormData(request)),response);
+    }
+
+    @PostMapping(value = "/add")
+    public final void add(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.add(new PageFormData().build(request)),response);
+    }
+
+    @PostMapping(value = "/edit")
+    public final void edit(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.edit(new PageFormData().build(request)),response);
+    }
+
+    @PostMapping(value = "/delById")
+    public final void delById(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.delById(new PageFormData().build(request)),response);
+    }
+
+    @PostMapping(value = "/delByKeys")
+    public final void delByKeys(final HttpServletRequest request,final HttpServletResponse response){
+        ToolClient.responseJson(service.delByKeys(new PageFormData().build(request)),response);
+    }
 }
