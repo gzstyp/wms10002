@@ -149,7 +149,6 @@ public class WmsController{
     @ApiOperation(value = "更新任务", notes = "参数为json数组,即List< Bean >,返回的json格式")
     @PostMapping("/status")
     public void status(@RequestBody final List<TaskStatus> taskStatus,final HttpServletResponse response){
-
         final String jsonStr = JSONObject.toJSONString(taskStatus);
         final JSONArray jsonArray = ToolString.parseJsonArray(jsonStr);
         final String string=taskService.status(jsonArray);
@@ -161,7 +160,6 @@ public class WmsController{
                 webSocketServer.sendMessage(json,userId);
             }catch(IOException e){}
         }
-
         ToolClient.responseJson(string,response);
     }
 }
