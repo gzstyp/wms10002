@@ -182,7 +182,13 @@ elementFn = new Vue({
                             done();
                         }
                     }
-                });*/
+                }).then(re =>{}).catch(re =>{});//不添加会报错 Uncaught (in promise) cancel
+
+                this.$alert('<div>'+code+'</div>','查看货位'+code+'信息',{
+                    dangerouslyUseHTMLString : true,
+                    showConfirmButton : false
+                }).then(re =>{}).catch(re =>{});//不添加会报错 Uncaught (in promise) cancel
+            */
         },
         loadOpen : function(msg){
             msg = (msg == null || msg.length <= 0) ? '正在操作,请稍候……' : msg;
