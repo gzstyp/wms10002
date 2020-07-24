@@ -136,6 +136,37 @@ elementFn = new Vue({
                 }
             });
         },
+        fnMsgboxs : function(msg){
+            const h = this.$createElement;
+            this.$msgbox({
+                title: '查看货位'+msg+'信息',
+                message: h('p', null, [
+                    h('span',null,''+msg),
+                    h('i', {style:'color:#2184d9'},'自定义样式影响的内容')//样式
+                ]),
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                beforeClose: (action, instance, done) => {
+                    if (action === 'confirm') {
+                        instance.confirmButtonLoading = true;
+                        instance.confirmButtonText = '执行中...';
+                        setTimeout(() => {
+                            done();
+                            setTimeout(() => {
+                                instance.confirmButtonLoading = false;
+                            }, 300);
+                        }, 3000);
+                    } else {
+                        done();
+                    }
+                }
+            }).then(action => {
+                console.info('确定回调');
+            }).catch(action => {
+                console.info('取消回调');
+            });
+        },
         loadOpen : function(msg){
             msg = (msg == null || msg.length <= 0) ? '正在操作,请稍候……' : msg;
             this.loadIndex = this.$loading({
