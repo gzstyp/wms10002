@@ -182,12 +182,18 @@ elementFn = new Vue({
                             done();
                         }
                     }
-                }).then(re =>{}).catch(re =>{});//不添加会报错 Uncaught (in promise) cancel
+                }).then(res =>{}).catch(err =>{});//不添加会报错 Uncaught (in promise) cancel
 
                 this.$alert('<div>'+code+'</div>','查看货位'+code+'信息',{
                     dangerouslyUseHTMLString : true,
                     showConfirmButton : false
-                }).then(re =>{}).catch(re =>{});//不添加会报错 Uncaught (in promise) cancel
+                }).then(res =>{}).catch(err =>{});//不添加会报错 Uncaught (in promise) cancel
+
+                this.$axios.post(url,formData).then(res => {
+
+                }).catch(err => {
+
+                });
             */
         },
         loadOpen : function(msg){
