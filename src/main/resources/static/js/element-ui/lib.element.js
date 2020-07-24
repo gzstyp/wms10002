@@ -166,6 +166,23 @@ elementFn = new Vue({
             }).catch(action => {
                 console.info('取消回调');
             });
+            /*好使的,this.$alert('<div>'+code+'</div>','查看货位信息',{
+                    dangerouslyUseHTMLString : true,
+                    beforeClose: (action, instance, done) => {
+                        if (action === 'confirm') {
+                            instance.confirmButtonLoading = true;
+                            instance.confirmButtonText = '执行中...';
+                            setTimeout(() => {
+                                done();
+                                setTimeout(() => {
+                                    instance.confirmButtonLoading = false;
+                                }, 300);
+                            }, 3000);
+                        } else {
+                            done();
+                        }
+                    }
+                });*/
         },
         loadOpen : function(msg){
             msg = (msg == null || msg.length <= 0) ? '正在操作,请稍候……' : msg;
