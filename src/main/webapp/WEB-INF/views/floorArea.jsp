@@ -62,8 +62,8 @@
         </div>
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
-                <el-form-item label="货位区域位置">
-                    <el-input v-model="formData.suffix" placeholder="区域位置[南区|北区|A区|B区|C区]" clearable style="width:90%"></el-input>
+                <el-form-item label="货位南北区域">
+                    <el-input v-model="formData.suffix" placeholder="仅支持[北区|南区]" clearable style="width:90%"></el-input>
                 </el-form-item>
             </el-form>
         </div>
