@@ -66,7 +66,7 @@
 
     <select id="getFloorArea" resultType="HashMap">
         select lt.name,group_concat(fa.kid) kids from (select name from floor_area group by name )lt
-        left join floor_area fa on fa.name like lt.name group by lt.name
+        left join floor_area fa on fa.name like lt.name group by lt.name ORDER BY lt.name DESC
     </select>
 
     <select id="getLayerGrid" parameterType="ArrayList" resultType="HashMap">
