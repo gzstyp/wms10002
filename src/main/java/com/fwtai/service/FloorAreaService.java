@@ -26,10 +26,6 @@ public class FloorAreaService{
     @Autowired
     private DaoHandle daoHandle;
 
-    protected boolean queryImagesExist(final String kid){
-        return daoHandle.queryForString("show.queryImagesExist",kid) == null;
-    }
-
     public String add(final PageFormData formData){
         final String _name = "name";
         final String _suffix = "suffix";

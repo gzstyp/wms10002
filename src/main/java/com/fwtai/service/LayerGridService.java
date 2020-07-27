@@ -43,6 +43,7 @@ public class LayerGridService{
         if(type != 2){
             return ToolClient.createJsonFail("货位信息不是标准的json数据格式");
         }
+        formData.put("grids",json);
         formData.put("kid",ToolString.getIdsChar32());
         return ToolClient.executeRows(daoHandle.execute("layer_grid.add",formData));
     }
@@ -61,6 +62,7 @@ public class LayerGridService{
         if(type != 2){
             return ToolClient.createJsonFail("货位信息不是标准的json数据格式");
         }
+        formData.put("grids",json);
         return ToolClient.executeRows(daoHandle.execute("layer_grid.edit",formData));
     }
 

@@ -63,4 +63,19 @@
     <select id="getOptions" resultType="HashMap">
         SELECT kid value,CONCAT(name,suffix) label FROM floor_area
     </select>
+
+    <select id="getFloorArea" resultType="HashMap">
+        select lt.name,group_concat(fa.kid) kids from (select name from floor_area group by name )lt
+        left join floor_area fa on fa.name like lt.name group by lt.name
+    </select>
+
+    <select id="getLayerGrid" parameterType="ArrayList" resultType="HashMap">
+        select grids,suffix from layer_grid lg
+            left join floor_area fa on fa.kid = lg.floor_area_id
+        where floor_area_id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>
