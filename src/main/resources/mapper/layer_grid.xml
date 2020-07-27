@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="layer_grid">
+
+    <update id="add" parameterType="HashMap">
+        INSERT INTO LAYER_GRID(KID,FLOOR_AREA_ID,GRIDS) VALUES (#{kid},#{floor_area_id},#{grids})
+    </update>
+
+    <update id="edit" parameterType="HashMap">
+        UPDATE LAYER_GRID
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="grids != null">GRIDS = #{grids},</if>
+            <if test="floor_area_id != null">FLOOR_AREA_ID = #{floor_area_id}</if>
+        </trim>
+        WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delById" parameterType="String">
+        DELETE FROM LAYER_GRID WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM LAYER_GRID WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select lg.kid,floor_area_id,CONCAT(fa.name,suffix) name, grids from LAYER_GRID lg
+        LEFT JOIN floor_area fa on fa.kid = lg.floor_area_id
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                CONCAT(fa.name,suffix) LIKE CONCAT('%',#{name},'%')
+            </if>
+        </trim>
+        <choose>
+            <when test="order != null and column != null">
+                ORDER BY ${column} ${order}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        LIMIT #{section},#{pageSize}
+    </select>
+
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT count(lg.kid) total from LAYER_GRID lg
+        LEFT JOIN floor_area fa on fa.kid = lg.floor_area_id
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                CONCAT(fa.name,suffix) LIKE CONCAT('%',#{name},'%')
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryImagesExist" resultType="String" parameterType="String">
+        SELECT KID FROM FLOOR_AREA WHERE KID = #{kid} LIMIT 1
+    </select>
+
+    <select id="getOptions" resultType="HashMap">
+        SELECT kid value,CONCAT(name,suffix) label FROM floor_area
+    </select>
+</mapper>

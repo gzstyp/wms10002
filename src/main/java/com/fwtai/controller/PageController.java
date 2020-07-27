@@ -54,4 +54,14 @@ public class PageController{
     public String component(){
         return "component";
     }
+
+    @GetMapping(value = "/layerGird")
+    public String layerGird(){
+        return "layerGird";
+    }
+
+    @GetMapping(value = "/floorArea")
+    public String floorArea(){
+        return "floorArea";
+    }
 }

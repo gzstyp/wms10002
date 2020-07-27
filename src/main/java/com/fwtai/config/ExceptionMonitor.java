@@ -94,7 +94,7 @@ public class ExceptionMonitor{
             final int start = message.lastIndexOf("Duplicate entry '") + 17;
             final int forKey = message.lastIndexOf("' for key '");
             final String value = message.substring(start,forKey);
-            ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的["+value + "]已存在"),response);
+            ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的已存在,已重复"),response);
         }else{
             ToolClient.responseJson(ToolClient.exceptionJson("添加编辑的数据已存在"),response);
         }
