@@ -63,7 +63,15 @@
         <div>
             <el-form ref="form" :model="formData" label-width="120px">
                 <el-form-item label="货位南北区域">
-                    <el-input v-model="formData.suffix" placeholder="仅支持[北区|南区]" clearable style="width:90%"></el-input>
+                    <el-select v-model="formData.suffix" placeholder="选择南北区域" clearable style="width:90%">
+                        <el-option
+                        v-for="item in optionsArea"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+
                 </el-form-item>
             </el-form>
         </div>
@@ -105,7 +113,21 @@
                     total: 0
                 },
                 optionsFloor: [],
-                dialogVisible : false
+                dialogVisible : false,
+                optionsArea: [
+                    {
+                        value : '',
+                        label : '选择区域'
+                    },
+                    {
+                        value : '南区',
+                        label : '南区'
+                    },
+                    {
+                        value : '北区',
+                        label : '北区'
+                    }
+                ],
             }
         },
         created() {
@@ -148,7 +170,7 @@
                     return;
                 }
                 if(!this.formData.suffix){
-                    elementFn.fnMsgError('请填写区域名称位置');
+                    elementFn.fnMsgError('请选择区域');
                     return;
                 }
                 return true;
