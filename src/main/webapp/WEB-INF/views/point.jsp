@@ -24,11 +24,15 @@
             <el-col :span="6" :pull="1">
                 <el-input placeholder="货位号" v-model="searchForm.storage_code" clearable/>
             </el-col>
-            <el-col :span="6" :pull="1" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
+            <el-col :span="6" :pull="1">
+                <el-button @click="search()" icon="el-icon-search">搜索</el-button>
+                <el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button>
+                <el-button @click="delByKeys()" type="danger" :disabled="kids.length > 0 ? false:true" icon="el-icon-delete">删除</el-button>
+            </el-col>
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:8px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="point" label="坐标信息" show-overflow-tooltip></el-table-column>
