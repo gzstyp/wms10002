@@ -30,7 +30,7 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @sort-change="sortChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:10px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @sort-change="sortChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
             <el-table-column prop="floor_name" label="楼层平面图名称" width="300" :sortable="'custom'"></el-table-column>
             <el-table-column prop="width" label="宽度" width="72"></el-table-column>

@@ -32,7 +32,7 @@
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:8px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
             <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
             <el-table-column prop="point" label="坐标信息" show-overflow-tooltip></el-table-column>
