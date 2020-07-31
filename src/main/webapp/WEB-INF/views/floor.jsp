@@ -8,33 +8,32 @@
 <head>
     <meta charset="utf-8">
     <base href="<%=basePath%>">
-    <title>物联网应用平台-楼层货位管理</title>
+    <title>物联网应用平台-楼层管理</title>
     <link href="/css/element-ui/element-ui.css" rel="stylesheet">
     <link href="/css/page/page.container.css" rel="stylesheet">
 </head>
 <body>
-<div id="app">
-    <div class="head">
+<div id="app" style="width:1002px">
+    <div>
         <el-row :gutter="24">
-            <el-col :span="2">
+            <el-col :span="3">
                 <el-col style="padding:0px;height:40px;line-height:40px;">
-                    货位号
+                    楼层名称
                 </el-col>
             </el-col>
             <el-col :span="6" :pull="1">
-                <el-input placeholder="货位号" v-model="searchForm.storage_code" clearable/>
+                <el-input placeholder="楼层名称" v-model="searchForm.name" clearable/>
             </el-col>
-            <el-col :span="6" :pull="1" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
-            <%--<el-col :span="4" style="background:#ccb19b;height:40px;line-height:40px;">4份</el-col>
-            <el-col :span="4" style="background:#a6cc88;height:40px;line-height:40px;">4份</el-col>--%>
+            <el-col :span="8" :pull="1" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
         </el-row>
     </div>
     <div>
-        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:6px;">
+        <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="item_storage_code" label="货位号" width="180"></el-table-column>
-            <el-table-column prop="coords" label="热点区域" show-overflow-tooltip></el-table-column>
-            <el-table-column width="160" label="操作">
+            <el-table-column prop="name" label="楼层名称" width="340"></el-table-column>
+            <el-table-column prop="url" label="路由地址" width="280"></el-table-column>
+            <el-table-column prop="sort" label="楼层排序" width="190"></el-table-column>
+            <el-table-column width="156" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
                     <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
@@ -53,41 +52,28 @@
             :total="page.total">
         </el-pagination>
     </div>
-    <el-dialog style="display:none;" :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <div>
-            <el-form ref="form" :model="formData" label-width="120px">
-                <el-form-item label="货位号">
-                    <el-input v-model="formData.item_storage_code" placeholder="货位号" clearable style="width:340px;"></el-input>
-                </el-form-item>
-                <el-form-item label="楼层平面图">
-                    <el-select v-model="formData.images_id" placeholder="选择楼层平面图" style="width:340px;">
-                        <%--如果有必要就取消注释即可,下面的:label="item.label"可以支持 item.label + i 变量哦 <el-option label="不选择" value=""></el-option>--%>
-                        <el-option
-                            v-for="(item,i) in optionsFloor"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="热点区域">
-                    <el-input v-model="formData.coords" placeholder="热点区域" clearable style="width:340px;"></el-input>
-                </el-form-item>
-            </el-form>
-        </div>
+    <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="32%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
+        <el-form ref="form" label-width="120px">
+            <el-form-item label="楼层名称">
+                <el-input v-model="formData.name" placeholder="楼层名称" clearable style="width:90%"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-form ref="form" label-width="120px">
+            <el-form-item label="路由地址">
+                <el-input v-model="formData.url" placeholder="路由地址" clearable style="width:90%"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-form ref="form" label-width="120px">
+            <el-form-item label="楼层排序">
+                <el-input v-model="formData.sort" placeholder="楼层排序" clearable style="width:90%" oninput="value=value.replace(/[^\d]/g,'')"></el-input>
+            </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submits()">提交</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
         </span>
     </el-dialog>
-    <%-- 好使的,<p v-for="(item,i) in optionsFloor">--id--{{item.value}}   --姓名--{{item.label}}</p>--%>
 </div>
-<%--
-可以结合jquery的其他插件一起使用!!!
-<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script src="/layer/layer.js"></script>
-<script src="/js/page.layer.js"></script>
---%>
 <!-- import Vue before Element -->
 <script src="/js/element-ui/vue.min.js"></script>
 <!-- import JavaScript -->
@@ -102,15 +88,15 @@
         data : function(){
             return {
                 listEmpty:'暂无数据',
-                dialogTitle :'货位号信息',
+                dialogTitle :'楼层名称',
                 formData : {
                     kid : '',
-                    images_id : '',
-                    item_storage_code : '',
-                    coords : ''
+                    name : '',
+                    url : '',
+                    sort : ''
                 },
                 searchForm : {
-                    storage_code : ''
+                    name : ''
                 },
                 kids: [],
                 listDatas : [],
@@ -125,7 +111,6 @@
             }
         },
         created() {
-            this.getOptions();
             this.getListData();
         },
         methods : {
@@ -146,51 +131,36 @@
                 if(row != null && row.kid != null){
                     this.formData = {
                         kid : row.kid,
-                        images_id : row.images_id,
-                        item_storage_code : row.item_storage_code,
-                        coords : row.coords
+                        name : row.name,
+                        url : row.url,
+                        sort : row.sort,
                     };
                 }else{
                     this.formData = {};
-                    /*this.formData = {
-                        kid : '',
-                        images_id : '',
-                        item_storage_code : '',
-                        coords : ''
-                    };*/
                 }
                 this.dialogVisible = true;
             },
             //dialog对话框右上角的关闭之前的操作
             handleClose : function(done) {
-                /*有用,不要删除,this.$confirm('确认关闭?')
-                    .then(_ => {
-                        done();
-                    })
-                .catch(_ => {});*/
                 this.dialogVisible = false;
             },
             checkForm : function(){
-                if(!this.formData.item_storage_code){
-                    elementFn.fnMsgError('请填写货位号');
+                if(!this.formData.name){
+                    elementFn.fnMsgError('请填写楼层名称');
                     return;
                 }
-                if(!this.formData.images_id){
-                    elementFn.fnMsgError('请选择楼层平面图');
-                    return;
-                }
-                if(!this.formData.coords){
-                    elementFn.fnMsgError('请填写热点区域');
+                if(!this.formData.url){
+                    elementFn.fnMsgError('请填写路由地址');
                     return;
                 }
                 return true;
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
-                    this.dialogTitle = '编辑';
+                    this.dialogTitle = '编辑楼层名称';
                     this.openDialog(item);
                 }else{
-                    this.dialogTitle = '添加';
+                    this.dialogTitle = '添加楼层名称';
                     this.openDialog(null);
                 }
             },
@@ -199,7 +169,7 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
-                    ajax.post('show/delById',{kid:row.kid},function(data){
+                    ajax.post('floor/delById',{kid:row.kid},function(data){
                         _this.resultHandle(data);
                     });
                 },function(){
@@ -221,7 +191,7 @@
                 if(this.kids){
                     elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         elementFn.loadOpen();
-                        ajax.post('show/delByKeys',{ids:_this.kids},function(data){
+                        ajax.post('floor/delByKeys',{ids:_this.kids},function(data){
                             _this.resultHandle(data);
                         });
                     });
@@ -236,7 +206,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'show/add' : 'show/edit';
+                var url = (kid == null || kid.length <= 0) ? 'floor/add' : 'floor/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.resultHandle(data);
@@ -248,11 +218,11 @@
                     current : _this.page.current,
                     pageSize : _this.page.size
                 };
-                if(_this.searchForm.storage_code){
-                    params.item_storage_code = _this.searchForm.storage_code;
+                if(_this.searchForm.name){
+                    params.name = _this.searchForm.name;
                 }
                 elementFn.loadOpen();
-                ajax.get("show/listData",params,function(data){
+                ajax.get("floor/listData",params,function(data){
                     elementFn.loadClose();
                     if(data.code === 200){
                         _this.listDatas = data.data;
@@ -267,16 +237,6 @@
                     elementFn.loadClose();
                     _this.listDatas = [];
                     _this.listEmpty = elementFn.connectError;
-                });
-            },
-            getOptions : function(){
-                var _this = this;
-                ajax.get("show/getAllFloorMap",{},function(data){
-                    if(data.code === 200){
-                        _this.optionsFloor = data.data;
-                    }else{
-                        _this.optionsFloor.push({"value":'',"label":data.msg});
-                    }
                 });
             },
             changeSize : function (pageSize){
