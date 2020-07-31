@@ -106,7 +106,6 @@
                     sizes: [20,50,99],
                     total: 0
                 },
-                optionsFloor: [],
                 dialogVisible : false
             }
         },

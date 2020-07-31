@@ -54,4 +54,14 @@ public class FloorAreaController{
     public void listData(final HttpServletRequest request,final HttpServletResponse response){
         ToolClient.responseJson(service.listData(new PageFormData(request)),response);
     }
+
+    @GetMapping("getAllFloor")
+    public void getAllFloor(final HttpServletResponse response){
+        ToolClient.responseJson(service.getAllFloor(),response);
+    }
+
+    @GetMapping("getAllArea")
+    public void getAllArea(final HttpServletResponse response){
+        ToolClient.responseJson(service.getAllArea(),response);
+    }
 }

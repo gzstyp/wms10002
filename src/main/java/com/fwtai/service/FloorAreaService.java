@@ -27,9 +27,9 @@ public class FloorAreaService{
     private DaoHandle daoHandle;
 
     public String add(final PageFormData formData){
-        final String _name = "name";
-        final String _suffix = "suffix";
-        final String validateField = ToolClient.validateField(formData,_name,_suffix);
+        final String _floorId = "floorId";
+        final String _areaId = "areaId";
+        final String validateField = ToolClient.validateField(formData,_floorId,_areaId);
         if(validateField !=null)return validateField;
         formData.put("kid",ToolString.getIdsChar32());
         return ToolClient.executeRows(daoHandle.execute("floor_area.add",formData));
@@ -37,9 +37,9 @@ public class FloorAreaService{
 
     public String edit(final PageFormData formData){
         final String _kid = "kid";
-        final String _name = "name";
-        final String _suffix = "suffix";
-        final String validateField = ToolClient.validateField(formData,_kid,_name,_suffix);
+        final String _floorId = "floorId";
+        final String _areaId = "areaId";
+        final String validateField = ToolClient.validateField(formData,_kid,_floorId,_areaId);
         if(validateField !=null)return validateField;
         return ToolClient.executeRows(daoHandle.execute("floor_area.edit",formData));
     }
@@ -67,5 +67,13 @@ public class FloorAreaService{
         if(formData == null)return ToolClient.jsonValidateField();
         final HashMap<String,Object> map = daoHandle.queryForPage(formData,"floor_area.getListData","floor_area.getListTotal");
         return ToolClient.jsonPage(map.get(ConfigFile.data),(Integer) map.get(ConfigFile.total));
+    }
+
+    public String getAllFloor(){
+        return ToolClient.queryJson(daoHandle.queryListEntity("floor_area.getAllFloor"));
+    }
+
+    public String getAllArea(){
+        return ToolClient.queryJson(daoHandle.queryListEntity("floor_area.getAllArea"));
     }
 }

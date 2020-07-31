@@ -18,21 +18,21 @@
         <el-row :gutter="24">
             <el-col :span="4">
                 <el-col style="padding:0px;height:40px;line-height:40px;">
-                    楼层区域名称
+                    楼层名称
                 </el-col>
             </el-col>
-            <el-col :span="6" :pull="1">
-                <el-input placeholder="楼层区域名称" v-model="searchForm.name" clearable/>
+            <el-col :span="6" :pull="2">
+                <el-input placeholder="楼层名称" v-model="searchForm.name" clearable/>
             </el-col>
-            <el-col :span="8" :pull="1" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
+            <el-col :span="8" :pull="2" ><el-button @click="search()" icon="el-icon-search">搜索</el-button><el-button @click="handleEdit()" type="primary" icon="el-icon-plus">添加</el-button><el-button :disabled="kids.length > 0 ? false:true" type="danger" @click="delByKeys()" icon="el-icon-delete">删除</el-button></el-col>
         </el-row>
     </div>
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="name" label="楼层区域名称" width="250"></el-table-column>
-            <el-table-column prop="suffix" label="区域位置" width="150"></el-table-column>
-            <el-table-column prop="area" label="货位区域位置" width="406"></el-table-column>
+            <el-table-column prop="floorName" label="楼层名称" width="250"></el-table-column>
+            <el-table-column prop="area" label="货位区域位置" width="156"></el-table-column>
+            <el-table-column prop="fullName" label="楼层区域位置" width="400"></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -52,15 +52,20 @@
             :total="page.total">
         </el-pagination>
     </div>
-    <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="32%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <el-form ref="form" :model="formData" label-width="120px">
-            <el-form-item label="楼层区域名称">
-                <el-input v-model="formData.name" placeholder="楼层区域名称" clearable style="width:90%"></el-input>
+    <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="28%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
+        <el-form ref="form" label-width="100px">
+            <el-form-item label="楼层名称">
+                <el-select v-model="formData.floorId" placeholder="楼层名称" clearable style="width:90%">
+                    <el-option
+                    v-for="item in optionsFloor"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
             </el-form-item>
-        </el-form>
-        <el-form ref="form" :model="formData" label-width="120px">
-            <el-form-item label="货位南北区域">
-                <el-select v-model="formData.suffix" placeholder="选择南北区域" clearable style="width:90%">
+            <el-form-item label="货位区域">
+                <el-select v-model="formData.areaId" placeholder="选择区域" clearable style="width:90%">
                     <el-option
                     v-for="item in optionsArea"
                     :key="item.value"
@@ -68,7 +73,6 @@
                     :value="item.value">
                     </el-option>
                 </el-select>
-
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -91,11 +95,11 @@
         data : function(){
             return {
                 listEmpty:'暂无数据',
-                dialogTitle :'楼层区域名称',
+                dialogTitle :'楼层名称',
                 formData : {
                     kid : '',
-                    name : '',
-                    suffix : ''
+                    floorId : '',
+                    areaId : ''
                 },
                 searchForm : {
                     name : ''
@@ -108,26 +112,14 @@
                     sizes: [20,50,99],
                     total: 0
                 },
-                optionsFloor: [],
                 dialogVisible : false,
-                optionsArea: [
-                    {
-                        value : '',
-                        label : '选择区域'
-                    },
-                    {
-                        value : '南区',
-                        label : '南区'
-                    },
-                    {
-                        value : '北区',
-                        label : '北区'
-                    }
-                ]
+                optionsFloor: [],
+                optionsArea: []
             }
         },
         created() {
-            this.getOptions();
+            this.getFloorOptions();
+            this.getAreaOptions();
             this.getListData();
         },
         methods : {
@@ -148,8 +140,8 @@
                 if(row != null && row.kid != null){
                     this.formData = {
                         kid : row.kid,
-                        name : row.name,
-                        suffix : row.suffix,
+                        floorId : row.floorId,
+                        areaId : row.areaId
                     };
                 }else{
                     this.formData = {};
@@ -161,11 +153,11 @@
                 this.dialogVisible = false;
             },
             checkForm : function(){
-                if(!this.formData.name){
-                    elementFn.fnMsgError('请填写楼层区域名称');
+                if(!this.formData.floorId){
+                    elementFn.fnMsgError('请选择楼层');
                     return;
                 }
-                if(!this.formData.suffix){
+                if(!this.formData.areaId){
                     elementFn.fnMsgError('请选择区域');
                     return;
                 }
@@ -255,13 +247,23 @@
                     _this.listEmpty = elementFn.connectError;
                 });
             },
-            getOptions : function(){
+            getFloorOptions : function(){
                 var _this = this;
-                ajax.get("floorArea/getAllFloorMap",{},function(data){
+                ajax.get("floorArea/getAllFloor",{},function(data){
                     if(data.code === 200){
                         _this.optionsFloor = data.data;
                     }else{
                         _this.optionsFloor.push({"value":'',"label":data.msg});
+                    }
+                });
+            },
+            getAreaOptions : function(){
+                var _this = this;
+                ajax.get("floorArea/getAllArea",{},function(data){
+                    if(data.code === 200){
+                        _this.optionsArea = data.data;
+                    }else{
+                        _this.optionsArea.push({"value":'',"label":data.msg});
                     }
                 });
             },

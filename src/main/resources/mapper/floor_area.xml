@@ -5,14 +5,14 @@
 <mapper namespace="floor_area">
 
     <update id="add" parameterType="HashMap">
-        INSERT INTO FLOOR_AREA(KID,NAME,suffix) VALUES (#{kid},#{name},#{suffix})
+        INSERT INTO FLOOR_AREA(KID,floorId,areaId) VALUES (#{kid},#{floorId},#{areaId})
     </update>
 
     <update id="edit" parameterType="HashMap">
         UPDATE FLOOR_AREA
         <trim prefix="SET" suffixOverrides=",">
-            <if test="name != null">NAME = #{name},</if>
-            <if test="suffix != null">SUFFIX = #{suffix}</if>
+            <if test="floorId != null">floorId = #{floorId},</if>
+            <if test="areaId != null">areaId = #{areaId}</if>
         </trim>
         WHERE KID = #{kid} LIMIT 1
     </update>
@@ -29,10 +29,12 @@
     </update>
 
     <select id="getListData" resultType="HashMap" parameterType="HashMap">
-        select kid,name,suffix,CONCAT(name,suffix) area from FLOOR_AREA
+        select fa.kid, floorId,fr.name floorName, areaId,a.name area,CONCAT(fr.name,a.name) fullName from floor_area fa
+        left join floor fr on fr.kid = fa.floorId
+        left join areas a on a.kid = fa.areaId
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
-                name LIKE CONCAT(#{name},'%')
+                fr.name LIKE CONCAT(#{name},'%')
             </if>
         </trim>
         <choose>
@@ -46,12 +48,24 @@
     </select>
 
     <select id="getListTotal" resultType="Integer" parameterType="HashMap">
-        SELECT count(kid) total from FLOOR_AREA
+        SELECT count(fa.kid) total from floor_area fa
+        left join floor fr on fr.kid = fa.floorId
+        left join areas a on a.kid = fa.areaId
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
-                AND name LIKE CONCAT(#{name},'%')
+                fr.name LIKE CONCAT(#{name},'%')
             </if>
         </trim>
+    </select>
+
+    <!-- 获取楼层 -->
+    <select id="getAllFloor" resultType="HashMap">
+        SELECT KID value,NAME label FROM FLOOR ORDER BY SORT
+    </select>
+
+    <!-- 获取区域 -->
+    <select id="getAllArea" resultType="HashMap">
+        SELECT kid value,name label FROM areas ORDER BY name
     </select>
 
 </mapper>
