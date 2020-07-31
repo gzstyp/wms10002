@@ -60,14 +60,18 @@
         SELECT KID FROM FLOOR_AREA WHERE KID = #{kid} LIMIT 1
     </select>
 
+    <!--获取楼层区域-->
     <select id="getOptions" resultType="HashMap">
-        SELECT kid value,CONCAT(name,suffix) label FROM floor_area
+        select fa.kid value,CONCAT(fr.name,a.name) label from floor_area fa
+        left join areas a on a.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId order by fr.sort,a.name
     </select>
 
     <!--获取楼层-->
     <select id="getFloorArea" resultType="HashMap">
-        select lt.name,group_concat(fa.kid) kids from (select name from floor_area group by name )lt
-        left join floor_area fa on fa.name like lt.name group by lt.name ORDER BY lt.name DESC
+        select fr.name,fr.url,lt.kids from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
+        left join floor_area fa on fa.floorId = lt.floorId group by lt.floorId) lt
+        left join floor fr on fr.kid = lt.floorId order by fr.sort
     </select>
 
     <!--获取区域-->
