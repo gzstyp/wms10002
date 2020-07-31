@@ -53,28 +53,24 @@
         </el-pagination>
     </div>
     <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="32%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <div>
-            <el-form ref="form" :model="formData" label-width="120px">
-                <el-form-item label="楼层区域名称">
-                    <el-input v-model="formData.name" placeholder="楼层区域名称" clearable style="width:90%"></el-input>
-                </el-form-item>
-            </el-form>
-        </div>
-        <div>
-            <el-form ref="form" :model="formData" label-width="120px">
-                <el-form-item label="货位南北区域">
-                    <el-select v-model="formData.suffix" placeholder="选择南北区域" clearable style="width:90%">
-                        <el-option
-                        v-for="item in optionsArea"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
+        <el-form ref="form" :model="formData" label-width="120px">
+            <el-form-item label="楼层区域名称">
+                <el-input v-model="formData.name" placeholder="楼层区域名称" clearable style="width:90%"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-form ref="form" :model="formData" label-width="120px">
+            <el-form-item label="货位南北区域">
+                <el-select v-model="formData.suffix" placeholder="选择南北区域" clearable style="width:90%">
+                    <el-option
+                    v-for="item in optionsArea"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
 
-                </el-form-item>
-            </el-form>
-        </div>
+            </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submits()">提交</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
