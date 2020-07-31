@@ -38,6 +38,11 @@ public class PageController{
         return "floor";
     }
 
+    @GetMapping(value = "/floorOld")
+    public String floorOld(){
+        return "floorOld";
+    }
+
     @GetMapping(value = "/point1")
     public String point1(){
         return "point1";

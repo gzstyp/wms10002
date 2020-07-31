@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="floor">
+
+    <update id="add" parameterType="HashMap">
+        INSERT INTO FLOOR(KID,NAME,url,sort) VALUES (#{kid},#{name},#{url},#{sort})
+    </update>
+
+    <update id="edit" parameterType="HashMap">
+        UPDATE FLOOR
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">NAME = #{name},</if>
+            <if test="url != null">URL = #{url},</if>
+            <if test="sort != null">SORT = #{sort}</if>
+        </trim>
+        WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delById" parameterType="String">
+        DELETE FROM FLOOR WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM FLOOR WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select kid,name,url,sort from FLOOR
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                name LIKE CONCAT(#{name},'%')
+            </if>
+        </trim>
+        <choose>
+            <when test="order != null and column != null">
+                ORDER BY ${column} ${order}
+            </when>
+            <otherwise>
+                ORDER BY sort
+            </otherwise>
+        </choose>
+        LIMIT #{section},#{pageSize}
+    </select>
+
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT count(kid) total from FLOOR
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                AND name LIKE CONCAT(#{name},'%')
+            </if>
+        </trim>
+    </select>
+
+</mapper>
