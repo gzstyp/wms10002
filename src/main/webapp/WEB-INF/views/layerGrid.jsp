@@ -30,7 +30,9 @@
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 100%;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="name" label="楼层区域名称" width="180"></el-table-column>
+            <el-table-column prop="floorName" label="楼层名称" width="180"></el-table-column>
+            <el-table-column prop="areaName" label="区域名称" width="100"></el-table-column>
+            <el-table-column prop="fullName" label="楼层区域名称" width="180"></el-table-column>
             <el-table-column prop="grids" label="货架货位信息" show-overflow-tooltip></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">

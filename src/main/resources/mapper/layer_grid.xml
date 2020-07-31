@@ -29,11 +29,14 @@
     </update>
 
     <select id="getListData" resultType="HashMap" parameterType="HashMap">
-        select lg.kid,floor_area_id,CONCAT(fa.name,suffix) name, grids from LAYER_GRID lg
-        LEFT JOIN floor_area fa on fa.kid = lg.floor_area_id
+        select lg.kid,lg.floor_area_id,lg.grids,rt.areaName,rt.floorName,rt.fullName from LAYER_GRID lg
+        inner join
+        (select fa.kid,a.name areaName,fr.name floorName,CONCAT(fr.name,a.name) fullName from floor_area fa
+        left join areas a on a.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId order by fr.sort,a.name) rt on rt.kid = lg.floor_area_id
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
-                CONCAT(fa.name,suffix) LIKE CONCAT('%',#{name},'%')
+                rt.fullName LIKE CONCAT('%',#{name},'%')
             </if>
         </trim>
         <choose>
@@ -48,10 +51,13 @@
 
     <select id="getListTotal" resultType="Integer" parameterType="HashMap">
         SELECT count(lg.kid) total from LAYER_GRID lg
-        LEFT JOIN floor_area fa on fa.kid = lg.floor_area_id
+        inner join
+        (select fa.kid,a.name areaName,fr.name floorName,CONCAT(fr.name,a.name) fullName from floor_area fa
+        left join areas a on a.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId order by fr.sort,a.name) rt on rt.kid = lg.floor_area_id
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
-                CONCAT(fa.name,suffix) LIKE CONCAT('%',#{name},'%')
+                rt.fullName LIKE CONCAT('%',#{name},'%')
             </if>
         </trim>
     </select>
@@ -74,10 +80,13 @@
         left join floor fr on fr.kid = lt.floorId order by fr.sort
     </select>
 
-    <!--获取区域-->
+    <!--获取楼层区域货位号-->
     <select id="getLayerGrid" parameterType="ArrayList" resultType="HashMap">
-        select grids,suffix from layer_grid lg
-            left join floor_area fa on fa.kid = lg.floor_area_id
+        select lg.grids,rt.name suffix from layer_grid lg
+        inner join (
+        select fa.kid,a.name from floor_area fa
+        left join areas a on a.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId order by fr.sort,a.name) rt on rt.kid = lg.floor_area_id
         where floor_area_id IN
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
