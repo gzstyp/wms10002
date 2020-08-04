@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="floor_camera">
+
+    <update id="add" parameterType="HashMap">
+        INSERT INTO FLOOR_CAMERA(KID,floorId,code,cameraId) VALUES (#{kid},#{floorId},#{code},#{cameraId})
+    </update>
+
+    <update id="edit" parameterType="HashMap">
+        UPDATE FLOOR_CAMERA
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="floorId != null">floorId = #{floorId},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="cameraId != null">cameraId = #{cameraId}</if>
+        </trim>
+        WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delById" parameterType="String">
+        DELETE FROM FLOOR_CAMERA WHERE KID = #{kid} LIMIT 1
+    </update>
+
+    <update id="delByKeys" parameterType="ArrayList">
+        DELETE FROM FLOOR_CAMERA WHERE KID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select fc.kid,fc.floorId,fc.code,fc.cameraId,fr.name floorName from floor_camera fc
+        left join floor fr on fr.kid = fc.floorId
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                fr.name LIKE CONCAT(#{name},'%')
+            </if>
+        </trim>
+        <choose>
+            <when test="order != null and column != null">
+                ORDER BY ${column} ${order}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        LIMIT #{section},#{pageSize}
+    </select>
+
+    <select id="getListTotal" resultType="Integer" parameterType="HashMap">
+        SELECT count(fc.kid) total from floor_camera fc
+        left join floor fr on fr.kid = fc.floorId
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="name != null">
+                fr.name LIKE CONCAT(#{name},'%')
+            </if>
+        </trim>
+    </select>
+
+    <!-- 获取楼层 -->
+    <select id="getAllFloor" resultType="HashMap">
+        SELECT KID value,NAME label FROM FLOOR ORDER BY SORT
+    </select>
+
+</mapper>

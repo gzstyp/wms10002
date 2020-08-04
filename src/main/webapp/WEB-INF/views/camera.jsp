@@ -31,8 +31,8 @@
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
             <el-table-column prop="floorName" label="楼层名称" width="250"></el-table-column>
-            <el-table-column prop="area" label="货位区域位置" width="156"></el-table-column>
-            <el-table-column prop="fullName" label="楼层区域位置" width="400"></el-table-column>
+            <el-table-column prop="code" label="摄像头编号" width="156"></el-table-column>
+            <el-table-column prop="cameraId" label="摄像头标识" width="400"></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -53,7 +53,7 @@
         </el-pagination>
     </div>
     <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="28%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <el-form ref="form" label-width="100px">
+        <el-form ref="form" label-width="120px">
             <el-form-item label="楼层名称">
                 <el-select v-model="formData.floorId" placeholder="选择楼层" clearable style="width:90%">
                     <el-option
@@ -64,16 +64,16 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="货位区域">
-                <el-select v-model="formData.areaId" placeholder="选择区域" clearable style="width:90%">
-                    <el-option
-                    v-for="item in optionsArea"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-form-item>
+            <el-form ref="form" label-width="120px">
+                <el-form-item label="摄像头编号">
+                    <el-input v-model="formData.code" placeholder="摄像头编号" clearable style="width:90%"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-form ref="form" label-width="120px">
+                <el-form-item label="摄像头标识">
+                    <el-input v-model="formData.cameraId" placeholder="摄像头标识" clearable style="width:90%"></el-input>
+                </el-form-item>
+            </el-form>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submits()">提交</el-button>
@@ -99,7 +99,8 @@
                 formData : {
                     kid : '',
                     floorId : '',
-                    areaId : ''
+                    code : '',
+                    cameraId : ''
                 },
                 searchForm : {
                     name : ''
@@ -119,7 +120,6 @@
         },
         created() {
             this.getFloorOptions();
-            this.getAreaOptions();
             this.getListData();
         },
         methods : {
@@ -141,7 +141,8 @@
                     this.formData = {
                         kid : row.kid,
                         floorId : row.floorId,
-                        areaId : row.areaId
+                        code : row.code,
+                        cameraId : row.cameraId
                     };
                 }else{
                     this.formData = {};
@@ -157,18 +158,22 @@
                     elementFn.fnMsgError('请选择楼层');
                     return;
                 }
-                if(!this.formData.areaId){
-                    elementFn.fnMsgError('请选择区域');
+                if(!this.formData.code){
+                    elementFn.fnMsgError('请输入摄像头编号');
+                    return;
+                }
+                if(!this.formData.cameraId){
+                    elementFn.fnMsgError('请输入摄像头标识');
                     return;
                 }
                 return true;
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
-                    this.dialogTitle = '编辑楼层区域名称';
+                    this.dialogTitle = '编辑摄像头';
                     this.openDialog(item);
                 }else{
-                    this.dialogTitle = '添加楼层区域名称';
+                    this.dialogTitle = '添加摄像头';
                     this.openDialog(null);
                 }
             },
@@ -177,7 +182,7 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
-                    ajax.post('floorArea/delById',{kid:row.kid},function(data){
+                    ajax.post('floorCamera/delById',{kid:row.kid},function(data){
                         _this.resultHandle(data);
                     });
                 },function(){
@@ -199,7 +204,7 @@
                 if(this.kids){
                     elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         elementFn.loadOpen();
-                        ajax.post('floorArea/delByKeys',{ids:_this.kids},function(data){
+                        ajax.post('floorCamera/delByKeys',{ids:_this.kids},function(data){
                             _this.resultHandle(data);
                         });
                     });
@@ -214,7 +219,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'floorArea/add' : 'floorArea/edit';
+                var url = (kid == null || kid.length <= 0) ? 'floorCamera/add' : 'floorCamera/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.resultHandle(data);
@@ -230,7 +235,7 @@
                     params.name = _this.searchForm.name;
                 }
                 elementFn.loadOpen();
-                ajax.get("floorArea/listData",params,function(data){
+                ajax.get("floorCamera/listData",params,function(data){
                     elementFn.loadClose();
                     if(data.code === 200){
                         _this.listDatas = data.data;
@@ -249,21 +254,11 @@
             },
             getFloorOptions : function(){
                 var _this = this;
-                ajax.get("floorArea/getAllFloor",{},function(data){
+                ajax.get("floorCamera/getAllFloor",{},function(data){
                     if(data.code === 200){
                         _this.optionsFloor = data.data;
                     }else{
                         _this.optionsFloor.push({"value":'',"label":data.msg});
-                    }
-                });
-            },
-            getAreaOptions : function(){
-                var _this = this;
-                ajax.get("floorArea/getAllArea",{},function(data){
-                    if(data.code === 200){
-                        _this.optionsArea = data.data;
-                    }else{
-                        _this.optionsArea.push({"value":'',"label":data.msg});
                     }
                 });
             },

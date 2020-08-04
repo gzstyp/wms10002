@@ -69,4 +69,9 @@ public class PageController{
     public String floorArea(){
         return "floorArea";
     }
+
+    @GetMapping(value = "/camera")
+    public String camera(){
+        return "camera";
+    }
 }
