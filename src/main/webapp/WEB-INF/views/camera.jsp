@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <base href="<%=basePath%>">
-    <title>物联网应用平台-楼层区域管理</title>
+    <title>物联网应用平台-楼层摄像头</title>
     <link href="/css/element-ui/element-ui.css" rel="stylesheet">
     <link href="/css/page/page.container.css" rel="stylesheet">
 </head>
