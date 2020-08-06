@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 		<meta charset="utf-8" />
 		<title>省级应急物资网格化管理</title>
         <style type="text/css">
@@ -28,11 +28,11 @@
                 transform:translate(-50%,-50%);
             }
             .main{
-                border:3px solid #107fde;
+                border:3px solid #fff;
                 padding:10px;
             }
             .wave{
-                background-color:#107fde;
+                background-color:#53b8ff;
                 overflow:hidden;
             }
             .wave:after{
@@ -51,6 +51,7 @@
                 content:"26℃";
                 color:#fff;
                 position:absolute;
+                cursor:pointer;
                 left:50%;
                 top:0;
                 z-index:99;
@@ -112,8 +113,7 @@
 
         </style>
 	</head>
-	<body>
-
+	<body id="app">
 
     <div>
         <div class="main">
@@ -129,8 +129,18 @@
         <span class="ripple r5"></span>
         <span class="ripple r6"></span>
     </div>
-
+    <script src="js/element-ui/vue.min.js"></script>
     <script type="text/javascript">
+        var vue = new Vue({
+            el : '#app',
+            data(){
+                return {
+                    showList : false
+                }
+            },
+            created(){},
+            methods : {}
+        });
     </script>
 	</body>
 </html>
