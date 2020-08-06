@@ -142,6 +142,9 @@
                 top:40px;
                 right:10px;
             }
+            .active{
+                color:#000;
+            }
         </style>
 	</head>
 	<body>
@@ -163,7 +166,7 @@
             <div class="menuCircle" @click="controllMenu"></div>
             <div class="menuList" v-if="showList">
                 <ul>
-                    <li><a target="_blank" @click="hideMenu" href="/point">货位号</a></li>
+                    <li><a target="_blank" @click="hideMenu" @mouseover="changeActive(event)" @mouseout="removeActive(event)" href="/point">货位号</a></li>
                     <li><a target="_blank" @click="hideMenu" href="/floor">仓库楼层</a></li>
                     <li><a target="_blank" @click="hideMenu" href="/layerGrid">区域货位</a></li>
                     <li><a target="_blank" @click="hideMenu" href="/floorArea">楼层区域</a></li>
@@ -187,6 +190,15 @@
                     },
                     hideMenu(){
                         this.showList = false;
+                    },
+                    // 鼠标移入加入class
+                    changeActive(event){
+                        //event.currentTarget.className="active";
+                    },
+                    removeActive(event){
+                        //event.currentTarget.className="";
+                        //console.info(event.clientX);
+                        //console.info(event.clientY);
                     }
                 }
             });
