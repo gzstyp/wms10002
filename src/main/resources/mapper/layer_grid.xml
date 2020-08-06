@@ -75,7 +75,7 @@
 
     <!--获取楼层-->
     <select id="getFloorArea" resultType="HashMap">
-        select fr.name,fr.url,lt.kids from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
+        select fr.kid,fr.name,fr.url,lt.kids from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
         left join floor_area fa on fa.floorId = lt.floorId group by lt.floorId) lt
         left join floor fr on fr.kid = lt.floorId order by fr.sort
     </select>
