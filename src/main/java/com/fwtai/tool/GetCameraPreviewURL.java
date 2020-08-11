@@ -50,13 +50,8 @@ public class GetCameraPreviewURL {
         String body = jsonBody.toJSONString();
         /**
          * STEP6：调用接口
-         */
+        */
         final String result = ArtemisHttpUtil.doPostStringArtemis(path, body, null, null, contentType , null);// post请求application/json类型参数
         return result;
-    }
-
-    public static void main(String[] args) {
-        String result = GetCameraPreviewURL();
-        System.out.println("result结果示例: " + result);
     }
 }
