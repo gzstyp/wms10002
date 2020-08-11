@@ -73,11 +73,13 @@
         left join floor fr on fr.kid = fa.floorId order by fr.sort,a.name
     </select>
 
-    <!--获取楼层-->
+    <!--获取楼层+楼层摄像头-->
     <select id="getFloorArea" resultType="HashMap">
-        select fr.kid,fr.name,fr.url,lt.kids from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
+        select fr.kid,glt.code,glt.cameraId,fr.name,fr.url,lt.kids from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
         left join floor_area fa on fa.floorId = lt.floorId group by lt.floorId) lt
-        left join floor fr on fr.kid = lt.floorId order by fr.sort
+        left join floor fr on fr.kid = lt.floorId
+        left join (select floorId,group_concat(code) code,group_concat(cameraId) cameraId from floor_camera group by floorId) glt on glt.floorId = fr.kid
+        order by fr.sort
     </select>
 
     <!--获取楼层区域货位号-->
