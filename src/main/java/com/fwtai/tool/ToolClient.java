@@ -784,4 +784,11 @@ public final class ToolClient implements Serializable{
             }.start();
         } catch (Exception e){}
     }
+
+    public final static String notAuthorized(){
+        final JSONObject json = new JSONObject();
+        json.put(ConfigFile.code,ConfigFile.code401);
+        json.put(ConfigFile.msg,ConfigFile.msg401);
+        return json.toJSONString();
+    }
 }

@@ -36,6 +36,10 @@ public final class ConfigFile implements Serializable{
 	public final static int code204 = 204;
 	/**系统出现异常*/
 	public final static String msg204 = "系统出现错误";
+    /**没有操作权限*/
+    public final static int code401 = 401;
+    /**没有操作权限*/
+    public final static String msg401 = "没有操作权限";
 	/**统一全局的code的状态码json关键字key关键字响应给客户端*/
 	public final static String code = "code";
 	/**统一全局的msg提示消息json关键字key响应给客户端*/
