@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tab滑动的按钮</title>
+    <link rel="stylesheet" href="https:////at.alicdn.com/t/font_2019525_yyo17tl34c9.css">
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            height:100vh;
+            background-color:#7dbfff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        #nav-tab{
+            width:600px;
+            height:150px;
+            background-color:#fff;
+            display:flex;
+            border-radius:20px 20px 90px 90px;
+            position:relative;
+            /*多出的部分隐藏*/
+            overflow:hidden;
+            border:20px solid #fff;
+        }
+        /*每个item项*/
+        .nav-tab-item{
+            width:130px;
+            height:100%;
+            display:flex;
+            /*包裹内[容器内]的元素按行排列*/
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            /*让本元素在其类‘nav-tab-overlay’之上,否则是看不到的!!!*/
+            z-index:2;
+            cursor:pointer;
+            /*item项的动画*/
+            transition:0.3s;
+        }
+        .nav-tab-item.active{
+            width:210px;
+        }
+        /*图标*/
+        .nav-tab-item_icon{
+            color:#4298e7;
+            font-size:32px;
+            /*item项的图标的动画*/
+            transition:0.3s;
+            transform:translate(0,0);
+        }
+        .active .nav-tab-item_icon{
+            transform:translate(0,-10px);
+        }
+        /*文字*/
+        .nav-tab-item_label{
+            color:#4298e7;
+            font-size:20px;
+            user-select:none;
+            /*如果透明度为0,则其不可见*/
+            opacity:0.6;
+            transition:0.3s;
+        }
+        /*在类active的下一个类nav-tab-item_label的样式,它是结合上一个 .nav-tab-item_label的 opacity:0.6; 来使用的,默认文字是看不见的,当选中后才显示文字*/
+        .active .nav-tab-item_label{
+            opacity:1;
+        }
+        /*遮罩层,其实就一个div,通过z-index让其在‘某元素’的z-index的值-1,来达到替换‘某元素’的背景色*/
+        .nav-tab-overlay{
+            position:absolute;
+            left:0;
+            top:0;
+            height:100%;
+            width:210px;
+            background-color:#e4f2ff;
+            /*移动动画,即遮罩层的动画*/
+            transition:0.3s;
+            border-radius:20px;
+        }
+    </style>
+</head>
+<body>
+<div id="nav-tab">
+    <div class="nav-tab-item" :class="{'active':activeIndex === index}" v-for="(item,index) in items" :key="index" @click="activeIndex = index">
+        <i :class=['nav-tab-item_icon','iconfont',item.icon]></i>
+        <p class="nav-tab-item_label">{{item.label}}</p>
+    </div>
+    <div class="nav-tab-overlay" :style="{'left':activeIndex * 130 +'px'}"></div>
+</div>
+<script src="js/element-ui/vue.min.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el : '#nav-tab',
+        data(){
+            return {
+                items : [
+                    {
+                        icon : 'icon-shouye',
+                        label : '首页'
+                    },
+                    {
+                        icon : 'icon-guanzhu',
+                        label : '关注'
+                    },
+                    {
+                        icon : 'icon-faxian',
+                        label : '发现'
+                    },
+                    {
+                        icon : 'icon-xiaoxi',
+                        label : '消息'
+                    }
+                ],
+                activeIndex : 0
+            }
+        },
+        created(){},
+        methods : {
+
+        }
+    });
+</script>
+</body>
+</html>
