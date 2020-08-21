@@ -1,0 +1,44 @@
+{
+  "id": "2020104",
+  "name": "gzjzzx",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "15951296",
+      "name": "货位映射",
+      "font_class": "huoweihao",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "1503986",
+      "name": "楼层",
+      "font_class": "louceng",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "6684336",
+      "name": "区域排序",
+      "font_class": "quyu",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "15951298",
+      "name": "货位物料关系",
+      "font_class": "huowei",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "16363200",
+      "name": "摄像头",
+      "font_class": "shexiangtou",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    }
+  ]
+}

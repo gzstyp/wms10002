@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>省级应急物资网格化管理</title>
-    <link rel="stylesheet" href="iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="iconfont/index/iconfont.css"/>
     <style type="text/css">
         *{
             margin:0;
             padding:0;
+        }
+        a:link,a:visited,a:hover,a:active{
+            text-decoration: none;
+            outline:none;
         }
         body{
             padding:0;
@@ -24,7 +28,7 @@
             align-items:center;
         }
         #nav-tab{
-            width:600px;
+            width:700px;/*总宽度*/
             height:150px;
             background-color:#fff;
             display:flex;
@@ -36,7 +40,7 @@
         }
         /*每个item项*/
         .nav-tab-item{
-            width:130px;
+            width:160px;/*item项宽度*/
             height:100%;
             display:flex;
             /*包裹内[容器内]的元素按行排列*/
@@ -82,7 +86,7 @@
             left:0;
             top:0;
             height:100%;
-            width:210px;
+            width:180px;/*遮罩层的宽度*/
             background-color:#e4f2ff;
             /*移动动画,即遮罩层的动画*/
             transition:0.3s;
@@ -92,7 +96,7 @@
 </head>
 <body>
 <div id="nav-tab">
-    <div class="nav-tab-item" :class="{'active':activeIndex === index}" v-for="(item,index) in items" :key="index" @click="activeIndex = index">
+    <div class="nav-tab-item" :class="{'active':activeIndex === index}" v-for="(item,index) in items" :key="index" @click="activeIndex = index;router(item.url)">
         <i :class=['nav-tab-item_icon','iconfont',item.icon]></i>
         <p class="nav-tab-item_label">{{item.label}}</p>
     </div>
@@ -106,20 +110,29 @@
             return {
                 items : [
                     {
-                        icon : 'icon-shouye',
-                        label : '仓库楼层'
+                        icon : 'icon-louceng',
+                        label : '楼层管理',
+                        url : '/floor'
                     },
                     {
-                        icon : 'icon-guanzhu',
-                        label : '区域货位'
+                        icon : 'icon-quyu',
+                        label : '楼层区域',
+                        url : '/floorArea'
                     },
                     {
-                        icon : 'icon-faxian',
-                        label : '楼层区域'
+                        icon : 'icon-huowei',
+                        label : '区域货位',
+                        url : '/layerGrid'
                     },
                     {
-                        icon : 'icon-xiaoxi',
-                        label : '摄像头'
+                        icon : 'icon-huoweihao',
+                        label : '货位信息',
+                        url : '/point'
+                    },
+                    {
+                        icon : 'icon-shexiangtou',
+                        label : '楼层监控',
+                        url : '/camera'
                     }
                 ],
                 activeIndex : 0
@@ -127,7 +140,11 @@
         },
         created(){},
         methods : {
-
+            router : function(url){
+                setTimeout(function(){
+                    window.open(url,'_blank').location;
+                },500);
+            }
         }
     });
 </script>
