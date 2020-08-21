@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta charset="utf-8" />
+		<title>省级应急物资网格化管理</title>
+        <style type="text/css">
+            body{
+                padding:0;
+                margin:0;
+                overflow:hidden;
+                list-style:none;
+                text-decoration:none;
+                outline:none;
+                width:100vw;
+                height:100vh;
+                background:radial-gradient(circle,#7bbfea,#33a3dc,#009ad6,#0696F5);
+            }
+
+            ul{
+                padding:0;
+                margin:0;
+                list-style:none;
+                text-decoration:none;
+                outline:none;
+            }
+
+            a:link,a:visited,a:hover,a:active{
+                text-decoration: none;
+                outline:none;
+                color:#fff;
+            }
+
+            /*水球2开始*/
+            .main,.wave{
+                width:200px;
+                height:200px;
+                border-radius:50%;
+                position:absolute;
+                left:50%;
+                top:50%;
+                transform:translate(-50%,-50%);
+            }
+            .main{
+                border:3px solid #fff;
+                padding:10px;
+            }
+            .wave{
+                background-color:#53b8ff;
+                overflow:hidden;
+            }
+            .wave:after{
+                content:"";
+                width:300px;
+                height:300px;
+                background-color:rgba(255, 255, 255, 0.2);
+                position:absolute;
+                left:50%;
+                top:0;
+                transform:translate(-50%,-60%);/*这个值要和下面的keyframes的transform要一致*/
+                border-radius:40%;
+                animation:wave_ani 5s linear infinite;
+            }
+            .wave::before{
+                content:"26℃";
+                color:#fff;
+                position:absolute;
+                cursor:pointer;
+                left:50%;
+                top:0;
+                z-index:99;
+                transform:translate(-50%,30px);
+                text-transform:uppercase;
+            }
+            @keyframes wave_ani{
+                100%{
+                    transform:translate(-50%,-60%) rotate(360deg);/*这个值要和上面的transform要一致*/
+                }
+            }
+
+            .container{
+                margin-top:114px;
+                position:absolute;
+                top:50%;
+                left:50%;
+                transform:translate(-50%,-50%) rotateX(70deg);
+            }
+            .ripple{
+                position:fixed;
+                top:0;
+                transform:translateX(-50%);
+                width:20px;
+                height:20px;
+                border-radius:50%;
+                animation:ripple 4s linear infinite;
+            }
+            .r2{
+                animation-delay:0.8s;
+            }
+            .r3{
+                animation-delay:1.6s;
+            }
+            .r4{
+                animation-delay:2.4s;
+            }
+            .r5{
+                animation-delay:3.2s;
+            }
+            .r6{
+                animation-delay:4.0s;
+            }
+
+            @keyframes ripple{
+                from{
+                    border: 4px solid #8e44ad;
+                    background:#9b59b670;
+                }
+                to{
+                    border: 0 solid #8e44ad;
+                    background:#9b59b670;
+                    width:400px;
+                    height:400px;
+                    top:20px;
+                    opacity:0;
+                }
+            }
+
+            .menuCircle{
+                cursor:pointer;
+                position:absolute;
+                height:30px;
+                width:30px;
+                top:10px;
+                right:10px;
+                border-radius:50%
+            }
+            .menuCircle:hover{
+                background-color:#53b8ff;
+            }
+            .menuList{
+                position:absolute;
+                top:40px;
+                right:10px;
+            }
+        </style>
+	</head>
+	<body>
+        <div id="app">
+            <div>
+                <div class="main">
+                    <div class="wave"></div>
+                </div>
+            </div>
+
+            <div class="container">
+                <span class="ripple"></span>
+                <span class="ripple r2"></span>
+                <span class="ripple r3"></span>
+                <span class="ripple r4"></span>
+                <span class="ripple r5"></span>
+                <span class="ripple r6"></span>
+            </div>
+            <div class="menuCircle" @click="controllMenu"></div>
+            <div class="menuList" v-if="showList">
+                <ul>
+                    <li><a target="_blank" @click="hideMenu" @mouseover="changeActive(event)" @mouseout="removeActive(event)" href="/point">货位号</a></li>
+                    <li><a target="_blank" @click="hideMenu" href="/floor">仓库楼层</a></li>
+                    <li><a target="_blank" @click="hideMenu" href="/layerGrid">区域货位</a></li>
+                    <li><a target="_blank" @click="hideMenu" href="/floorArea">楼层区域</a></li>
+                    <li><a target="_blank" @click="hideMenu" href="/camera">摄像头</a></li>
+                </ul>
+            </div>
+        </div>
+        <script src="js/element-ui/vue.min.js"></script>
+        <script type="text/javascript">
+            new Vue({
+                el : '#app',
+                data(){
+                    return {
+                        showList : false
+                    }
+                },
+                created(){},
+                methods : {
+                    controllMenu(){
+                        this.showList = !this.showList;
+                    },
+                    hideMenu(){
+                        this.showList = false;
+                    },
+                    // 鼠标移入加入class
+                    changeActive(event){
+                        //event.currentTarget.className="active";
+                    },
+                    removeActive(event){
+                        //event.currentTarget.className="";
+                        //console.info(event.clientX);
+                        //console.info(event.clientY);
+                    }
+                }
+            });
+        </script>
+	</body>
+</html>
