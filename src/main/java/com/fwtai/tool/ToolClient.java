@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 */
 public final class ToolClient implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+	private static long serialVersionUID = 1L;
 
     private static Logger logger = LoggerFactory.getLogger(ToolClient.class);
 
@@ -53,7 +53,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	public final static String queryJson(final Object object){
+	public static String queryJson(final Object object){
         if(object == null || object.toString().trim().length() <= 0){
             return queryEmpty();
         }
@@ -120,7 +120,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	private static final String queryEmpty(){
+	private static String queryEmpty(){
 		final JSONObject json = new JSONObject();
 		json.put(ConfigFile.code,ConfigFile.code201);
 		json.put(ConfigFile.msg,ConfigFile.msg201);
@@ -136,7 +136,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public static final String executeRows(final int rows){
+	public static String executeRows(final int rows){
 		final JSONObject json = new JSONObject();
 		if(rows > 0){
 			json.put(ConfigFile.code,ConfigFile.code200);
@@ -158,7 +158,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2020/1/19 11:31
     */
-    public static final String executeRows(final int rows,final String success){
+    public static String executeRows(final int rows,final String success){
         final JSONObject json = new JSONObject();
         if(rows > 0){
             json.put(ConfigFile.code,ConfigFile.code200);
@@ -183,7 +183,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public static final String executeRows(final int rows,final String success,final String failure){
+	public static String executeRows(final int rows,final String success,final String failure){
 		final JSONObject json = new JSONObject();
 		if(rows > 0){
 			json.put(ConfigFile.code,ConfigFile.code200);
@@ -208,7 +208,7 @@ public final class ToolClient implements Serializable{
 	 * @param code 相关参数协议
 	 * @主页 http://www.fwtai.com
 	*/
-	public static final String createJson(final int code,final String msg){
+	public static String createJson(final int code,final String msg){
 		final JSONObject json = new JSONObject();
 		json.put(ConfigFile.code,code);
 		json.put(ConfigFile.msg,msg);
@@ -225,7 +225,7 @@ public final class ToolClient implements Serializable{
      * @param code 相关参数协议
      * @主页 http://www.fwtai.com
     */
-    public static final String createJson(final String code,final String msg){
+    public static String createJson(final String code,final String msg){
         final JSONObject json = new JSONObject();
         json.put(ConfigFile.code,code);
         json.put(ConfigFile.msg,msg);
@@ -239,7 +239,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2019/7/29 15:00
     */
-    public final static String createJsonFail(final String msg){
+    public static String createJsonFail(final String msg){
         final JSONObject json = new JSONObject();
         json.put(ConfigFile.code,ConfigFile.code199);
         json.put(ConfigFile.msg,msg);
@@ -253,7 +253,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2019/7/29 15:00
     */
-    public final static String createJsonSuccess(final String msg){
+    public static String createJsonSuccess(final String msg){
         final JSONObject json = new JSONObject();
         json.put(ConfigFile.code,ConfigFile.code200);
         json.put(ConfigFile.msg,msg);
@@ -268,7 +268,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	public static final String jsonValidateField(){
+	public static String jsonValidateField(){
 		final JSONObject json = new JSONObject();
 		json.put(ConfigFile.code,ConfigFile.code202);
 		json.put(ConfigFile.msg,ConfigFile.msg202);
@@ -286,7 +286,7 @@ public final class ToolClient implements Serializable{
      * @QQ号码 444141300
      * @主页 http://www.fwtai.com
     */
-    public final static String validateField(final Map<String,?> params,final String... fields){
+    public static String validateField(final Map<String,?> params,final String... fields){
         if(ToolString.isBlank(params) || ToolString.isBlank(fields)){
             return jsonValidateField();
         }
@@ -301,7 +301,7 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    public final static String validateField(final String... fields){
+    public static String validateField(final String... fields){
         if(fields == null || fields.length <= 0){
             return jsonValidateField();
         }
@@ -316,7 +316,7 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    public final static String validateField(final JSONObject params,final String... fields){
+    public static String validateField(final JSONObject params,final String... fields){
         if(ToolString.isBlank(params) || ToolString.isBlank(fields)){
             return jsonValidateField();
         }
@@ -340,7 +340,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2019/11/2 18:31
    */
-    public final static String validateForm(final ConcurrentHashMap<String,String> formData,final String[] fields){
+    public static String validateForm(final ConcurrentHashMap<String,String> formData,final String[] fields){
         if(ToolString.isBlank(formData) || ToolString.isBlank(fields)){
             return jsonValidateField();
         }
@@ -357,7 +357,7 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    private static final String jsonValidateInteger(){
+    private static String jsonValidateInteger(){
         final JSONObject json = new JSONObject();
         json.put(ConfigFile.code,ConfigFile.code199);
         json.put(ConfigFile.msg,"参数类型有误");
@@ -373,7 +373,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2020/4/2 13:04
     */
-    public final static String validateInteger(final Map<String,?> params,final String... fields){
+    public static String validateInteger(final Map<String,?> params,final String... fields){
         for(int i = 0; i < fields.length; i++){
             try {
                 final Object o = params.get(fields[i]);
@@ -395,7 +395,7 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    public final static String validateInteger(final JSONObject params,final String... fields){
+    public static String validateInteger(final JSONObject params,final String... fields){
         for(int i = 0; i < fields.length; i++){
             try {
                 final Object o = params.get(fields[i]);
@@ -425,7 +425,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	public final static Integer totalPage(final Integer total,final Integer pageSize){
+	public static Integer totalPage(final Integer total,final Integer pageSize){
 		return (total%pageSize) == 0 ? (total/pageSize):(total/pageSize)+1; //总页数
 	}
 
@@ -438,7 +438,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static String jsonObj(final Map<String, Object> map){
+	public static String jsonObj(final Map<String, Object> map){
 		return JSON.toJSONString(map);
 	}
 
@@ -452,7 +452,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static String jsonArray(final List<Map<String, Object>> listData){
+	public static String jsonArray(final List<Map<String, Object>> listData){
 		return JSONArray.toJSONString(listData);
 	}
 
@@ -465,7 +465,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	public final static String exceptionJson(){
+	public static String exceptionJson(){
 		final JSONObject json = new JSONObject();
 		json.put(ConfigFile.code,ConfigFile.code204);
 		json.put(ConfigFile.msg,ConfigFile.msg204);
@@ -481,7 +481,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @主页 http://www.fwtai.com
 	*/
-	public final static String exceptionJson(final String msg){
+	public static String exceptionJson(final String msg){
 		final JSONObject json = new JSONObject();
 		json.put(ConfigFile.code,ConfigFile.code204);
 		json.put(ConfigFile.msg,msg);
@@ -496,7 +496,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static void responseException(final HttpServletResponse response){
+	public static void responseException(final HttpServletResponse response){
 		responseJson(exceptionJson(),response);
 		return;
 	}
@@ -510,7 +510,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static void responseException(final HttpServletResponse response,final String msg){
+	public static void responseException(final HttpServletResponse response,final String msg){
 		responseJson(exceptionJson(msg),response);
 		return;
 	}
@@ -524,7 +524,7 @@ public final class ToolClient implements Serializable{
      * @QQ号码 444141300
      * @官网 http://www.fwtai.com
     */
-    public final static void responseJson(final String json){
+    public static void responseJson(final String json){
         try {
             final HttpServletResponse response = getResponse();
             responseJson(json,response);
@@ -541,7 +541,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static void responseJson(final String json,final HttpServletResponse response){
+	public static void responseJson(final String json,final HttpServletResponse response){
 		response.setContentType("text/html;charset=utf-8");
 		response.setHeader("Cache-Control","no-cache");
 		PrintWriter writer = null;
@@ -564,7 +564,7 @@ public final class ToolClient implements Serializable{
 		}
 	}
 
-    public final static HttpServletResponse getResponse(){
+    public static HttpServletResponse getResponse(){
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
 
@@ -576,7 +576,7 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static String getWebRoot(final HttpServletRequest request){
+	public static String getWebRoot(final HttpServletRequest request){
 		return request.getSession().getServletContext().getRealPath(File.separator);
 	}
 
@@ -589,11 +589,11 @@ public final class ToolClient implements Serializable{
 	 * @QQ号码 444141300
 	 * @官网 http://www.fwtai.com
 	*/
-	public final static String getDomainName(final HttpServletRequest request){
+	public static String getDomainName(final HttpServletRequest request){
 		return request.getScheme()+"://"+request.getServerName();
 	}
 
-    public final static String getHttpClientRequest(final HttpServletRequest request){
+    public static String getHttpClientRequest(final HttpServletRequest request){
         final StringBuilder sb = new StringBuilder();
         try {
             final InputStream is = request.getInputStream();
@@ -608,7 +608,7 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    public final static String jsonPage(Object listData,Integer total){
+    public static String jsonPage(Object listData,Integer total){
         final JSONObject json = new JSONObject();
         if(total == null || total == 0){
             listData = new ArrayList<HashMap<String,Object>>();
@@ -633,7 +633,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2020/6/1 11:48
     */
-    public final static PageFormData dataMysql(final PageFormData pageFormData){
+    public static PageFormData dataMysql(final PageFormData pageFormData){
         Integer size = pageFormData.getInteger("pageSize");//每页大小
         Integer current = pageFormData.getInteger("current");//当前页
         if(size == null || current == null) return null;
@@ -675,7 +675,7 @@ public final class ToolClient implements Serializable{
      * @QQ 444141300
      * @创建时间 2020/5/30 10:19
     */
-    public final static HashMap<String,Object> uploadImage(final HttpServletRequest request,final String baseDir,final Integer limit,final boolean verify){
+    public static HashMap<String,Object> uploadImage(final HttpServletRequest request,final String baseDir,final Integer limit,final boolean verify){
         //final PageFormData formData = new PageFormData().build(request);
         final PageFormData formData = new PageFormData(request);
         final HashMap<String,Object> objectHashMap = new HashMap<String,Object>(2);
@@ -772,7 +772,7 @@ public final class ToolClient implements Serializable{
      * 开线程访问服务器删除图片
      * @date 2019年10月31日 16:41:40
     */
-    public final static void delFileByThread(final String filePath) {
+    public static void delFileByThread(final String filePath) {
         try {
             new Thread(){
                 public void run() {
@@ -785,7 +785,7 @@ public final class ToolClient implements Serializable{
         } catch (Exception e){}
     }
 
-    public final static String notAuthorized(){
+    public static String notAuthorized(){
         final JSONObject json = new JSONObject();
         json.put(ConfigFile.code,ConfigFile.code401);
         json.put(ConfigFile.msg,ConfigFile.msg401);
