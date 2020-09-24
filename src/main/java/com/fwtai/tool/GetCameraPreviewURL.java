@@ -42,7 +42,7 @@ public class GetCameraPreviewURL {
          * STEP5：组装请求参数
         */
         final JSONObject jsonBody = new JSONObject();
-        jsonBody.put("cameraIndexCode", "748d84750e3a4a5bbad3cd4af9ed5101");
+        jsonBody.put("cameraIndexCode", "d8c714ffd2de4b33b40749c8609412c2");
         jsonBody.put("streamType", 0);
         jsonBody.put("protocol", "rtsp");
         jsonBody.put("transmode", 1);
@@ -53,5 +53,9 @@ public class GetCameraPreviewURL {
         */
         final String result = ArtemisHttpUtil.doPostStringArtemis(path, body, null, null, contentType , null);// post请求application/json类型参数
         return result;
+    }
+
+    public static void main(String[] args){
+        System.out.println(GetCameraPreviewURL());
     }
 }
