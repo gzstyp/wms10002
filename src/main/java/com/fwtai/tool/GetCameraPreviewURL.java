@@ -14,18 +14,18 @@ public class GetCameraPreviewURL {
         /**
          * STEP1：设置平台参数，根据实际情况,设置host appkey appsecret 三个参数.
          */
-        ArtemisConfig.host = "192.168.2.251:443"; // artemis网关服务器ip端口
+        ArtemisConfig.host = "192.168.4.2:443"; // artemis网关服务器ip端口
         ArtemisConfig.appKey = "22786995";  // 秘钥appkey
         ArtemisConfig.appSecret = "eudF0IBqzEnSrNZjqwd8";// 秘钥appSecret
 
         /**
          * STEP2：设置OpenAPI接口的上下文
-         */
+        */
         final String ARTEMIS_PATH = "/artemis";
 
         /**
          * STEP3：设置接口的URI地址
-         */
+        */
         final String previewURLsApi = ARTEMIS_PATH + "/api/video/v1/cameras/previewURLs";
         Map<String, String> path = new HashMap<String, String>(2) {
             {
@@ -35,12 +35,12 @@ public class GetCameraPreviewURL {
 
         /**
          * STEP4：设置参数提交方式
-         */
+        */
         final String contentType = "application/json";
 
         /**
          * STEP5：组装请求参数
-         */
+        */
         final JSONObject jsonBody = new JSONObject();
         jsonBody.put("cameraIndexCode", "748d84750e3a4a5bbad3cd4af9ed5101");
         jsonBody.put("streamType", 0);
