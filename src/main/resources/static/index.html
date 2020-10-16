@@ -28,7 +28,7 @@
             align-items:center;
         }
         #nav-tab{
-            width:700px;/*总宽度*/
+            width:850px;/*导航总宽度*/
             height:150px;
             background-color:#fff;
             display:flex;
@@ -40,7 +40,7 @@
         }
         /*每个item项*/
         .nav-tab-item{
-            width:160px;/*item项宽度*/
+            width:160px;/*每个item项宽度*/
             height:100%;
             display:flex;
             /*包裹内[容器内]的元素按行排列*/
@@ -50,11 +50,11 @@
             /*让本元素在其类‘nav-tab-overlay’之上,否则是看不到的!!!*/
             z-index:2;
             cursor:pointer;
-            /*item项的动画*/
+            /*item项的动画时间*/
             transition:0.3s;
         }
         .nav-tab-item.active{
-            width:210px;
+            width:210px;/*每个item的宽度*/
         }
         /*图标*/
         .nav-tab-item_icon{
@@ -86,7 +86,7 @@
             left:0;
             top:0;
             height:100%;
-            width:180px;/*遮罩层的宽度*/
+            width:170px;/*遮罩层的宽度*/
             background-color:#e4f2ff;
             /*移动动画,即遮罩层的动画*/
             transition:0.3s;
@@ -100,7 +100,7 @@
         <i :class=['nav-tab-item_icon','iconfont',item.icon]></i>
         <p class="nav-tab-item_label">{{item.label}}</p>
     </div>
-    <div class="nav-tab-overlay" :style="{'left':activeIndex * 130 +'px'}"></div>
+    <div class="nav-tab-overlay" :style="{'left':activeIndex * 136 +'px'}"></div>
 </div>
 <script src="js/element-ui/vue.min.js"></script>
 <script type="text/javascript">
@@ -128,6 +128,11 @@
                         icon : 'icon-huoweihao',
                         label : '货位信息',
                         url : '/point'
+                    },
+                    {
+                        icon : 'icon-wenshidu',
+                        label : '温度湿度',
+                        url : '/humiture'
                     },
                     {
                         icon : 'icon-shexiangtou',
