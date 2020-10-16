@@ -29,14 +29,18 @@
         </foreach>
     </update>
 
-    <select id="getListData" resultType="HashMap" parameterType="HashMap">
-        select fc.kid,fc.floorId,fc.code,fc.cameraId,fr.name floorName from floor_camera fc
-        left join floor fr on fr.kid = fc.floorId
+    <sql id="where_list_data">
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
                 fr.name LIKE CONCAT(#{name},'%')
             </if>
         </trim>
+    </sql>
+
+    <select id="getListData" resultType="HashMap" parameterType="HashMap">
+        select fc.kid,fc.floorId,fc.code,fc.cameraId,fr.name floorName from floor_camera fc
+        left join floor fr on fr.kid = fc.floorId
+        <include refid="where_list_data"/>
         <choose>
             <when test="order != null and column != null">
                 ORDER BY ${column} ${order}
@@ -50,11 +54,7 @@
     <select id="getListTotal" resultType="Integer" parameterType="HashMap">
         SELECT count(fc.kid) total from floor_camera fc
         left join floor fr on fr.kid = fc.floorId
-        <trim prefix="WHERE" prefixOverrides="AND">
-            <if test="name != null">
-                fr.name LIKE CONCAT(#{name},'%')
-            </if>
-        </trim>
+        <include refid="where_list_data"/>
     </select>
 
     <!-- 获取楼层 -->
