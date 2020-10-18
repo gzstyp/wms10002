@@ -1,15 +1,11 @@
 package com.fwtai.service;
 
 import com.fwtai.bean.PageFormData;
-import com.fwtai.config.ConfigFile;
 import com.fwtai.dao.DaoHandle;
 import com.fwtai.tool.ToolClient;
 import com.fwtai.tool.ToolString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 楼层的货位号管理
@@ -21,7 +17,7 @@ import java.util.HashMap;
  * @官网 http://www.fwtai.com
 */
 @Service
-public class FloorAreaService{
+public class FloorAreaService extends DataService{
 
     @Autowired
     private DaoHandle daoHandle;
@@ -45,28 +41,15 @@ public class FloorAreaService{
     }
 
     public String delById(final PageFormData formData){
-        final String p_kid = "kid";
-        final String validateField = ToolClient.validateField(formData,p_kid);
-        if(validateField !=null)return validateField;
-        return ToolClient.executeRows(daoHandle.execute("floor_area.delById",formData.getString(p_kid)));
+        return delById(formData,"floor_area");
     }
 
     public String delByKeys(final PageFormData formData){
-        final String p_ids = "ids";
-        final String validate = ToolClient.validateField(formData,p_ids);
-        if(validate != null)return validate;
-        final ArrayList<Object> lists = ToolString.jsonArrayToList(formData.get(p_ids));
-        if(lists == null || lists.size() <= 0){
-            return ToolClient.createJsonFail("请选择要删除的数据");
-        }
-        return ToolClient.executeRows(daoHandle.execute("floor_area.delByKeys",lists),"操作成功","数据已不存在,刷新重试");
+        return delByKeys(formData,"floor_area");
     }
 
     public String listData(PageFormData formData){
-        formData = ToolClient.dataMysql(formData);
-        if(formData == null)return ToolClient.jsonValidateField();
-        final HashMap<String,Object> map = daoHandle.queryForPage(formData,"floor_area.getListData","floor_area.getListTotal");
-        return ToolClient.jsonPage(map.get(ConfigFile.data),(Integer) map.get(ConfigFile.total));
+        return listData(formData,"floor_area");
     }
 
     public String getAllFloor(){

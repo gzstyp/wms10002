@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11806530",
+      "name": "温湿度",
+      "font_class": "wenshidu",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
       "icon_id": "15951296",
       "name": "货位映射",
       "font_class": "huoweihao",

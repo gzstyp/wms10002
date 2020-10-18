@@ -74,4 +74,9 @@ public class PageController{
     public String camera(){
         return "camera";
     }
+
+    @GetMapping(value = "/humiture")
+    public String humiture(){
+        return "humiture";
+    }
 }

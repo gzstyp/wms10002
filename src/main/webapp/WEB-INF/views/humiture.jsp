@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <base href="<%=basePath%>">
-    <title>物联网应用平台-楼层摄像头</title>
+    <title>物联网应用平台-楼层温湿度</title>
     <link href="/css/element-ui/element-ui.css" rel="stylesheet">
     <link href="/css/page/page.container.css" rel="stylesheet">
 </head>
@@ -30,10 +30,9 @@
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="floorName" label="楼层名称" width="210"></el-table-column>
-            <el-table-column prop="code" label="摄像头编号" width="106"></el-table-column>
-            <el-table-column prop="cameraId" label="摄像头标识" width="290"></el-table-column>
-            <el-table-column prop="camera_name" label="摄像头名称" width="200"></el-table-column>
+            <el-table-column prop="label" label="楼层区域位置" width="296"></el-table-column>
+            <el-table-column prop="code" label="设备编号" width="230"></el-table-column>
+            <el-table-column prop="cameraId" label="设备标识" width="280"></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -66,18 +65,13 @@
                 </el-select>
             </el-form-item>
             <el-form ref="form" label-width="120px">
-                <el-form-item label="摄像头编号">
-                    <el-input v-model="formData.code" placeholder="摄像头编号" clearable style="width:90%"></el-input>
+                <el-form-item label="设备编号">
+                    <el-input v-model="formData.code" placeholder="设备编号" clearable style="width:90%"></el-input>
                 </el-form-item>
             </el-form>
             <el-form ref="form" label-width="120px">
-                <el-form-item label="摄像头标识">
-                    <el-input v-model="formData.cameraId" placeholder="摄像头标识" clearable style="width:90%"></el-input>
-                </el-form-item>
-            </el-form>
-            <el-form ref="form" label-width="120px">
-                <el-form-item label="摄像头名称">
-                    <el-input v-model="formData.camera_name" placeholder="摄像头名称" clearable style="width:90%"></el-input>
+                <el-form-item label="设备标识">
+                    <el-input v-model="formData.cameraId" placeholder="设备标识" clearable style="width:90%"></el-input>
                 </el-form-item>
             </el-form>
         </el-form>
@@ -106,8 +100,7 @@
                     kid : '',
                     floorId : '',
                     code : '',
-                    cameraId : '',
-                    camera_name : ''
+                    cameraId : ''
                 },
                 searchForm : {
                     name : ''
@@ -149,8 +142,7 @@
                         kid : row.kid,
                         floorId : row.floorId,
                         code : row.code,
-                        cameraId : row.cameraId,
-                        camera_name : row.camera_name
+                        cameraId : row.cameraId
                     };
                 }else{
                     this.formData = {};
@@ -167,21 +159,21 @@
                     return;
                 }
                 if(!this.formData.code){
-                    elementFn.fnMsgError('请输入摄像头编号');
+                    elementFn.fnMsgError('请输入设备编号');
                     return;
                 }
                 if(!this.formData.cameraId){
-                    elementFn.fnMsgError('请输入摄像头标识');
+                    elementFn.fnMsgError('请输入设备标识');
                     return;
                 }
                 return true;
             },
             handleEdit : function(index,item){
                 if(item != null && item.kid != null){
-                    this.dialogTitle = '编辑摄像头';
+                    this.dialogTitle = '编辑设备';
                     this.openDialog(item);
                 }else{
-                    this.dialogTitle = '添加摄像头';
+                    this.dialogTitle = '添加设备';
                     this.openDialog(null);
                 }
             },
@@ -190,7 +182,7 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
-                    ajax.post('floorCamera/delById',{kid:row.kid},function(data){
+                    ajax.post('floorHumiture/delById',{kid:row.kid},function(data){
                         _this.resultHandle(data);
                     });
                 },function(){
@@ -212,7 +204,7 @@
                 if(this.kids){
                     elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         elementFn.loadOpen();
-                        ajax.post('floorCamera/delByKeys',{ids:_this.kids},function(data){
+                        ajax.post('floorHumiture/delByKeys',{ids:_this.kids},function(data){
                             _this.resultHandle(data);
                         });
                     });
@@ -227,7 +219,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'floorCamera/add' : 'floorCamera/edit';
+                var url = (kid == null || kid.length <= 0) ? 'floorHumiture/add' : 'floorHumiture/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.resultHandle(data);
@@ -243,7 +235,7 @@
                     params.name = _this.searchForm.name;
                 }
                 elementFn.loadOpen();
-                ajax.get("floorCamera/listData",params,function(data){
+                ajax.get("floorHumiture/listData",params,function(data){
                     elementFn.loadClose();
                     if(data.code === 200){
                         _this.listDatas = data.data;
@@ -262,7 +254,7 @@
             },
             getFloorOptions : function(){
                 var _this = this;
-                ajax.get("floorCamera/getAllFloor",{},function(data){
+                ajax.get("layerGrid/getOptions",{},function(data){
                     if(data.code === 200){
                         _this.optionsFloor = data.data;
                     }else{

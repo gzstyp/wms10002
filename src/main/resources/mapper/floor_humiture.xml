@@ -2,29 +2,28 @@
 <!DOCTYPE mapper
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="floor_camera">
+<mapper namespace="floor_humiture">
 
     <update id="add" parameterType="HashMap">
-        INSERT INTO FLOOR_CAMERA(KID,floorId,code,cameraId,camera_name) VALUES (#{kid},#{floorId},#{code},#{cameraId},#{camera_name})
+        INSERT INTO FLOOR_HUMITURE(KID,floorId,code,cameraId) VALUES (#{kid},#{floorId},#{code},#{cameraId})
     </update>
 
     <update id="edit" parameterType="HashMap">
-        UPDATE FLOOR_CAMERA
+        UPDATE FLOOR_HUMITURE
         <trim prefix="SET" suffixOverrides=",">
             <if test="floorId != null">floorId = #{floorId},</if>
             <if test="code != null">code = #{code},</if>
-            <if test="cameraId != null">cameraId = #{cameraId},</if>
-            <if test="camera_name != null">camera_name = #{camera_name}</if>
+            <if test="cameraId != null">cameraId = #{cameraId}</if>
         </trim>
         WHERE KID = #{kid} LIMIT 1
     </update>
 
     <update id="delById" parameterType="String">
-        DELETE FROM FLOOR_CAMERA WHERE KID = #{kid} LIMIT 1
+        DELETE FROM FLOOR_HUMITURE WHERE KID = #{kid} LIMIT 1
     </update>
 
     <update id="delByKeys" parameterType="ArrayList">
-        DELETE FROM FLOOR_CAMERA WHERE KID IN
+        DELETE FROM FLOOR_HUMITURE WHERE KID IN
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -33,14 +32,17 @@
     <sql id="where_list_data">
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
-                fr.name LIKE CONCAT(#{name},'%')
+                lt.label LIKE CONCAT(#{name},'%')
             </if>
         </trim>
     </sql>
 
     <select id="getListData" resultType="HashMap" parameterType="HashMap">
-        select fc.kid,fc.floorId,fc.code,fc.cameraId,fc.camera_name,fr.name floorName from floor_camera fc
+        select fc.kid,fc.floorId,fc.code,fc.cameraId,lt.label ,lt.name from FLOOR_HUMITURE fc
         left join floor fr on fr.kid = fc.floorId
+        left join (select fa.kid value,CONCAT(fr.name,as_.name) label,fr.name from floor_area fa
+        left join areas as_ on as_.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId) lt on lt.value = fc.floorId
         <include refid="where_list_data"/>
         <choose>
             <when test="order != null and column != null">
@@ -53,14 +55,12 @@
     </select>
 
     <select id="getListTotal" resultType="Integer" parameterType="HashMap">
-        SELECT count(fc.kid) total from floor_camera fc
+        SELECT count(fc.kid) total from FLOOR_HUMITURE fc
         left join floor fr on fr.kid = fc.floorId
+        left join (select fa.kid value,CONCAT(fr.name,as_.name) label,fr.name from floor_area fa
+        left join areas as_ on as_.kid = fa.areaId
+        left join floor fr on fr.kid = fa.floorId order by fr.sort,as_.name) lt on lt.value = fc.floorId
         <include refid="where_list_data"/>
-    </select>
-
-    <!-- 获取楼层 -->
-    <select id="getAllFloor" resultType="HashMap">
-        SELECT KID value,NAME label FROM FLOOR ORDER BY SORT
     </select>
 
 </mapper>
