@@ -608,15 +608,11 @@ public final class ToolClient implements Serializable{
         return null;
     }
 
-    public static String jsonPage(Object listData,Integer total){
+    public static String jsonPage(final Object listData,final Integer total){
         final JSONObject json = new JSONObject();
         if(total == null || total == 0){
-            listData = new ArrayList<HashMap<String,Object>>();
-            total = 0;
-            json.put(ConfigFile.code,ConfigFile.code202);
+            json.put(ConfigFile.code,ConfigFile.code201);
             json.put(ConfigFile.msg,ConfigFile.msg201);
-            json.put(ConfigFile.total,total);
-            json.put(ConfigFile.data,listData);
             return json.toJSONString();
         }else{
             json.put(ConfigFile.code,ConfigFile.code200);
