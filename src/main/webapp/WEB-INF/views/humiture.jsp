@@ -126,8 +126,8 @@
             // 行选择触发事件
             selectionChange(selection) {
                 this.kids = [];
-                selection.forEach(element => {
-                    this.kids.push(element.kid);
+                selection.forEach(item => {
+                    this.kids.push(item.kid);
                 });
             },
             dblclick : function(row,column,event){
