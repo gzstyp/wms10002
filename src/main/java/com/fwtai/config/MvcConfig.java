@@ -15,4 +15,13 @@ public class MvcConfig implements WebMvcConfigurer{
         //权限拦截器
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**").excludePathPatterns(Arrays.asList(array));
     }
+
+    /*@Override
+    public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
+        final FastJsonHttpMessageConverter fjc = new FastJsonHttpMessageConverter();
+        final FastJsonConfig fj = new FastJsonConfig();
+        fj.setSerializerFeatures(SerializerFeature.WriteNullListAsEmpty,SerializerFeature.WriteNullStringAsEmpty,SerializerFeature.DisableCircularReferenceDetect);
+        fjc.setFastJsonConfig(fj);
+        converters.add(fjc);
+    }*/
 }
