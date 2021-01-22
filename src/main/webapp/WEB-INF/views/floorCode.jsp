@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <base href="<%=basePath%>">
-    <title>物联网应用平台-楼层区域</title>
+    <title>物联网应用平台-楼层编码</title>
     <link href="/css/element-ui/element-ui.css" rel="stylesheet">
     <link href="/css/page/page.container.css" rel="stylesheet">
 </head>
@@ -119,7 +119,6 @@
         },
         created() {
             this.getFloorOptions();
-            this.getAreaOptions();
             this.getListData();
         },
         methods : {
@@ -177,7 +176,7 @@
                 elementFn.fnConfirm('删除之后是无法恢复,确认要删除吗?',function(){
                     elementFn.loadOpen();
                     _this.listDatas.splice(index,1);
-                    ajax.post('floorArea/delById',{kid:row.kid},function(data){
+                    ajax.post('foorCode/delById',{kid:row.kid},function(data){
                         _this.resultHandle(data);
                     });
                 },function(){
@@ -199,7 +198,7 @@
                 if(this.kids){
                     elementFn.fnConfirm("删除之后是无法恢复的,你要批量删除"+this.kids.length+"条数据吗?",function(){
                         elementFn.loadOpen();
-                        ajax.post('floorArea/delByKeys',{ids:_this.kids},function(data){
+                        ajax.post('foorCode/delByKeys',{ids:_this.kids},function(data){
                             _this.resultHandle(data);
                         });
                     });
@@ -214,7 +213,7 @@
                 }
                 var _this = this;
                 var kid = this.formData.kid;
-                var url = (kid == null || kid.length <= 0) ? 'floorArea/add' : 'floorArea/edit';
+                var url = (kid == null || kid.length <= 0) ? 'foorCode/add' : 'foorCode/edit';
                 elementFn.loadOpen();
                 ajax.post(url,this.formData,function(data){
                     _this.resultHandle(data);
@@ -230,7 +229,7 @@
                     params.name = _this.searchForm.name;
                 }
                 elementFn.loadOpen();
-                ajax.get("floorArea/listData",params,function(data){
+                ajax.get("foorCode/listData",params,function(data){
                     elementFn.loadClose();
                     if(data.code === 200){
                         _this.listDatas = data.data;
@@ -254,16 +253,6 @@
                         _this.optionsFloor = data.data;
                     }else{
                         _this.optionsFloor.push({"value":'',"label":data.msg});
-                    }
-                });
-            },
-            getAreaOptions : function(){
-                var _this = this;
-                ajax.get("floorArea/getAllArea",{},function(data){
-                    if(data.code === 200){
-                        _this.optionsArea = data.data;
-                    }else{
-                        _this.optionsArea.push({"value":'',"label":data.msg});
                     }
                 });
             },

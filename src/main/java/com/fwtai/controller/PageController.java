@@ -79,4 +79,9 @@ public class PageController{
     public String humiture(){
         return "humiture";
     }
+
+    @GetMapping(value = "/floorCode")
+    public String floorCode(){
+        return "floorCode";
+    }
 }

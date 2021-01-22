@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3702616",
+      "name": "编码方案",
+      "font_class": "navicon-bmfa",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
       "icon_id": "11806530",
       "name": "温湿度",
       "font_class": "wenshidu",
