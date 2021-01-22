@@ -7,8 +7,6 @@ import com.fwtai.tool.ToolString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 楼层仓库编码业务层
  * @作者 田应平
@@ -23,8 +21,7 @@ public class FloorCodeService extends DataService{
     @Autowired
     private DaoHandle daoHandle;
 
-    public String add(final HttpServletRequest request){
-        final PageFormData formData = new PageFormData(request);
+    public String add(final PageFormData formData){
         final String p_block_name = "block_name";
         final String p_floorId = "floorId";
         final String p_target_code = "target_code";
@@ -35,8 +32,7 @@ public class FloorCodeService extends DataService{
         return ToolClient.executeRows(daoHandle.execute("floorCode.add",formData));
     }
 
-    public String edit(final HttpServletRequest request){
-        final PageFormData formData = new PageFormData(request);
+    public String edit(final PageFormData formData){
         final String p_kid = "kid";
         final String p_block_name = "block_name";
         final String p_floorId = "floorId";

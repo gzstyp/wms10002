@@ -30,9 +30,10 @@
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="floorName" label="楼层名称" width="250"></el-table-column>
-            <el-table-column prop="area" label="货位区域位置" width="156"></el-table-column>
-            <el-table-column prop="fullName" label="楼层区域位置" width="400"></el-table-column>
+            <el-table-column prop="floorName" label="楼层名称" width="200"></el-table-column>
+            <el-table-column prop="target_code" label="楼层编码" width="150"></el-table-column>
+            <el-table-column prop="block_name" label="区域名称" width="150"></el-table-column>
+            <el-table-column prop="target_label" label="仓库区域名称" width="306"></el-table-column>
             <el-table-column width="160" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -64,15 +65,14 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="货位区域">
-                <el-select v-model="formData.areaId" placeholder="选择区域" clearable style="width:90%">
-                    <el-option
-                    v-for="item in optionsArea"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
+            <el-form-item label="楼层编码" label-width="100px">
+                <el-input v-model="formData.target_code" placeholder="楼层编码，跳转info.html时的参数c,如 02-1B" clearable style="width:90%"></el-input>
+            </el-form-item>
+            <el-form-item label="区域名称" label-width="100px">
+                <el-input v-model="formData.block_name" placeholder="区域名称,如A区,B区;点击改名称跳转页面" clearable style="width:90%"></el-input>
+            </el-form-item>
+            <el-form-item label="仓库区域" label-width="100px">
+                <el-input v-model="formData.target_label" placeholder="跳转时的参数t(x号仓库x楼x区)" clearable style="width:90%"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -99,7 +99,9 @@
                 formData : {
                     kid : '',
                     floorId : '',
-                    areaId : ''
+                    target_code : '',
+                    block_name : '',
+                    target_label : ''
                 },
                 searchForm : {
                     name : ''
@@ -140,7 +142,9 @@
                     this.formData = {
                         kid : row.kid,
                         floorId : row.floorId,
-                        areaId : row.areaId
+                        target_code : row.target_code,
+                        block_name : row.block_name,
+                        target_label : row.target_label
                     };
                 }else{
                     this.formData = {};
@@ -156,8 +160,16 @@
                     elementFn.fnMsgError('请选择楼层');
                     return;
                 }
-                if(!this.formData.areaId){
-                    elementFn.fnMsgError('请选择区域');
+                if(!this.formData.target_code){
+                    elementFn.fnMsgError('请输入楼层编码');
+                    return;
+                }
+                if(!this.formData.block_name){
+                    elementFn.fnMsgError('请输入区域名称');
+                    return;
+                }
+                if(!this.formData.target_label){
+                    elementFn.fnMsgError('请输入仓库区域');
                     return;
                 }
                 return true;

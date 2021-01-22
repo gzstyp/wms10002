@@ -79,6 +79,7 @@
             fc.block_name,
             fc.floor_humiture,
             fc.floorId,
+            fr.name floorName,
             fc.target_code,
             fc.target_label
 		FROM FLOOR_CODE fc
