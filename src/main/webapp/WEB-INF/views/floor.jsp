@@ -32,7 +32,7 @@
             <el-table-column type="selection" align="center" width="35"></el-table-column>
             <el-table-column prop="name" label="楼层名称" width="330"></el-table-column>
             <el-table-column prop="url" label="路由地址" width="260"></el-table-column>
-            <el-table-column prop="sort" label="楼层编码" width="110"></el-table-column>
+            <el-table-column prop="code" label="楼层编码" width="110"></el-table-column>
             <el-table-column prop="sort" label="楼层排序" width="110"></el-table-column>
             <el-table-column width="156" label="操作">
                 <template slot-scope="scope">
