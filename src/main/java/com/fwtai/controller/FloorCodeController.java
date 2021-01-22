@@ -42,18 +42,18 @@ public class FloorCodeController{
     /**删除-单行*/
     @PostMapping("/delById")
     public void delById(final HttpServletRequest request,final HttpServletResponse response){
-        ToolClient.responseJson(floorcodeService.delById(new PageFormData().build(request)),response);
+        ToolClient.responseJson(floorcodeService.delById(new PageFormData(request)),response);
     }
 
     /**批量删除*/
     @PostMapping("/delByKeys")
     public void delByKeys(final HttpServletRequest request,final HttpServletResponse response){
-        ToolClient.responseJson(floorcodeService.delByKeys(new PageFormData().build(request)),response);
+        ToolClient.responseJson(floorcodeService.delByKeys(new PageFormData(request)),response);
     }
 
     /**获取数据*/
     @GetMapping("/listData")
     public void listData(final HttpServletRequest request,final HttpServletResponse response){
-        ToolClient.responseJson(floorcodeService.listData(new PageFormData().build(request)),response);
+        ToolClient.responseJson(floorcodeService.listData(new PageFormData(request)),response);
     }
 }

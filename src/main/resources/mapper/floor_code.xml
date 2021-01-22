@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="floor_code">
-
-    <sql id="sql_column">
-        block_name,
-        floor_humiture,
-        floorId,
-        kid,
-        target_code,
-        target_label
-    </sql>
+<mapper namespace="floorCode">
 
     <!-- 添加数据 -->
     <update id="add" parameterType="HashMap">
@@ -32,36 +23,6 @@
 			<if test="target_label != null">#{target_label}</if>
         </trim>
         )
-    </update>
-
-    <!-- 批量添加|插入-->
-    <update id="batchAdd" parameterType="ArrayList">
-        INSERT INTO FLOOR_CODE (
-            <foreach collection="list" item="item" index="index">
-                <trim suffixOverrides=",">
-                    <if test="index==0">
-                        <if test="item.block_name != null">block_name,</if>
-                        <if test="item.floor_humiture != null">floor_humiture,</if>
-                        <if test="item.floorId != null">floorId,</if>
-                        <if test="item.kid != null">kid,</if>
-                        <if test="item.target_code != null">target_code,</if>
-                        <if test="item.target_label != null">target_label</if>
-                    </if>
-                </trim>
-            </foreach>
-        ) VALUES
-        <foreach collection="list" item="item" index="index" separator="," >
-            (
-            <trim suffixOverrides=",">
-                <if test="item.block_name != null">#{item.block_name},</if>
-                <if test="item.floor_humiture != null">#{item.floor_humiture},</if>
-                <if test="item.floorId != null">#{item.floorId},</if>
-                <if test="item.kid != null">#{item.kid},</if>
-                <if test="item.target_code != null">#{item.target_code},</if>
-                <if test="item.target_label != null">#{item.target_label}</if>
-            </trim>
-            )
-        </foreach>
     </update>
 
 	<!-- 编辑数据 -->
@@ -105,22 +66,23 @@
 	<!-- listData条件查询 -->
 	<sql id="sql_where_listData">
 		<trim prefix="WHERE" prefixOverrides="AND">
-            <if test="floorId != null">
-                AND floorId LIKE CONCAT('%',#{floorId},'%')
+            <if test="name != null">
+                fr.name LIKE CONCAT(#{name},'%')
             </if>
 		</trim>
 	</sql>
 	
 	<!-- 列表数据 -->
-	<select id="listData" parameterType="HashMap" resultType="HashMap">
+	<select id="getListData" parameterType="HashMap" resultType="HashMap">
 		SELECT
-            kid,
-			block_name,
-			floor_humiture,
-			floorId,
-			target_code,
-			target_label
-		FROM FLOOR_CODE
+            fc.kid,
+            fc.block_name,
+            fc.floor_humiture,
+            fc.floorId,
+            fc.target_code,
+            fc.target_label
+		FROM FLOOR_CODE fc
+        left join floor fr on fr.kid = fc.floorId
 		<include refid="sql_where_listData"/>
 		<choose>
     	<when test="order != null and column != null">
@@ -135,8 +97,9 @@
 	</select>
 	
 	<!-- 总条数总记录数 -->
-	<select id="listTotal" parameterType="HashMap" resultType="Integer">
-		SELECT COUNT(kid) TOTAL FROM FLOOR_CODE
+	<select id="getListTotal" parameterType="HashMap" resultType="Integer">
+		SELECT COUNT(fc.kid) TOTAL FROM FLOOR_CODE fc
+        left join floor fr on fr.kid = fc.floorId
 		<include refid="sql_where_listData"/>
         LIMIT 1
 	</select>
