@@ -30,9 +30,10 @@
     <div>
         <el-table :data="listDatas" :empty-text="listEmpty" @selection-change="selectionChange" @row-dblclick="dblclick" border stripe style="width: 1002px;margin-top:6px;">
             <el-table-column type="selection" align="center" width="35"></el-table-column>
-            <el-table-column prop="name" label="楼层名称" width="340"></el-table-column>
-            <el-table-column prop="url" label="路由地址" width="280"></el-table-column>
-            <el-table-column prop="sort" label="楼层排序" width="190"></el-table-column>
+            <el-table-column prop="name" label="楼层名称" width="330"></el-table-column>
+            <el-table-column prop="url" label="路由地址" width="260"></el-table-column>
+            <el-table-column prop="sort" label="楼层编码" width="110"></el-table-column>
+            <el-table-column prop="sort" label="楼层排序" width="110"></el-table-column>
             <el-table-column width="156" label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
@@ -55,7 +56,12 @@
     <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="32%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
         <el-form ref="form" label-width="120px">
             <el-form-item label="楼层名称">
-                <el-input v-model="formData.name" placeholder="楼层名称" clearable style="width:90%"></el-input>
+                <el-input v-model="formData.name" placeholder="仓库楼层名称" clearable style="width:90%"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-form ref="form" label-width="120px">
+            <el-form-item label="楼层编码">
+                <el-input v-model="formData.code" placeholder="仓库楼层编码" clearable style="width:90%"></el-input>
             </el-form-item>
         </el-form>
         <el-form ref="form" label-width="120px">
@@ -93,7 +99,8 @@
                     kid : '',
                     name : '',
                     url : '',
-                    sort : ''
+                    sort : '',
+                    code : ''
                 },
                 searchForm : {
                     name : ''
@@ -133,6 +140,7 @@
                         name : row.name,
                         url : row.url,
                         sort : row.sort,
+                        code : row.code
                     };
                 }else{
                     this.formData = {};
@@ -145,7 +153,11 @@
             },
             checkForm : function(){
                 if(!this.formData.name){
-                    elementFn.fnMsgError('请填写楼层名称');
+                    elementFn.fnMsgError('请填写仓库楼层名称');
+                    return;
+                }
+                if(!this.formData.code){
+                    elementFn.fnMsgError('请填写仓库楼层编码');
                     return;
                 }
                 if(!this.formData.url){

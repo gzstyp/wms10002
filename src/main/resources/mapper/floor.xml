@@ -5,7 +5,7 @@
 <mapper namespace="floor">
 
     <update id="add" parameterType="HashMap">
-        INSERT INTO FLOOR(KID,NAME,url,sort) VALUES (#{kid},#{name},#{url},#{sort})
+        INSERT INTO FLOOR(KID,NAME,url,sort,code) VALUES (#{kid},#{name},#{url},#{sort},#{code})
     </update>
 
     <update id="edit" parameterType="HashMap">
@@ -13,6 +13,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null">NAME = #{name},</if>
             <if test="url != null">URL = #{url},</if>
+            <if test="code != null">code = #{code},</if>
             <if test="sort != null">SORT = #{sort}</if>
         </trim>
         WHERE KID = #{kid} LIMIT 1
@@ -30,7 +31,7 @@
     </update>
 
     <select id="getListData" resultType="HashMap" parameterType="HashMap">
-        select kid,name,url,sort from FLOOR
+        select kid,name,url,sort,code from FLOOR
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="name != null">
                 name LIKE CONCAT(#{name},'%')
