@@ -75,14 +75,23 @@
 
     <!--获取楼层+楼层摄像头-->
     <select id="getFloorArea" resultType="HashMap">
-        select fr.kid,glt.code,glt.cameraId,glt.names,fr.name,fr.url,lt.kids,hs.humitures
+        select fr.kid,glt.code,glt.cameraId,glt.names,fr.name,fr.url,lt.kids,hs.humitures,fce.target_code,fce.target_label
         from (select lt.floorId,GROUP_CONCAT(fa.kid) kids from (select floorId from floor_area group by floorId)lt
         left join floor_area fa on fa.floorId = lt.floorId group by lt.floorId) lt
         left join floor fr on fr.kid = lt.floorId
         left join (select floorId,group_concat(code) code,group_concat(cameraId) cameraId,group_concat(camera_name) names from floor_camera group by floorId) glt on glt.floorId = fr.kid
-        left join (select faa.floorId,group_concat(ijt.cameraId) humitures from floor_area faa
+        left join (
+            select faa.floorId,group_concat(ijt.cameraId) humitures from floor_area faa
         inner join (select floorId,group_concat(code) code,group_concat(cameraId) cameraId from floor_humiture group by floorId) ijt on ijt.floorId = faa.kid
-        group by faa.floorId) hs on hs.floorId = fr.kid
+        group by faa.floorId
+            ) hs on hs.floorId = fr.kid
+        left join (SELECT
+            fc.floorId,
+            group_concat(fc.target_code ORDER BY fc.target_code ASC) target_code,
+            group_concat(fc.target_label ORDER BY fc.target_label ASC) target_label
+		FROM FLOOR_CODE fc
+        left join floor fr on fr.kid = fc.floorId
+        group by fc.floorId) fce on fce.floorId = lt.floorId
         order by fr.sort
     </select>
 
