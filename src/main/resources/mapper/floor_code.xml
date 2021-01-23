@@ -90,6 +90,7 @@
     		ORDER BY ${column} ${order}
     	</when>
     	<otherwise>
+            ORDER BY fc.target_code
         </otherwise>
         </choose>
         <if test="section != null and pageSize != null">
