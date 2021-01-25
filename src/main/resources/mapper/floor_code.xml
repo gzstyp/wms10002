@@ -7,7 +7,6 @@
         INSERT INTO FLOOR_CODE (
         <trim suffixOverrides=",">
             <if test="block_name != null">block_name,</if>
-            <if test="floor_humiture != null">floor_humiture,</if>
             <if test="floorId != null">floorId,</if>
             <if test="kid != null">kid,</if>
             <if test="target_code != null">target_code,</if>
@@ -16,7 +15,6 @@
         ) VALUES (
         <trim suffixOverrides=",">
 			<if test="block_name != null">#{block_name},</if>
-			<if test="floor_humiture != null">#{floor_humiture},</if>
 			<if test="floorId != null">#{floorId},</if>
 			<if test="kid != null">#{kid},</if>
 			<if test="target_code != null">#{target_code},</if>
@@ -30,7 +28,6 @@
 		UPDATE FLOOR_CODE
 		<trim prefix="SET" suffixOverrides=",">
             <if test="block_name != null">block_name = #{block_name},</if>
-            <if test="floor_humiture != null">floor_humiture = #{floor_humiture},</if>
             <if test="floorId != null">floorId = #{floorId},</if>
             <if test="target_code != null">target_code = #{target_code},</if>
             <if test="target_label != null">target_label = #{target_label}</if>
@@ -42,7 +39,6 @@
     <select id="queryById" parameterType="String" resultType="HashMap">
         SELECT
             block_name,
-            floor_humiture,
             floorId,
             target_code,
             target_label
@@ -77,7 +73,6 @@
 		SELECT
             fc.kid,
             fc.block_name,
-            fc.floor_humiture,
             fc.floorId,
             fr.name floorName,
             fc.target_code,

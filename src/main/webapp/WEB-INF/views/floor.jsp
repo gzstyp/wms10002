@@ -54,24 +54,24 @@
         </el-pagination>
     </div>
     <el-dialog :title="dialogTitle" :lock-scroll="false" :visible.sync="dialogVisible" width="32%" :before-close="handleClose" :close-on-click-modal="false" :append-to-body="true">
-        <el-form ref="form" label-width="120px">
+        <el-form ref="form" label-width="110px">
             <el-form-item label="楼层名称">
-                <el-input v-model="formData.name" placeholder="仓库楼层名称" clearable style="width:90%"></el-input>
+                <el-input v-model="formData.name" placeholder="仓库楼层名称" clearable style="width:86%"></el-input>
             </el-form-item>
         </el-form>
-        <el-form ref="form" label-width="120px">
+        <el-form ref="form" label-width="110px">
             <el-form-item label="楼层编码">
-                <el-input v-model="formData.code" placeholder="仓库楼层编码" clearable style="width:90%"></el-input>
+                <el-input v-model="formData.code" placeholder="仓库楼层编码" clearable style="width:86%"></el-input>
             </el-form-item>
         </el-form>
-        <el-form ref="form" label-width="120px">
+        <el-form ref="form" label-width="110px">
             <el-form-item label="路由地址">
-                <el-input v-model="formData.url" placeholder="路由地址" clearable style="width:90%"></el-input>
+                <el-input v-model="formData.url" placeholder="路由地址" clearable style="width:86%"></el-input>
             </el-form-item>
         </el-form>
-        <el-form ref="form" label-width="120px">
+        <el-form ref="form" label-width="110px">
             <el-form-item label="楼层排序">
-                <el-input v-model="formData.sort" placeholder="楼层排序" clearable style="width:90%" oninput="value=value.replace(/[^\d]/g,'')"></el-input>
+                <el-input v-model="formData.sort" placeholder="楼层排序" clearable style="width:86%" oninput="value=value.replace(/[^\d]/g,'')"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
