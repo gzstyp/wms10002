@@ -63,4 +63,13 @@
         <include refid="where_list_data"/>
     </select>
 
+    <!-- 获取全部温湿度设备 -->
+    <select id="allData" resultType="HashMap" parameterType="HashMap">
+        select code,cameraId deviceId from floor_humiture
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="deviceId != null">
+                cameraId = #{deviceId}
+            </if>
+        </trim>
+    </select>
 </mapper>

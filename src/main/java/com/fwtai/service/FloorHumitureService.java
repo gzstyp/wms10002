@@ -70,4 +70,9 @@ public class FloorHumitureService{
         final HashMap<String,Object> map = daoHandle.queryForPage(formData,"floor_humiture.getListData","floor_humiture.getListTotal");
         return ToolClient.jsonPage(map.get(ConfigFile.data),(Integer) map.get(ConfigFile.total));
     }
+
+    //获取全部温湿度设备
+    public String allData(final PageFormData formData){
+        return ToolClient.queryJson(daoHandle.queryForListMap("floor_humiture.allData",formData));
+    }
 }
