@@ -64,7 +64,13 @@
     </select>
 
     <!-- 获取全部温湿度设备 -->
-    <select id="allData" resultType="String">
-        select group_concat(cameraId) ids from floor_humiture
+    <select id="allData" resultType="HashMap">
+        select floorCode,group_concat(ids) ids from (select left(code,2) floorCode,ids from (
+        select fr.code,group_concat(lt.cameraId) ids
+        from (select fhe.cameraId,faa.floorId from floor_humiture fhe
+        left join floor_area faa on faa.kid = fhe.floorId) lt
+        left join floor fr on fr.kid = lt.floorId
+        group by fr.name,fr.code order by fr.sort
+        ) gt) lt group by floorCode
     </select>
 </mapper>
