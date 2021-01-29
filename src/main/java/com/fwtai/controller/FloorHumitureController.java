@@ -57,7 +57,7 @@ public class FloorHumitureController{
 
     //获取全部温湿度设备
     @GetMapping("allData")
-    public void allData(final HttpServletRequest request,final HttpServletResponse response){
-        ToolClient.responseJson(service.allData(new PageFormData(request)),response);
+    public void allData(final HttpServletResponse response){
+        ToolClient.responseJson(service.allData(),response);
     }
 }

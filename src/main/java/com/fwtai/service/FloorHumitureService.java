@@ -72,7 +72,7 @@ public class FloorHumitureService{
     }
 
     //获取全部温湿度设备
-    public String allData(final PageFormData formData){
-        return ToolClient.queryJson(daoHandle.queryForListMap("floor_humiture.allData",formData));
+    public String allData(){
+        return ToolClient.queryJson(daoHandle.queryForString("floor_humiture.allData"));
     }
 }

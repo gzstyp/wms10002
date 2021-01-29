@@ -64,12 +64,7 @@
     </select>
 
     <!-- 获取全部温湿度设备 -->
-    <select id="allData" resultType="HashMap" parameterType="HashMap">
-        select code,cameraId deviceId from floor_humiture
-        <trim prefix="WHERE" prefixOverrides="AND">
-            <if test="deviceId != null">
-                cameraId = #{deviceId}
-            </if>
-        </trim>
+    <select id="allData" resultType="String">
+        select group_concat(cameraId) ids from floor_humiture
     </select>
 </mapper>
