@@ -8,7 +8,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -41,129 +40,98 @@ public final class PageFormData extends HashMap<String,Object>{
 	/**有参数的构造方法,能获取到表单或ajax提交传参数和值或参数不传值的方法,用法 new PageFormData(request); */
 	public PageFormData(final HttpServletRequest request){
 		map = new HashMap<String,Object>(20);
-		final Enumeration<String> paramNames = request.getParameterNames();
+        final Enumeration<String> paramNames = request.getParameterNames();
         while(paramNames.hasMoreElements()){
-            final String key = paramNames.nextElement();
+            final String key = paramNames.nextElement().trim();
             if(key.equals("_"))continue;
-            final String value = request.getParameter(key);
+            String value = request.getParameter(key);
             if(value != null && value.length() > 0){
-                if(value.length() == 1 && value.equals("_"))continue;
-                if(value.equalsIgnoreCase("undefined"))continue;
-                if(value.equalsIgnoreCase("null"))continue;
-                map.put(key,value.trim());
+                value = value.trim();
+                if(checkNull(value))
+                    continue;
+                map.put(key,value);
             }
         }
 	}
 
 	/**构建获取POST方式的参数,用法:new PageFormData().build(request);*/
-    public final PageFormData build(final HttpServletRequest request){
+    public PageFormData build(final HttpServletRequest request){
         try {
-            final BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
-            final StringBuilder sb = new StringBuilder();
-            String s = "";
-            while((s = in.readLine()) != null){
-                sb.append(s);
-            }
-            in.close();
+            final StringBuilder sb = getFormBody(request);
             if(sb.length() > 0){
                 final String str = sb.toString().trim();
                 final JSONObject json = JSONObject.parseObject(str);
-                if(!json.isEmpty()){
-                    for (final String key : json.keySet()){
-                        if(key.equals("_"))continue;
-                        final Object obj = json.get(key);
-                        if(obj != null){
-                            if(obj instanceof String){
-                                final String value = obj.toString().trim();
-                                if(value.length() <= 0)continue;
-                                if(value.length() == 1 && value.equals("_"))continue;
-                                if(value.equalsIgnoreCase("undefined"))continue;
-                                if(value.equalsIgnoreCase("null"))continue;
-                                map.put(key,value);
-                            }else{
-                                map.put(key,obj);
-                            }
-                        }
-                    }
-                }
+                getValue(json,map);
             }
-        } catch (Exception e) {}
+        } catch (final Exception ignored){}
         return this;
     }
 
     public final JSONObject buildJSONObject(final HttpServletRequest request){
-        JSONObject json = new JSONObject(20);
+        final JSONObject result = new JSONObject(20);
         try {
-            final BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
-            final StringBuilder sb = new StringBuilder();
-            String s = "";
-            while((s = in.readLine()) != null){
-                sb.append(s);
-            }
-            in.close();
+            final StringBuilder sb = getFormBody(request);
             if(sb.length() > 0){
-                json = JSONObject.parseObject(sb.toString().trim());
-                if(!json.isEmpty()){
-                    for(final String key : json.keySet()){
-                        if(key.equals("_"))continue;
-                        final Object obj = json.get(key);
-                        if(obj != null){
-                            if(obj instanceof String){
-                                final String value = obj.toString().trim();
-                                if(value.length() <= 0)continue;
-                                if(value.length() == 1 && value.equals("_"))continue;
-                                if(value.equalsIgnoreCase("undefined"))continue;
-                                if(value.equalsIgnoreCase("null"))continue;
-                                json.put(key,value);
-                            }else {
-                                json.put(key,obj);
-                            }
-                        }
-                    }
-                    return json;
-                }
+                final JSONObject original = JSONObject.parseObject(sb.toString().trim());
+                getValue(original,result);
             }
-        } catch (Exception e){
-        }
-        return json;
+        } catch (final Exception ignored){}
+        return result;
     }
 
     public final JSONArray buildJSONArray(final HttpServletRequest request){
         final JSONArray jsonArray = new JSONArray();
         try {
-            final BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
-            final StringBuilder sb = new StringBuilder();
-            String s = "";
-            while((s = in.readLine()) != null){
-                sb.append(s);
-            }
-            in.close();
+            final StringBuilder sb = getFormBody(request);
             if(sb.length() > 0){
                 final JSONArray array = JSONObject.parseArray(sb.toString().trim());
                 for(int i = 0; i < array.size(); i++){
                     final JSONObject object = array.getJSONObject(i);
                     final JSONObject objectObject = new JSONObject();
-                    for(final String key : object.keySet()){
-                        if(key.equals("_"))continue;
-                        final Object obj = object.get(key);
-                        if(obj != null){
-                            if(obj instanceof String){
-                                final String value = String.valueOf(obj).trim();
-                                if(value.length() <= 0)continue;
-                                if(value.length() == 1 && value.equals("_"))continue;
-                                if(value.equalsIgnoreCase("undefined"))continue;
-                                if(value.equalsIgnoreCase("null"))continue;
-                                objectObject.put(key,value);
-                            }else{
-                                objectObject.put(key,obj);
-                            }
-                        }
-                    }
+                    getValue(object,objectObject);
                     if(!objectObject.isEmpty())jsonArray.add(objectObject);
                 }
             }
-        } catch (Exception e){}
+        } catch (final Exception ignored){}
         return jsonArray;
+    }
+
+    public static StringBuilder getFormBody(final HttpServletRequest request) throws IOException{
+        final StringBuilder sb = new StringBuilder();
+        final BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
+        String s = "";
+        while((s = in.readLine()) != null){
+            sb.append(s);
+        }
+        in.close();
+        return sb;
+    }
+
+    private boolean checkNull(final String value){
+        if(value.length() <= 0)return true;
+        if(value.equals("_"))return true;
+        if(value.equalsIgnoreCase("undefined"))return true;
+        if(value.equalsIgnoreCase("null"))return true;
+        return false;
+    }
+
+    protected void getValue(final Map<String, Object> original,final Map<String, Object> result){
+        if(!original.isEmpty()){
+            for(final String key : original.keySet()){
+                if(key.equals("_"))continue;
+                final Object obj = original.get(key);
+                if(obj != null){
+                    if(obj instanceof String){
+                        final String value = ((String)obj).trim();
+                        if(checkNull(value))
+                            continue;
+                        result.put(key,value);
+                    }else {
+                        result.put(key,obj);
+                    }
+                }
+            }
+        }
     }
 
     public static Map<String, String> build(final ServletRequest request){
@@ -174,10 +142,9 @@ public final class PageFormData extends HashMap<String,Object>{
             return (Map<String,String>)request.getAttribute("body");
         } else {
             try {
-                Map<String,String > maps = JSON.parseObject(request.getInputStream(),Map.class);
-                dataMap.putAll(maps);
+                dataMap.putAll(JSON.parseObject(request.getInputStream(),Map.class));
                 request.setAttribute("body",dataMap);
-            }catch (IOException e) {
+            }catch (final IOException e) {
                 e.printStackTrace();
             }
             return dataMap;
@@ -189,41 +156,34 @@ public final class PageFormData extends HashMap<String,Object>{
      * @param
      * @作者 田应平
      * @QQ 444141300
-     * @创建时间 2020/5/23 20:24
+     * @创建时间 2020年5月23日 20:27:44
     */
     public static String getRequest(final HttpServletRequest request){
-        final StringBuilder sb = new StringBuilder();
         try {
-            final InputStream is = request.getInputStream();
-            final InputStreamReader isr = new InputStreamReader(is,"UTF-8");
-            final BufferedReader br = new BufferedReader(isr);
-            String s = "";
-            while ((s = br.readLine()) != null){
-                sb.append(s);
-            }
+            final StringBuilder sb = getFormBody(request);
             return sb.length() > 0 ? sb.toString() : null;
-        } catch (Exception e) {}
+        } catch (final Exception ignored) {}
         return null;
     }
 
-	public final String getString(final String key){
+    public final String getString(final String key){
         final Object value = get(key);
         if(value == null)return null;
         final String strVal = (String) value;
-        if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+        if(strVal.trim().length() == 0 || "null".equalsIgnoreCase(strVal.trim()))return null;
         return String.valueOf(value).trim();
-	}
+    }
 
-	public final Integer getInteger(final String key){
+    public final Integer getInteger(final String key){
         final Object value = get(key);
         if(value == null)return null;
         if(value instanceof Integer)return (Integer) value;
         if(value instanceof String){
             final String strVal = (String) value;
-            if(strVal.length() == 0 || "null".equalsIgnoreCase(strVal))return null;
+            if(strVal.trim().length() == 0 || "null".equalsIgnoreCase(strVal.trim()))return null;
         }
-		return Integer.parseInt(String.valueOf(value));
-	}
+        return Integer.parseInt(String.valueOf(value));
+    }
 
     public final Long getLong(final String key){
         final Object value = get(key);
