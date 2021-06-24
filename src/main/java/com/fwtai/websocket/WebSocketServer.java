@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-//客户端连接WebSocket服务端
+//客户端连接WebSocket服务端,Nginx不支持WebSocket,需要配置或直接连接到项目服务本身
 @ServerEndpoint("/imserver/{userId}")
 @Component
 @EnableScheduling
