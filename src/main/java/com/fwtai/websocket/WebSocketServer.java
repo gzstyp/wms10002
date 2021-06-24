@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-//连接WebSocket服务端
+//客户端连接WebSocket服务端
 @ServerEndpoint("/imserver/{userId}")
 @Component
 @EnableScheduling
@@ -32,22 +32,22 @@ public class WebSocketServer{
 
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
-     */
+    */
     public static ConcurrentHashMap<String,WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
-     */
+    */
     private Session session;
 
     /**
      * 接收userId
-     */
+    */
     private String userId;
 
     /**
      * 连接建立成功调用的方法
-     */
+    */
     @OnOpen
     public void onOpen(final Session session,@PathParam("userId") String userId){
         this.session = session;
@@ -75,7 +75,7 @@ public class WebSocketServer{
 
     /**
      * 连接关闭调用的方法
-     */
+    */
     @OnClose
     public void onClose(){
         if(webSocketMap.containsKey(userId)){
@@ -119,7 +119,7 @@ public class WebSocketServer{
     /**
      * @param session
      * @param error
-     */
+    */
     @OnError
     public void onError(final Session session,final Throwable error){
         System.err.println("用户错误:" + this.userId + ",原因:" + error.getMessage());
