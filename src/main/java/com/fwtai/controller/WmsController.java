@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+//先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行
 @RestController
 @CrossOrigin
 @Api(tags = "出入库接口文档")
@@ -76,7 +77,7 @@ public class WmsController{
     }
 
     /**
-     * 根据用户key发送消息
+     * 根据用户key发送消息,先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行
      * @return
      * @throws Exception
     */
