@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-//先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行
+//先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行,注意事项 所有的invoices_code的值要一样,item_storage_code的格式是 3-1C-03-02
 @RestController
 @CrossOrigin
 @Api(tags = "出入库接口文档")
@@ -78,6 +78,38 @@ public class WmsController{
 
     /**
      * 根据用户key发送消息,先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行
+     * todo 注意事项 所有的invoices_code的值要一样,item_storage_code的格式是 3-1C-03-02
+
+	{
+	  "data": [
+	    {
+	      "invoices_code": "561",
+	      "item_code": "1040901",
+	      "item_name": "应急工作包20个1包装",
+	      "item_storage_code": "3-1C-03-02",
+	      "item_total": "1"
+	    },
+	    {
+	      "invoices_code": "561",
+	      "item_code": "1041302",
+	      "item_name": "雨衣20套1包装",
+	      "item_storage_code": "2-1B-02-03",
+	      "item_total": "2"
+	    },
+	    {
+	      "invoices_code": "561",
+	      "item_code": "1041402",
+	      "item_name": "雨鞋10双1包装",
+	      "item_storage_code": "2-1B-02-01",
+	      "item_total": "2"
+	    }
+	  ],
+	  "invoices_code": "561",
+	  "status": 1,
+	  "total": 5,
+	  "type": 1
+	}	
+
      * @return
      * @throws Exception
     */
