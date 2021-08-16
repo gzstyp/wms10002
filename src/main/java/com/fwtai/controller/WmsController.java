@@ -78,7 +78,7 @@ public class WmsController{
 
     /**
      * 根据用户key发送消息,先打开平板,让其连接到远端服务器,再手动调用添加任务接口,app端获取数据,开始执行
-     * todo 注意事项 所有的invoices_code的值要一样,item_storage_code的格式是 3-1C-03-02
+     * todo 注意事项 所有的invoices_code的值要一样,item_storage_code的格式是 3-1C-03-02,同时看实际的仓库是否存在该编号
 
 	{
 	  "data": [
@@ -86,7 +86,7 @@ public class WmsController{
 	      "invoices_code": "561",
 	      "item_code": "1040901",
 	      "item_name": "应急工作包20个1包装",
-	      "item_storage_code": "3-1C-03-02",
+	      "item_storage_code": "3-1A-02-01",
 	      "item_total": "1"
 	    },
 	    {
