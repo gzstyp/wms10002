@@ -217,7 +217,7 @@ public class WmsController{
     public void status(@RequestBody final List<TaskStatus> taskStatus,final HttpServletResponse response){
         final String jsonStr = JSONObject.toJSONString(taskStatus);
         final JSONArray jsonArray = ToolString.parseJsonArray(jsonStr);
-        final String string=taskService.status(jsonArray);
+        final String string = taskService.status(jsonArray);
         final ConcurrentHashMap<String,WebSocketServer> map = WebSocketServer.webSocketMap;
         final List<HashMap<String,Object>> listTask = taskService.queryListTask();
         for(final String userId : map.keySet()){
