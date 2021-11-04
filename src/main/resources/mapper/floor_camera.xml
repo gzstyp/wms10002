@@ -63,4 +63,10 @@
         SELECT KID value,NAME label FROM FLOOR ORDER BY SORT
     </select>
 
+    <!-- 获取指定区域的监控摄像头 -->
+    <select id="getFloorCamera" resultType="HashMap" parameterType="HashMap">
+      select fca.code,fca.cameraId from floor_camera fca
+      left join floor_code fce on fca.floorId = fce.floorId
+      where fca.floorId = #{floorId} and fce.target_code = #{code}
+    </select>
 </mapper>

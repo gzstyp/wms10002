@@ -59,4 +59,10 @@ public class FloorCameraController{
     public void getAllFloor(final HttpServletResponse response){
         ToolClient.responseJson(service.getAllFloor(),response);
     }
+
+    //获取指定区域的监控摄像头 http://127.0.0.1:10000/floorCamera/getFloorCamera?code=02-1A&kid=ffffffffdc2ebe6a000000006b149e18
+    @GetMapping("getFloorCamera")
+    public void getFloorCamera(final String code,final String kid,final HttpServletResponse response){
+        ToolClient.responseJson(service.getFloorCamera(code,kid),response);
+    }
 }

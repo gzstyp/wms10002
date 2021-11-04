@@ -36,6 +36,10 @@ public final class PageFormData extends HashMap<String,Object>{
 	public PageFormData(){
 		map = new HashMap<String,Object>(20);
 	}
+
+	public PageFormData(final int initialCapacity){
+		map = new HashMap<String,Object>(initialCapacity);
+	}
 	
 	/**有参数的构造方法,能获取到表单或ajax提交传参数和值或参数不传值的方法,用法 new PageFormData(request); */
 	public PageFormData(final HttpServletRequest request){

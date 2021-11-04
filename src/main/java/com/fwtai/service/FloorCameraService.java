@@ -74,4 +74,14 @@ public class FloorCameraService{
     public String getAllFloor(){
         return ToolClient.queryJson(daoHandle.queryListEntity("floor_camera.getAllFloor"));
     }
+
+    public String getFloorCamera(final String code,final String kid){
+        if(code == null || code.length() <= 0 || kid == null || kid.length() <= 0){
+            return ToolClient.createJsonFail("参数有误");
+        }
+        final PageFormData formData = new PageFormData(2);
+        formData.put("floorId",kid);
+        formData.put("code",code);
+        return ToolClient.queryJson(daoHandle.queryForListMap("floor_camera.getFloorCamera",formData));
+    }
 }
